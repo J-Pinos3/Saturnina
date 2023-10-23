@@ -2,4 +2,6 @@
     <string name="app_name">SaturninaApp</string>
 
     <string name="personalizamos_prendas">Personalizamos\ntus\nprendas favoritas</string>
+    <string name="tuInfo">Ingresa tu información de contacto</string>
+    <string name="tusCredenciales">Ingresa tu correo y contraseña</string>
 </resources>
