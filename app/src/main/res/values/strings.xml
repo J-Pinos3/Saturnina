@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SaturninaApp</string>
+
+    <string name="personalizamos_prendas">Personalizamos\ntus\nprendas favoritas</string>
 </resources>
