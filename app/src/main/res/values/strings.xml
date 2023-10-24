@@ -4,4 +4,9 @@
     <string name="personalizamos_prendas">Personalizamos\ntus\nprendas favoritas</string>
     <string name="tuInfo">Ingresa tu información de contacto</string>
     <string name="tusCredenciales">Ingresa tu correo y contraseña</string>
+
+
+    <string name="navigation_drawer_open"> Open </string>
+    <string name="navigation_drawer_close"> Close </string>
+
 </resources>

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="Circulars">
+        <item name="cornerSize">75%</item>
+    </style>
+
     <style name="h4">
         <item name="android:textColor">@color/g_black</item>
         <item name="android:textSize">@dimen/h4TextSize</item>
