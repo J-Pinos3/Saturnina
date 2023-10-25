@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.ProfileActivity">
+
+
+    <!-- LOGO -->
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/guidelineTop"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:src="@drawable/logosaturninacolores"
+            app:layout_constraintBottom_toTopOf="@id/guidelineTop"
+            android:layout_marginRight="35dp"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Perfil"
+            android:textSize="30sp"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
+
+
+    <!--PROFILE INFO-->
+
+    <LinearLayout
+        android:id="@+id/llInfoProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/guidelineTop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="50dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="229dp"
+            android:layout_height="229dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/g_gray500"/>
+
+        <EditText
+            android:id="@+id/etNameProfile"
+            android:layout_width="311dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="15dp"
+            style="@style/editText"
+            android:hint="Nombre"
+            android:inputType="text"/>
+
+        <EditText
+            android:id="@+id/etEmailProfile"
+            android:layout_width="311dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="15dp"
+            style="@style/editText"
+            android:hint="Correo"
+            android:inputType="textEmailAddress"/>
+
+        <EditText
+            android:id="@+id/etNumberProfile"
+            android:layout_width="311dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="15dp"
+            style="@style/editText"
+            android:hint="Teléfono"
+            android:inputType="phone"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/llInfoProfile"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnSaveLogin"
+            style="@style/blueButtonStyle"
+            android:layout_width="190dp"
+            android:layout_height="50dp"
+            android:paddingHorizontal="20dp"
+            android:text="Guardar"
+            android:textColor="@color/black"
+            android:textSize="30sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnRegresarLogin"
+            style="@style/blueButtonStyle"
+            android:layout_width="190dp"
+            android:layout_height="50dp"
+            android:paddingHorizontal="20dp"
+            android:text="Atrás"
+            android:textColor="@color/black"
+            android:layout_marginTop="12dp"
+            android:textSize="30sp" />
+
+    </LinearLayout>
+
+    <!-- GUIDELINES -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.15" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
