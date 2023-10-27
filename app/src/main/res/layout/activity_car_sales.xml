@@ -25,6 +25,10 @@
     </com.google.android.material.navigation.NavigationView>
 
 
+    <include
+        layout="@layout/car_items_summary"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 
 

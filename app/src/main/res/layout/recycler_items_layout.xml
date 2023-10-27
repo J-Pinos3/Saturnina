@@ -1,27 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="?attr/actionBarSize">
 
-    <ImageView
-        android:layout_width="70dp"
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/cgFilterClothes"
+        android:layout_width="wrap_content"
         android:layout_height="63dp"
-        android:src="@drawable/ic_filter"
-        app:layout_constraintTop_toTopOf="@id/guidelineTop"
-        app:layout_constraintEnd_toEndOf="@id/guidelineRight"
-        android:layout_marginTop="15dp"
-        android:backgroundTint="#84000000"/>
+        app:layout_constraintEnd_toEndOf="@+id/guidelineRight"
+        app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
+        app:layout_constraintTop_toTopOf="@id/guidelineTop">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipEmbroid"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:text="Bordado"
+            android:textAlignment="center" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipPrint"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:text="Estampado"
+            android:textAlignment="center" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipAll"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:text="Todos"
+            android:textAlignment="center" />
+
+    </com.google.android.material.chip.ChipGroup>
+
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvProducts"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/guidelineTop"
+        app:layout_constraintTop_toBottomOf="@id/cgFilterClothes"
         app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-        app:layout_constraintEnd_toEndOf="@id/guidelineRight"
-        android:layout_marginTop="125dp" >
+        app:layout_constraintEnd_toEndOf="@id/guidelineRight">
 
 
     </androidx.recyclerview.widget.RecyclerView>
