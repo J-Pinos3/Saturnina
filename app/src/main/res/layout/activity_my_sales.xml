@@ -5,9 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.CarSalesActivity"
+    tools:context=".activities.MySalesActivity"
     tools:openDrawer="start"
-    android:id="@+id/drawer_layout_car">
+    android:id="@+id/drawer_layout_my_sales">
 
     <include
         layout="@layout/app_bar_main"
@@ -15,7 +15,7 @@
         android:layout_height="match_parent"/>
 
     <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nav_view_car"
+        android:id="@+id/nav_view_my_sales"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
@@ -24,12 +24,8 @@
 
     </com.google.android.material.navigation.NavigationView>
 
-
     <include
-        layout="@layout/car_items_summary"
+        layout="@layout/my_sales_management"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-
-
-
 </androidx.drawerlayout.widget.DrawerLayout>

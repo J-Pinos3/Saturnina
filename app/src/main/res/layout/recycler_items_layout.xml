@@ -41,15 +41,13 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvProducts"
+        android:id="@+id/rvProductsDash"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/cgFilterClothes"
         app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-        app:layout_constraintEnd_toEndOf="@id/guidelineRight">
+        app:layout_constraintEnd_toEndOf="@id/guidelineRight"/>
 
-
-    </androidx.recyclerview.widget.RecyclerView>
 
 
 
