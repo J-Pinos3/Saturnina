@@ -26,4 +26,7 @@
 
     <color name="blue_button">#8DA4CF</color>
     <color name="white_text">#1C8DA4CF</color>
+
+
+    <color name="cloth_item_bg">#66F9DEE6</color>
 </resources>
