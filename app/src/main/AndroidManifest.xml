@@ -23,7 +23,7 @@
             android:exported="false" />
         <activity
             android:name=".activities.CarSalesActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".activities.ManagementOptionsActivity"
             android:exported="false" />

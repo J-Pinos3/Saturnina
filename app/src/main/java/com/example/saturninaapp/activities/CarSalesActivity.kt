@@ -8,13 +8,31 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.saturninaapp.R
+import com.example.saturninaapp.adapters.ItemClothesAdapter
+import com.example.saturninaapp.models.CategoryClothes
+import com.example.saturninaapp.models.ItemClothes
 import com.google.android.material.navigation.NavigationView
 
 class CarSalesActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener  {
 
     lateinit var drawer: DrawerLayout
     lateinit var toggle: ActionBarDrawerToggle
+
+    //for the recycler view that'll show items in the dashboard
+    private lateinit var rvProductsCar: RecyclerView
+    private lateinit var itemClothesAdapter: ItemClothesAdapter
+
+    private val itemsClothes = mutableListOf<ItemClothes>(
+        ItemClothes("Camiseta bordada",10, 20.35, 'X', CategoryClothes.bordado),
+        ItemClothes("Zapatos pintados",10, 10.35, 'X', CategoryClothes.bordado),
+        ItemClothes("Chompa con estampado",10, 39.56, 'X', CategoryClothes.estampado),
+        ItemClothes("Camiseta con estampado",10, 20.11, 'X', CategoryClothes.estampado),
+
+        )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_car_sales)
@@ -33,6 +51,13 @@ class CarSalesActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
 
         val navigationView: NavigationView = findViewById(R.id.nav_view_car)
         navigationView.setNavigationItemSelectedListener(this)
+
+
+        //reycler
+        rvProductsCar = findViewById(R.id.rvProductsCar)
+        itemClothesAdapter = ItemClothesAdapter(itemsClothes)
+        rvProductsCar.layoutManager = LinearLayoutManager(this)
+        rvProductsCar.adapter = itemClothesAdapter
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
