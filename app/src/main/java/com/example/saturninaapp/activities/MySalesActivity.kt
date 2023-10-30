@@ -8,54 +8,71 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.saturninaapp.R
+import com.example.saturninaapp.adapters.ItemClothesAdapter
+import com.example.saturninaapp.models.CategoryClothes
+import com.example.saturninaapp.models.ItemClothes
 import com.google.android.material.navigation.NavigationView
 
-class MySalesActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MySalesActivity : AppCompatActivity() {
 
     lateinit var drawer: DrawerLayout
     lateinit var toggle: ActionBarDrawerToggle
+    lateinit var nav_view_my_sales: NavigationView
+
+    //for the recycler view that'll show items in the dashboard
+    private lateinit var rvSalesManagement: RecyclerView
+    private lateinit var itemClothesAdapter: ItemClothesAdapter
+
+    private val itemsClothes = mutableListOf<ItemClothes>(
+        ItemClothes("Camiseta bordada",10, 20.35, 'X', CategoryClothes.bordado),
+        ItemClothes("Zapatos pintados",10, 10.35, 'X', CategoryClothes.bordado),
+        ItemClothes("Chompa con estampado",10, 39.56, 'X', CategoryClothes.estampado),
+        ItemClothes("Camiseta con estampado",10, 20.11, 'X', CategoryClothes.estampado),
+
+        )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_sales)
+        initUI()
 
+        //reycler
+        rvSalesManagement = findViewById(R.id.rvSalesManagement)
+        itemClothesAdapter = ItemClothesAdapter(itemsClothes)
+        rvSalesManagement.layoutManager = LinearLayoutManager(this)
+        rvSalesManagement.adapter = itemClothesAdapter
+
+
+        //navigation
         val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_main)
         setSupportActionBar(toolbar)
-
-        drawer = findViewById(R.id.drawer_layout_my_sales)
         toggle = ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open,R.string.navigation_drawer_close)
-
         drawer.addDrawerListener(toggle)
+        toggle.syncState()
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeButtonEnabled(true)
+        nav_view_my_sales.setNavigationItemSelectedListener {
+            when(it.itemId){
+                R.id.nav_item_one ->{
+                    Toast.makeText(this, "Item 1", Toast.LENGTH_SHORT).show()
+                }
+                R.id.nav_item_two ->{
+                    Toast.makeText(this, "Item 2", Toast.LENGTH_SHORT).show()
+                }
+                R.id.nav_item_three ->{
+                    Toast.makeText(this, "Item 3", Toast.LENGTH_SHORT).show()
+                }
+                R.id.nav_item_four ->{
+                    Toast.makeText(this, "Item 4", Toast.LENGTH_SHORT).show()
+                }
+            }
 
-
-        val navigationView: NavigationView = findViewById(R.id.nav_view_my_sales)
-        navigationView.setNavigationItemSelectedListener(this)
-
-    }
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when( item.itemId ){
-            R.id.nav_item_one -> Toast.makeText(this, "Item 1", Toast.LENGTH_SHORT).show()
-            R.id.nav_item_two -> Toast.makeText(this, "Item 2", Toast.LENGTH_SHORT).show()
-            R.id.nav_item_three -> Toast.makeText(this, "Item 3", Toast.LENGTH_SHORT).show()
+            true
         }
 
-        drawer.closeDrawer(GravityCompat.START)
-        return true
-    }
-
-    override fun onPostCreate(savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
-        toggle.syncState()
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        toggle.onConfigurationChanged(newConfig)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -64,5 +81,11 @@ class MySalesActivity : AppCompatActivity(), NavigationView.OnNavigationItemSele
         }
         return super.onOptionsItemSelected(item)
     }
+
+    private fun initUI(){
+        drawer = findViewById(R.id.drawerLayoutMySales)
+        nav_view_my_sales = findViewById(R.id.nav_view_my_sales)
+    }
+
 
 }//FIN DE LA CLASE MY SALES ACTIVITY
