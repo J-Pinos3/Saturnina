@@ -16,10 +16,11 @@ import com.example.saturninaapp.models.CategoryClothes
 import com.example.saturninaapp.models.ItemClothes
 import com.google.android.material.navigation.NavigationView
 
-class CarSalesActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener  {
+class CarSalesActivity : AppCompatActivity()  {
 
     lateinit var drawer: DrawerLayout
     lateinit var toggle: ActionBarDrawerToggle
+    lateinit var nav_view_car: NavigationView
 
     //for the recycler view that'll show items in the dashboard
     private lateinit var rvProductsCar: RecyclerView
@@ -36,50 +37,42 @@ class CarSalesActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_car_sales)
-
-        val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_main)
-        setSupportActionBar(toolbar)
-
-        drawer = findViewById(R.id.drawer_layout_car)
-        toggle = ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open,R.string.navigation_drawer_close)
-
-        drawer.addDrawerListener(toggle)
-
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeButtonEnabled(true)
-
-
-        val navigationView: NavigationView = findViewById(R.id.nav_view_car)
-        navigationView.setNavigationItemSelectedListener(this)
-
+        initUI()
 
         //reycler
         rvProductsCar = findViewById(R.id.rvProductsCar)
         itemClothesAdapter = ItemClothesAdapter(itemsClothes)
         rvProductsCar.layoutManager = LinearLayoutManager(this)
         rvProductsCar.adapter = itemClothesAdapter
-    }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when( item.itemId ){
-            R.id.nav_item_one -> Toast.makeText(this, "Item 1", Toast.LENGTH_SHORT).show()
-            R.id.nav_item_two -> Toast.makeText(this, "Item 2", Toast.LENGTH_SHORT).show()
-            R.id.nav_item_three -> Toast.makeText(this, "Item 3", Toast.LENGTH_SHORT).show()
+
+        //navigation
+        val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_main)
+        setSupportActionBar(toolbar)
+        toggle = ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open,R.string.navigation_drawer_close)
+        drawer.addDrawerListener(toggle)
+        toggle.syncState()
+        nav_view_car.setNavigationItemSelectedListener {
+            when(it.itemId){
+                R.id.nav_item_one ->{
+                    Toast.makeText(this, "Item 1", Toast.LENGTH_SHORT).show()
+                }
+                R.id.nav_item_two ->{
+                    Toast.makeText(this, "Item 2", Toast.LENGTH_SHORT).show()
+                }
+                R.id.nav_item_three ->{
+                    Toast.makeText(this, "Item 3", Toast.LENGTH_SHORT).show()
+                }
+                R.id.nav_item_four ->{
+                    Toast.makeText(this, "Item 4", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            true
         }
 
-        drawer.closeDrawer(GravityCompat.START)
-        return true
-    }
+    }// ON CREATE
 
-    override fun onPostCreate(savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
-        toggle.syncState()
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        toggle.onConfigurationChanged(newConfig)
-    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if( toggle.onOptionsItemSelected(item) ){
@@ -88,7 +81,10 @@ class CarSalesActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         return super.onOptionsItemSelected(item)
     }
 
-
+    private fun initUI(){
+        drawer = findViewById(R.id.drawerLayoutCar)
+        nav_view_car = findViewById(R.id.nav_view_car)
+    }
 
 
 }//FIN DE LA CLASE CAR SALES ACTIVITY
