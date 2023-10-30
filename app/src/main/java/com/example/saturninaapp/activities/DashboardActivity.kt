@@ -3,6 +3,7 @@ package com.example.saturninaapp.activities
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.MenuItem
 import android.widget.Toast
@@ -16,12 +17,15 @@ import com.example.saturninaapp.R
 import com.example.saturninaapp.adapters.ItemClothesAdapter
 import com.example.saturninaapp.models.CategoryClothes
 import com.example.saturninaapp.models.ItemClothes
+import com.example.saturninaapp.util.UtilClasses
+import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.navigation.NavigationView
 
-class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class DashboardActivity : AppCompatActivity() {
 
     lateinit var drawer: DrawerLayout
     lateinit var toggle: ActionBarDrawerToggle
+    lateinit var nav_view: NavigationView
 
     //for the recycler view that'll show items in the dashboard
     private lateinit var rvProductsDash: RecyclerView
@@ -35,24 +39,11 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
 
     )
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
-
-        val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_main)
-        setSupportActionBar(toolbar)
-
-        drawer = findViewById(R.id.drawer_layout)
-        toggle = ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open,R.string.navigation_drawer_close)
-
-        drawer.addDrawerListener(toggle)
-
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeButtonEnabled(true)
-
-
-        val navigationView: NavigationView = findViewById(R.id.nav_view)
-        navigationView.setNavigationItemSelectedListener(this)
+        initUi()
 
         //recycler
         rvProductsDash = findViewById(R.id.rvProductsDash)
@@ -60,34 +51,50 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         rvProductsDash.layoutManager = LinearLayoutManager(this)
         rvProductsDash.adapter = itemClothesAdapter
 
-    }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when( item.itemId ){
-            R.id.nav_item_one -> Toast.makeText(this, "Item 1", Toast.LENGTH_SHORT).show()
-            R.id.nav_item_two -> Toast.makeText(this, "Item 2", Toast.LENGTH_SHORT).show()
-            R.id.nav_item_three -> Toast.makeText(this, "Item 3", Toast.LENGTH_SHORT).show()
+        //navigation
+
+        val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_main)
+        setSupportActionBar(toolbar)
+        toggle = ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open,R.string.navigation_drawer_close)
+        drawer.addDrawerListener(toggle)
+        toggle.syncState()
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        nav_view.setNavigationItemSelectedListener {
+            when(it.itemId){
+                R.id.nav_item_one ->{
+                    Toast.makeText(this, "Item 1", Toast.LENGTH_SHORT).show()
+                }
+                R.id.nav_item_two ->{
+                    Toast.makeText(this, "Item 2", Toast.LENGTH_SHORT).show()
+                }
+                R.id.nav_item_three ->{
+                    Toast.makeText(this, "Item 3", Toast.LENGTH_SHORT).show()
+                }
+                R.id.nav_item_four ->{
+                    Toast.makeText(this, "Item 4", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            true
         }
 
-        drawer.closeDrawer(GravityCompat.START)
-        return true
+
     }
 
-    override fun onPostCreate(savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
-        toggle.syncState()
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        toggle.onConfigurationChanged(newConfig)
-    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if( toggle.onOptionsItemSelected(item) ){
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun initUi(){
+        //navigation
+        drawer = findViewById(R.id.drawerLayout)
+        nav_view = findViewById(R.id.nav_view)
     }
 
 }

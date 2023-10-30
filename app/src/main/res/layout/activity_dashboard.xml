@@ -7,6 +7,113 @@
     android:layout_height="match_parent"
     tools:context=".activities.DashboardActivity"
     tools:openDrawer="start"
+    android:id="@+id/drawerLayout">
+
+    <include
+        layout="@layout/app_bar_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/cgFilterClothes"
+            android:layout_width="wrap_content"
+            android:layout_height="63dp"
+            app:layout_constraintEnd_toEndOf="@+id/guidelineRight"
+            app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
+            app:layout_constraintTop_toTopOf="@id/guidelineTop">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipEmbroid"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:text="Bordado"
+                android:textAlignment="center" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipPrint"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:text="Estampado"
+                android:textAlignment="center" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipAll"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:text="Todos"
+                android:textAlignment="center" />
+
+        </com.google.android.material.chip.ChipGroup>
+
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvProductsDash"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/cgFilterClothes"
+            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+            app:layout_constraintEnd_toEndOf="@id/guidelineRight"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+
+
+        <!-- GUIDELINES -->
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_end="667dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.07" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.93" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header_main"
+        app:menu="@menu/activity_main_drawer"/>
+
+
+</androidx.drawerlayout.widget.DrawerLayout>
+
+<!--
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.DashboardActivity"
+    tools:openDrawer="start"
     android:id="@+id/drawer_layout">
 
 
@@ -22,9 +129,9 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer">
+        app:menu="@menu/activity_main_drawer"/>
 
-    </com.google.android.material.navigation.NavigationView>
+
 
     <include
         layout="@layout/recycler_items_layout"
@@ -32,3 +139,4 @@
         android:layout_height="match_parent"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>
+-->
