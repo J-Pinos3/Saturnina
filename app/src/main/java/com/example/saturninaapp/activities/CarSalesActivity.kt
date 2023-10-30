@@ -52,6 +52,8 @@ class CarSalesActivity : AppCompatActivity()  {
         toggle = ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open,R.string.navigation_drawer_close)
         drawer.addDrawerListener(toggle)
         toggle.syncState()
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         nav_view_car.setNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.nav_item_one ->{

@@ -7,12 +7,50 @@
     android:layout_height="match_parent"
     tools:context=".activities.MyProductsActivity"
     tools:openDrawer="start"
-    android:id="@+id/drawer_layout_my_products">
+    android:id="@+id/drawerLayoutMyProducts">
 
     <include
         layout="@layout/app_bar_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvProductsManagement"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/guidelineTop"
+            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+            app:layout_constraintEnd_toEndOf="@id/guidelineRight"
+            android:layout_marginTop="15dp"/>
+
+        <!-- GUIDELINES -->
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_end="667dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.07" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.93" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view_my_products"
@@ -20,14 +58,12 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer">
-
-    </com.google.android.material.navigation.NavigationView>
+        app:menu="@menu/activity_main_drawer"/>
 
 
-    <include
-        layout="@layout/my_products_management"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+<!--    <include-->
+<!--        layout="@layout/my_products_management"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"/>-->
 
 </androidx.drawerlayout.widget.DrawerLayout>
