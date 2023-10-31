@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.widget.EditText
 import androidx.appcompat.widget.AppCompatButton
 import com.example.saturninaapp.R
+import com.example.saturninaapp.models.User
+import java.io.Serializable
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -22,6 +24,9 @@ class RegisterActivity : AppCompatActivity() {
 
         btnContinuarRegister.setOnClickListener {
             val intent = Intent(this, PasswordsActivity::class.java)
+            val user = getUsersNameLastNumber()
+            println("REGISTERACTIVITY: ${user.nombre} ${user.apellido} ${user.telefono}")
+            intent.putExtra("NAME_LAST_NUMBER", user )
             startActivity(intent)
         }
 
@@ -41,4 +46,13 @@ class RegisterActivity : AppCompatActivity() {
         btnContinuarRegister = findViewById(R.id.btnContinuarRegister)
         btnRegresarRegister = findViewById(R.id.btnRegresarRegister)
     }
+
+    private fun getUsersNameLastNumber(): User{
+        return User(etNameRegister.text.toString(),
+            etLastNameRegister.text.toString(),
+            etNumberRegister.text.toString()
+            )
+    }
+
+
 }
