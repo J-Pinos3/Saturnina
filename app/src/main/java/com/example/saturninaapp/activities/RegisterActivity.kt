@@ -1,12 +1,44 @@
 package com.example.saturninaapp.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.EditText
+import androidx.appcompat.widget.AppCompatButton
 import com.example.saturninaapp.R
 
 class RegisterActivity : AppCompatActivity() {
+
+    private lateinit var etNameRegister: EditText
+    private lateinit var etLastNameRegister: EditText
+    private lateinit var etNumberRegister: EditText
+    private lateinit var btnContinuarRegister: AppCompatButton
+    private lateinit var btnRegresarRegister: AppCompatButton
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
+        initUI()
+
+        btnContinuarRegister.setOnClickListener {
+            val intent = Intent(this, PasswordsActivity::class.java)
+            startActivity(intent)
+        }
+
+        //return to mainActivity
+        btnRegresarRegister.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+
+
+    }//ON CREATE
+
+    private fun initUI() {
+        etNameRegister = findViewById(R.id.etNameRegister)
+        etLastNameRegister = findViewById(R.id.etLastNameRegister)
+        etNumberRegister = findViewById(R.id.etNumberRegister)
+        btnContinuarRegister = findViewById(R.id.btnContinuarRegister)
+        btnRegresarRegister = findViewById(R.id.btnRegresarRegister)
     }
 }

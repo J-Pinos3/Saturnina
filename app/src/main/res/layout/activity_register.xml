@@ -114,7 +114,7 @@
         android:layout_marginTop="20dp">
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnIniciarSesionLogin"
+            android:id="@+id/btnContinuarRegister"
             style="@style/blueButtonStyle"
             android:layout_width="190dp"
             android:layout_height="55dp"
@@ -124,7 +124,7 @@
             android:textSize="30sp" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnRegresarLogin"
+            android:id="@+id/btnRegresarRegister"
             style="@style/blueButtonStyle"
             android:layout_width="190dp"
             android:layout_height="55dp"
