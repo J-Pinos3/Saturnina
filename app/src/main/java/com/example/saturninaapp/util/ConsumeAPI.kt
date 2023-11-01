@@ -1,5 +1,6 @@
 package com.example.saturninaapp.util
 
+import com.example.saturninaapp.models.LoginCredentials
 import com.example.saturninaapp.models.User
 import retrofit2.Response
 import retrofit2.http.Body
@@ -10,6 +11,10 @@ interface ConsumeAPI {
 
     @Headers("Content-type:application/json; charset=UTF-8")
     @POST("register")
-    suspend fun createUser( @Body p:User ): Response<User>
+    suspend fun createUser( @Body p:User ): Response<String>
+
+    @Headers("Content-type:application/json; charset=UTF-8")
+    @POST("login")
+    suspend fun loginUser(@Body credentials: LoginCredentials): Response<String>
 
 }

@@ -42,7 +42,7 @@ class PasswordsActivity : AppCompatActivity() {
                 val retrofitPost = RetrofitHelper.consumeAPI.createUser(user)
                 if( retrofitPost.isSuccessful ){
                     runOnUiThread {
-                        Log.d("Llamada exitosa", "${retrofitPost.body()?.correo}")
+                        Log.d("Llamada exitosa", retrofitPost.message().toString())
                     }
                 }else{
                     Log.e("Error: ","${retrofitPost.code()} -- ${retrofitPost.message()}")
