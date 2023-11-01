@@ -3,10 +3,16 @@ package com.example.saturninaapp.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import com.example.saturninaapp.R
 import com.example.saturninaapp.models.User
+import com.example.saturninaapp.util.RetrofitHelper
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class PasswordsActivity : AppCompatActivity() {
 
@@ -30,6 +36,20 @@ class PasswordsActivity : AppCompatActivity() {
             }
             var confirmPassword = etConfirmPasswordPass.text.toString()
             showUserCompleted(user, confirmPassword)
+
+            //ejecutamos la petición en otro hilo
+            CoroutineScope(Dispatchers.IO).launch {
+                val retrofitPost = RetrofitHelper.consumeAPI.createUser(user)
+                if( retrofitPost.isSuccessful ){
+                    runOnUiThread {
+                        Log.d("Llamada exitosa", "${retrofitPost.body()?.correo}")
+                    }
+                }else{
+                    Log.e("Error: ","${retrofitPost.code()} -- ${retrofitPost.message()}")
+                }
+
+            }
+
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
 
@@ -38,12 +58,6 @@ class PasswordsActivity : AppCompatActivity() {
 
         //return to registerActivity
         btnRegresarPass.setOnClickListener {
-            user.apply {
-                correo  = etEmailPass.text.toString()
-                password = etPasswordPass.text.toString()
-            }
-            var confirmPassword = etConfirmPasswordPass.text.toString()
-            showUserCompleted(user, confirmPassword)
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
