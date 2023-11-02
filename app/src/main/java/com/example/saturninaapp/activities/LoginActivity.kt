@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import com.example.saturninaapp.R
 import com.example.saturninaapp.models.LoginCredentials
+import com.example.saturninaapp.models.UserResponseLogin
 import com.example.saturninaapp.util.RetrofitHelper
 import com.example.saturninaapp.util.UtilClasses
 import kotlinx.coroutines.CoroutineScope
@@ -42,18 +43,19 @@ class LoginActivity : AppCompatActivity() {
                 val retrofitPost = RetrofitHelper.consumeAPI.loginUser(userCredentials)
                 if( retrofitPost.isSuccessful ){
                     runOnUiThread{
-                        Log.d("Login exitoso", retrofitPost.message().toString())
+                        //Log.d("Login exitoso", retrofitPost.body() )
+                        val UserResponseLogine = retrofitPost.body()
+                        Log.d("Login exitoso", "${UserResponseLogine?.detail?.token!!} ${UserResponseLogine.detail.nombre}" )
+
                     }
-                    navegar = true
+                    val intent = Intent(applicationContext, DashboardActivity::class.java)
+                    startActivity(intent)
+
                 }else{
-                    Log.e("Error al Logearse: ","${retrofitPost.code()} -- ${retrofitPost.message()}")
+                    Log.e("Error al Logearse: ","${retrofitPost.code()} -- ${retrofitPost.errorBody()?.string()}")
                 }
             }
 
-            if( navegar ){
-                val intent = Intent(this, DashboardActivity::class.java)
-                startActivity(intent)
-            }
 
         }
 
