@@ -48,11 +48,6 @@
         android:layout_marginHorizontal="50dp"
         android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="229dp"
-            android:layout_height="229dp"
-            android:layout_gravity="center_horizontal"
-            android:background="@color/g_gray500"/>
 
         <EditText
             android:id="@+id/etNameProfile"
@@ -61,6 +56,15 @@
             android:layout_marginTop="15dp"
             style="@style/editText"
             android:hint="Nombre"
+            android:inputType="text"/>
+
+        <EditText
+            android:id="@+id/etLastProfile"
+            android:layout_width="311dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="15dp"
+            style="@style/editText"
+            android:hint="Apellido"
             android:inputType="text"/>
 
         <EditText
@@ -80,6 +84,17 @@
             style="@style/editText"
             android:hint="Teléfono"
             android:inputType="phone"/>
+
+        <TextView
+            android:id="@+id/tvPasswordProfileOptions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cambiar Contraseña"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textAlignment="center"
+            android:paddingVertical="10dp"
+            android:layout_marginTop="5dp"/>
 
     </LinearLayout>
 

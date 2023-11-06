@@ -28,21 +28,24 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
             android:text="Gestión"
-            android:textSize="30sp"
-            android:layout_gravity="center"/>
+            android:textSize="30sp" />
 
     </LinearLayout>
 
 
+    <!-- CIRCLES -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="@id/guidelineTop"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/guidelineBottom"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/guidelineBottom">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guidelineTop"
+        app:layout_constraintVertical_bias="0.30"
+        android:layout_marginTop="5dp">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnProfileManagementOptions"
@@ -59,60 +62,70 @@
             style="@style/blueButtonStyle"
             android:layout_width="291dp"
             android:layout_height="55dp"
+            android:layout_marginTop="12dp"
             android:paddingHorizontal="20dp"
             android:text="Mis Productos"
             android:textColor="@color/black"
-            android:textSize="30sp"
-            android:layout_marginTop="20dp"/>
+            android:textSize="30sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnCategoriesManagementOptions"
+            style="@style/blueButtonStyle"
+            android:layout_width="291dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="12dp"
+            android:paddingHorizontal="20dp"
+            android:text="Mis Categorías"
+            android:textColor="@color/black"
+            android:textSize="30sp" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnSalesManagementOptions"
             style="@style/blueButtonStyle"
             android:layout_width="291dp"
             android:layout_height="55dp"
+            android:layout_marginTop="12dp"
             android:paddingHorizontal="20dp"
             android:text="Mis Ventas"
             android:textColor="@color/black"
-            android:textSize="30sp"
-            android:layout_marginTop="20dp"/>
+            android:textSize="30sp" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnCustomersManagementOptions"
             style="@style/blueButtonStyle"
             android:layout_width="291dp"
             android:layout_height="55dp"
+            android:layout_marginTop="12dp"
             android:paddingHorizontal="20dp"
             android:text="Mis Clientes"
             android:textColor="@color/black"
-            android:textSize="30sp"
-            android:layout_marginTop="20dp"/>
+            android:textSize="30sp" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnBusinessManagementOptions"
             style="@style/blueButtonStyle"
             android:layout_width="291dp"
             android:layout_height="55dp"
+            android:layout_marginTop="12dp"
             android:paddingHorizontal="20dp"
             android:text="Mi Empresa"
             android:textColor="@color/black"
-            android:textSize="30sp"
-            android:layout_marginTop="20dp"/>
+            android:textSize="30sp" />
+
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnBackManagementOptions"
             style="@style/blueButtonStyle"
             android:layout_width="291dp"
             android:layout_height="55dp"
+            android:layout_marginTop="12dp"
             android:paddingHorizontal="20dp"
             android:text="Regresar"
             android:textColor="@color/black"
-            android:textSize="30sp"
-            android:layout_marginTop="20dp"/>
+            android:textSize="30sp" />
 
     </LinearLayout>
 
-
-    <!-- CIRCLES -->
     <ImageView
         android:layout_width="150dp"
         android:layout_height="150dp"
@@ -138,7 +151,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.23" />
+        app:layout_constraintGuide_percent="0.2" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineBottom"

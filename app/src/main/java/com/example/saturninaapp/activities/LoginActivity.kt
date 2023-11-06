@@ -10,13 +10,11 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import com.example.saturninaapp.R
 import com.example.saturninaapp.models.LoginCredentials
-import com.example.saturninaapp.models.UserResponseLogin
 import com.example.saturninaapp.util.RetrofitHelper
-import com.example.saturninaapp.util.UtilClasses
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.coroutines.coroutineContext
+
 
 class LoginActivity : AppCompatActivity() {
 
@@ -37,7 +35,6 @@ class LoginActivity : AppCompatActivity() {
 
         btnIniciarSesionLogin.setOnClickListener {
             val userCredentials = getUsersCredentials()
-            var navegar = false
 
             CoroutineScope(Dispatchers.IO).launch {
                 val retrofitPost = RetrofitHelper.consumeAPI.loginUser(userCredentials)
@@ -46,13 +43,19 @@ class LoginActivity : AppCompatActivity() {
                         //Log.d("Login exitoso", retrofitPost.body() )
                         val UserResponseLogine = retrofitPost.body()
                         Log.d("Login exitoso", "${UserResponseLogine?.detail?.token!!} ${UserResponseLogine.detail.nombre}" )
+                        val user_token = UserResponseLogine?.detail?.token!!
 
+                        val intent = Intent(applicationContext, DashboardActivity::class.java)
+                        intent.putExtra("USER_TOKEN", user_token)
+                        startActivity(intent)
                     }
-                    val intent = Intent(applicationContext, DashboardActivity::class.java)
-                    startActivity(intent)
-
                 }else{
-                    Log.e("Error al Logearse: ","${retrofitPost.code()} -- ${retrofitPost.errorBody()?.string()}")
+                    runOnUiThread{
+                        Log.e("Error al Logearse: ","${retrofitPost.code()} -- ${retrofitPost.errorBody()?.string()}")
+                        var msg = retrofitPost.errorBody()?.string()
+                        println("MENSAJE JSON: " + msg)
+                    }
+
                 }
             }
 

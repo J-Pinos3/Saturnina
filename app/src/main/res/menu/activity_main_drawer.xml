@@ -22,6 +22,11 @@
             android:id="@+id/nav_item_four"
             android:icon="@drawable/ic_menu"
             android:title="Gestión" />
+
+        <item
+            android:id="@+id/nav_item_five"
+            android:icon="@drawable/ic_quit"
+            android:title="Salir"/>
     </group>
 
 

@@ -1,5 +1,6 @@
 package com.example.saturninaapp.activities
 
+import android.content.Intent
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -44,6 +45,7 @@ class DashboardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
         initUi()
+        val user_token = intent.extras?.getString("USER_TOKEN")
 
         //recycler
         rvProductsDash = findViewById(R.id.rvProductsDash)
@@ -64,16 +66,29 @@ class DashboardActivity : AppCompatActivity() {
         nav_view.setNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.nav_item_one ->{
-                    Toast.makeText(this, "Item 1", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, DashboardActivity::class.java)
+                    startActivity(intent)
+
+                    //Toast.makeText(this, "Item 1", Toast.LENGTH_SHORT).show()
                 }
                 R.id.nav_item_two ->{
-                    Toast.makeText(this, "Item 2", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, ProfileActivity::class.java)
+                    intent.putExtra("USER_TOKEN_PROFILE", user_token)
+                    startActivity(intent)
+
+                    //Toast.makeText(this, "Item 2", Toast.LENGTH_SHORT).show()
                 }
                 R.id.nav_item_three ->{
                     Toast.makeText(this, "Item 3", Toast.LENGTH_SHORT).show()
                 }
                 R.id.nav_item_four ->{
                     Toast.makeText(this, "Item 4", Toast.LENGTH_SHORT).show()
+                }
+
+                R.id.nav_item_five ->{
+                    val intent = Intent(applicationContext, LoginActivity::class.java)
+                    startActivity(intent)
+                    finish()
                 }
             }
 

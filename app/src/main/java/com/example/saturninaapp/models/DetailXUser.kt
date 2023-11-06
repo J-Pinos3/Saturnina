@@ -1,6 +1,6 @@
 package com.example.saturninaapp.models
 
-data class DetailX(
+data class DetailXUser(
     val apellido: String = "",
     val email: String = "",
     val id: String = "",

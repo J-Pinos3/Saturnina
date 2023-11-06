@@ -43,6 +43,8 @@ class PasswordsActivity : AppCompatActivity() {
                 if( retrofitPost.isSuccessful ){
                     runOnUiThread {
                         Log.d("Llamada exitosa", retrofitPost.body()?:"mensaje" )
+                        val intent = Intent(applicationContext, LoginActivity::class.java)
+                        startActivity(intent)
                     }
                 }else{
                     Log.e("Error: ","${retrofitPost.code()} -- ${retrofitPost.errorBody()?.string()}")
@@ -50,8 +52,7 @@ class PasswordsActivity : AppCompatActivity() {
 
             }
 
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
+
 
         }
 
