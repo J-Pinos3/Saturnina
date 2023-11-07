@@ -1,13 +1,16 @@
 package com.example.saturninaapp.activities
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import com.example.saturninaapp.R
+import com.example.saturninaapp.models.UpdateUserProfilePut
 import com.example.saturninaapp.util.RetrofitHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -22,16 +25,39 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var etNumberProfile: EditText
     private lateinit var tvPasswordProfileOptions: TextView
     //Buttons
-    private lateinit var btnSaveLogin: AppCompatButton
+    private lateinit var btnSaveProfile: AppCompatButton
     private lateinit var btnRegresarLogin: AppCompatButton
 
+    //WATCHER
+    var profileTextWatcher = object:TextWatcher{
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+        }
+
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            val name: String = etNameProfile.text.toString()
+            val lastName: String = etLastProfile.text.toString()
+            val email: String = etEmailProfile.text.toString()
+            val number: String = etNumberProfile.text.toString()
+
+            disableClickSave(name, lastName, email, number)
+        }
+
+        override fun afterTextChanged(p0: Editable?) {
+
+        }
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
         initUI()
+
         val user_token = intent.extras?.getString("USER_TOKEN_PROFILE")
         val bearer_token = "Bearer "+user_token
+        var user_id: String = ""
+        var userProfile: UpdateUserProfilePut
         println("Mi Token = ${bearer_token}")
 
         CoroutineScope(Dispatchers.IO).launch {
@@ -40,6 +66,8 @@ class ProfileActivity : AppCompatActivity() {
                 val userResponseProfile = retrofitGetProfile.body()
                 withContext(Dispatchers.Main) {
                     //Log.d("Perfil Obtenido exitosamente", "${userResponseProfile?.detail?.token} ${userResponseProfile?.detail?.nombre} ${userResponseProfile?.detail?.apellido}")
+                    user_id = userResponseProfile?.detail?.id.toString()
+
                     etNameProfile.post {
                         etNameProfile.text = Editable.Factory.getInstance().newEditable(userResponseProfile?.detail?.nombre)
                     }
@@ -65,15 +93,39 @@ class ProfileActivity : AppCompatActivity() {
             }
         }
 
-        /*
-        btnSaveLogin.isClickable = enableSaveClick()
-        if( btnSaveLogin.isClickable ){//si no es clickable, ingrese datos
-            btnSaveLogin.setOnClickListener {
 
+
+
+        etNameProfile.addTextChangedListener(profileTextWatcher)
+        etLastProfile.addTextChangedListener(profileTextWatcher)
+        etEmailProfile.addTextChangedListener(profileTextWatcher)
+        etNumberProfile.addTextChangedListener(profileTextWatcher)
+
+
+
+        btnSaveProfile.setOnClickListener {
+            userProfile = getUserProfileFromUI()
+            CoroutineScope(Dispatchers.IO).launch {
+
+                val retrofitUpdateProfile = RetrofitHelper.consumeAPI.updateUserProfile(bearer_token, user_id, userProfile)
+                println("AQUIIIIIIII")
+
+                if( retrofitUpdateProfile.isSuccessful ){
+                    runOnUiThread {
+                        val userResponseUpdateProfile = retrofitUpdateProfile.body()
+                        val msg = userResponseUpdateProfile?.getAsJsonObject("detail")?.get("msg")?.asString
+                        println("userr message $msg")
+                        Log.d("Usuario Actualizado", "Se actualizó el usuario ${userProfile.nombre} con id ${user_id}\n ${retrofitUpdateProfile.body().toString()}")
+                        paintUserNewData(userProfile)
+                    }
+
+                }else{
+                    runOnUiThread {
+                        Log.e("Error al Logearse: ","${retrofitUpdateProfile.code()} -- ${retrofitUpdateProfile.errorBody()?.string()}")
+                    }
+                }
             }
-        }
-        */
-
+        }//save listener
 
 
     }//ON CREATE
@@ -86,22 +138,42 @@ class ProfileActivity : AppCompatActivity() {
         etNumberProfile = findViewById(R.id.etNumberProfile)
         tvPasswordProfileOptions = findViewById(R.id.tvPasswordProfileOptions)
 
-        btnSaveLogin = findViewById(R.id.btnSaveLogin)
+        btnSaveProfile = findViewById(R.id.btnSaveProfile)
         btnRegresarLogin = findViewById(R.id.btnRegresarLogin)
 
 
     }
 
-    private fun enableSaveClick(): Boolean{
-        var clickable = false
 
-        if( !etNameProfile.text.toString().isNullOrEmpty() && !etLastProfile.text.toString().isNullOrEmpty() &&
-            !etEmailProfile.text.toString().isNullOrEmpty() && !etNumberProfile.text.toString().isNullOrEmpty() ) {
+    private fun disableClickSave(name: String, lastName:String, email:String, number: String) {
+        btnSaveProfile.isClickable = ( !name.isNullOrEmpty() ) && ( !lastName.isNullOrEmpty() ) &&
+                ( !email.isNullOrEmpty() ) && ( !number.isNullOrEmpty() )
 
-            clickable = true
+        when(btnSaveProfile.isClickable){
+            true->{
+                btnSaveProfile.setBackgroundColor( resources.getColor(R.color.blue_button) )
+            }
+            false->{
+                btnSaveProfile.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+            }
         }
+    }
 
-        return clickable
+
+
+    private fun paintUserNewData(updatedUser: UpdateUserProfilePut){
+        etNameProfile.text =  Editable.Factory.getInstance().newEditable(updatedUser.nombre)
+        etLastProfile.text =  Editable.Factory.getInstance().newEditable(updatedUser.apellido)
+        etEmailProfile.text =  Editable.Factory.getInstance().newEditable(updatedUser.email)
+        etNumberProfile.text =  Editable.Factory.getInstance().newEditable(updatedUser.telefono)
+    }
+
+    private fun getUserProfileFromUI(): UpdateUserProfilePut{
+        return UpdateUserProfilePut(
+            etLastProfile.text.toString(),
+            etEmailProfile.text.toString(),
+            etNameProfile.text.toString(),
+            etNumberProfile.text.toString() )
     }
 
 }// PROFILE ACTIVITY

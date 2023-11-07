@@ -108,7 +108,7 @@
         android:layout_marginTop="20dp">
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnSaveLogin"
+            android:id="@+id/btnSaveProfile"
             style="@style/blueButtonStyle"
             android:layout_width="190dp"
             android:layout_height="50dp"
