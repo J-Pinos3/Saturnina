@@ -15,8 +15,10 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.saturninaapp.R
+import com.example.saturninaapp.adapters.ClothesCategoryAdapter
 import com.example.saturninaapp.adapters.ItemClothesAdapter
 import com.example.saturninaapp.models.CategoryClothes
+import com.example.saturninaapp.models.ClothCategoryData
 import com.example.saturninaapp.models.ItemClothes
 import com.example.saturninaapp.util.UtilClasses
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
@@ -27,6 +29,19 @@ class DashboardActivity : AppCompatActivity() {
     lateinit var drawer: DrawerLayout
     lateinit var toggle: ActionBarDrawerToggle
     lateinit var nav_view: NavigationView
+
+    //for the recycler view that'll show categories in the dashboard
+    private lateinit var rvFilterClothes: RecyclerView
+    private lateinit var clothesCategoryAdapter: ClothesCategoryAdapter
+
+    private val itemsCategories = mutableListOf<ClothCategoryData>(
+        ClothCategoryData("1","zapatos"),
+        ClothCategoryData("2","pinturas"),
+        ClothCategoryData("3","camisetas"),
+        ClothCategoryData("4","jeans"),
+        ClothCategoryData("5","hoodie")
+    )
+
 
     //for the recycler view that'll show items in the dashboard
     private lateinit var rvProductsDash: RecyclerView
@@ -47,7 +62,14 @@ class DashboardActivity : AppCompatActivity() {
         initUi()
         val user_token = intent.extras?.getString("USER_TOKEN")
 
-        //recycler
+        //recycler to show categories
+        rvFilterClothes = findViewById(R.id.rvFilterClothes)
+        clothesCategoryAdapter = ClothesCategoryAdapter(itemsCategories)
+        rvFilterClothes.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        rvFilterClothes.adapter = clothesCategoryAdapter
+
+
+        //recycler to show products
         rvProductsDash = findViewById(R.id.rvProductsDash)
         itemClothesAdapter = ItemClothesAdapter(itemsClothes)
         rvProductsDash.layoutManager = LinearLayoutManager(this)
