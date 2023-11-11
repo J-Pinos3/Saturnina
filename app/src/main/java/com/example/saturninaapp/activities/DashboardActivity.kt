@@ -20,9 +20,16 @@ import com.example.saturninaapp.adapters.ItemClothesAdapter
 import com.example.saturninaapp.models.CategoryClothes
 import com.example.saturninaapp.models.ClothCategoryData
 import com.example.saturninaapp.models.ItemClothes
+import com.example.saturninaapp.util.RetrofitHelper
 import com.example.saturninaapp.util.UtilClasses
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.navigation.NavigationView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.lang.Exception
+import java.util.concurrent.TimeoutException
 
 class DashboardActivity : AppCompatActivity() {
 
@@ -33,7 +40,7 @@ class DashboardActivity : AppCompatActivity() {
     //for the recycler view that'll show categories in the dashboard
     private lateinit var rvFilterClothes: RecyclerView
     private lateinit var clothesCategoryAdapter: ClothesCategoryAdapter
-
+    //private var itemsCategories = mutableListOf<ClothCategoryData>()
     private val itemsCategories = mutableListOf<ClothCategoryData>(
         ClothCategoryData("1","zapatos"),
         ClothCategoryData("2","pinturas"),
@@ -41,6 +48,7 @@ class DashboardActivity : AppCompatActivity() {
         ClothCategoryData("4","jeans"),
         ClothCategoryData("5","hoodie")
     )
+
 
 
     //for the recycler view that'll show items in the dashboard
@@ -61,6 +69,12 @@ class DashboardActivity : AppCompatActivity() {
         setContentView(R.layout.activity_dashboard)
         initUi()
         val user_token = intent.extras?.getString("USER_TOKEN")
+        val bearerToken: String = "Bearer "+user_token
+
+        //try to categories from API
+        CoroutineScope(Dispatchers.IO).launch {
+            fetchClothCategories(bearerToken)
+        }
 
         //recycler to show categories
         rvFilterClothes = findViewById(R.id.rvFilterClothes)
@@ -133,5 +147,39 @@ class DashboardActivity : AppCompatActivity() {
         drawer = findViewById(R.id.drawerLayout)
         nav_view = findViewById(R.id.nav_view)
     }
+
+
+    //suspend fun fetchClothCategories(bearerToken: String): List<ClothCategoryData>{
+    suspend fun fetchClothCategories(bearerToken: String){
+        //val categoriesList = mutableListOf<ClothCategoryData>()
+
+        try {
+            val retrofitGetCategories = RetrofitHelper.consumeAPI.getClothesCategories(bearerToken)
+            if(retrofitGetCategories.isSuccessful){
+                val listResponse = retrofitGetCategories.body()?.detail
+                println(listResponse.toString() + "  ${listResponse?.size}")
+                withContext(Dispatchers.Main){
+                    if (listResponse != null) {
+                        for(k in listResponse){
+                            println("ID: " + k.id + " CATE: " + k.name)
+                            itemsCategories.add(ClothCategoryData(k.id, k.name))
+                        }
+
+                        clothesCategoryAdapter.notifyDataSetChanged()
+                    }
+
+                }
+
+            }else{
+                runOnUiThread {
+                    Log.e("CANT BRING CATS", "${retrofitGetCategories.code()} --- ${retrofitGetCategories.errorBody()?.toString()}")
+                }
+            }
+        }catch (e: Exception){
+                e.printStackTrace()
+        }
+
+        //return categoriesList
+    }//FIN DEL MÉTODO FETCH CLOTH CATEGORIES
 
 }

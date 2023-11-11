@@ -1,5 +1,7 @@
 package com.example.saturninaapp.util
 
+import com.example.saturninaapp.models.ClothCategoryData
+import com.example.saturninaapp.models.ClothCategoryList
 import com.example.saturninaapp.models.LoginCredentials
 import com.example.saturninaapp.models.UpdateUserProfilePut
 import com.example.saturninaapp.models.User
@@ -38,5 +40,10 @@ interface ConsumeAPI {
         @Body userProfilePut: UpdateUserProfilePut
         ): Response<JsonObject>
 
+
+    @Headers("Content-type:application/json; charset=UTF-8")
+    @GET("category")
+    suspend fun getClothesCategories(@Header("Authorization")  authorization: String,
+    ): Response<ClothCategoryList>
 
 }
