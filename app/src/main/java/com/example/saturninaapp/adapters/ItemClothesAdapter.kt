@@ -4,10 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.saturninaapp.R
-import com.example.saturninaapp.models.ItemClothes
+import com.example.saturninaapp.models.DetailProduct
 import com.example.saturninaapp.viewholder.ItemClothesViewHolder
 
-class ItemClothesAdapter(private val sellingItems: List<ItemClothes>)
+class ItemClothesAdapter(private val sellingItems: List<DetailProduct>)
     :RecyclerView.Adapter<ItemClothesViewHolder>()
 {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemClothesViewHolder {

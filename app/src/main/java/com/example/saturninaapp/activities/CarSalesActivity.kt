@@ -1,19 +1,16 @@
 package com.example.saturninaapp.activities
 
-import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.saturninaapp.R
 import com.example.saturninaapp.adapters.ItemClothesAdapter
-import com.example.saturninaapp.models.CategoryClothes
-import com.example.saturninaapp.models.ItemClothes
+import com.example.saturninaapp.models.DetailProduct
 import com.google.android.material.navigation.NavigationView
 
 class CarSalesActivity : AppCompatActivity()  {
@@ -26,13 +23,7 @@ class CarSalesActivity : AppCompatActivity()  {
     private lateinit var rvProductsCar: RecyclerView
     private lateinit var itemClothesAdapter: ItemClothesAdapter
 
-    private val itemsClothes = mutableListOf<ItemClothes>(
-        ItemClothes("Camiseta bordada",10, 20.35, 'X', CategoryClothes.bordado),
-        ItemClothes("Zapatos pintados",10, 10.35, 'X', CategoryClothes.bordado),
-        ItemClothes("Chompa con estampado",10, 39.56, 'X', CategoryClothes.estampado),
-        ItemClothes("Camiseta con estampado",10, 20.11, 'X', CategoryClothes.estampado),
-
-        )
+    private var itemsProducts = mutableListOf<DetailProduct>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +32,7 @@ class CarSalesActivity : AppCompatActivity()  {
 
         //reycler
         rvProductsCar = findViewById(R.id.rvProductsCar)
-        itemClothesAdapter = ItemClothesAdapter(itemsClothes)
+        itemClothesAdapter = ItemClothesAdapter(itemsProducts)
         rvProductsCar.layoutManager = LinearLayoutManager(this)
         rvProductsCar.adapter = itemClothesAdapter
 

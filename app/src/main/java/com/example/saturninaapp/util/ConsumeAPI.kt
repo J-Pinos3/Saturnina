@@ -6,6 +6,7 @@ import com.example.saturninaapp.models.LoginCredentials
 import com.example.saturninaapp.models.UpdateUserProfilePut
 import com.example.saturninaapp.models.User
 import com.example.saturninaapp.models.UserResponseLogin
+import com.example.saturninaapp.models.itemProduct
 import com.google.gson.JsonObject
 import retrofit2.Response
 import retrofit2.http.Body
@@ -46,4 +47,8 @@ interface ConsumeAPI {
     suspend fun getClothesCategories(@Header("Authorization")  authorization: String,
     ): Response<ClothCategoryList>
 
+
+    @Headers("Content-type: application/json; charset=UTF-8")
+    @GET("products")
+    suspend fun getItemsProducts(@Header("Authorization") authorization: String): Response<itemProduct>
 }
