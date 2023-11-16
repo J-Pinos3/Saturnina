@@ -7,7 +7,7 @@ import com.example.saturninaapp.R
 import com.example.saturninaapp.models.ClothCategoryData
 import com.example.saturninaapp.viewholder.ClothesCategoryViewHolder
 
-class ClothesCategoryAdapter(private val clothesCategories: List<ClothCategoryData> )
+class ClothesCategoryAdapter(private val clothesCategories: List<ClothCategoryData>, private val onCategorySelected : (Int) -> Unit)
     :RecyclerView.Adapter<ClothesCategoryViewHolder>()
 {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClothesCategoryViewHolder {
@@ -17,7 +17,7 @@ class ClothesCategoryAdapter(private val clothesCategories: List<ClothCategoryDa
 
 
     override fun onBindViewHolder(holder: ClothesCategoryViewHolder, position: Int) {
-        holder.render(clothesCategories[position])
+        holder.render(clothesCategories[position],onCategorySelected)
     }
 
     override fun getItemCount(): Int = clothesCategories.size

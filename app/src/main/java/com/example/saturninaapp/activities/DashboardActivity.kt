@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.saturninaapp.R
 import com.example.saturninaapp.adapters.ClothesCategoryAdapter
 import com.example.saturninaapp.adapters.ItemClothesAdapter
+//import com.example.saturninaapp.adapters.OnItemCategoryListener
 import com.example.saturninaapp.models.ClothCategoryData
 import com.example.saturninaapp.models.DetailProduct
 import com.example.saturninaapp.util.RetrofitHelper
@@ -68,7 +69,9 @@ class DashboardActivity : AppCompatActivity() {
 
         //recycler to show categories
         rvFilterClothes = findViewById(R.id.rvFilterClothes)
-        clothesCategoryAdapter = ClothesCategoryAdapter(itemsCategories)
+        clothesCategoryAdapter = ClothesCategoryAdapter(itemsCategories){ position -> updateCateories(position) }
+                //Toast.makeText(applicationContext, "${itemsCategories[position].name} was chosen", Toast.LENGTH_SHORT).show()
+
         rvFilterClothes.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         rvFilterClothes.adapter = clothesCategoryAdapter
 
@@ -123,6 +126,11 @@ class DashboardActivity : AppCompatActivity() {
         }
 
 
+    }//ON CREATE
+
+    private fun updateCateories(position: Int){
+        itemsCategories[position].isSelectedCategory = !itemsCategories[position].isSelectedCategory
+        clothesCategoryAdapter.notifyItemChanged(position)  //.notifyDataSetChanged()
     }
 
 
