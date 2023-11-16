@@ -7,7 +7,7 @@ import com.example.saturninaapp.R
 import com.example.saturninaapp.models.DetailProduct
 import com.example.saturninaapp.viewholder.ItemClothesViewHolder
 
-class ItemClothesAdapter(private val sellingItems: List<DetailProduct>)
+class ItemClothesAdapter( var sellingItems: MutableList<DetailProduct>)
     :RecyclerView.Adapter<ItemClothesViewHolder>()
 {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemClothesViewHolder {

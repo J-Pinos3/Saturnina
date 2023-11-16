@@ -34,13 +34,7 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var rvFilterClothes: RecyclerView
     private lateinit var clothesCategoryAdapter: ClothesCategoryAdapter
     //private var itemsCategories = mutableListOf<ClothCategoryData>()
-    private val itemsCategories = mutableListOf<ClothCategoryData>(
-        ClothCategoryData("1","zapatos"),
-        ClothCategoryData("2","pinturas"),
-        ClothCategoryData("3","camisetas"),
-        ClothCategoryData("4","jeans"),
-        ClothCategoryData("5","hoodie")
-    )
+    private val itemsCategories = mutableListOf<ClothCategoryData>()
 
 
 
@@ -131,8 +125,32 @@ class DashboardActivity : AppCompatActivity() {
     private fun updateCateories(position: Int){
         itemsCategories[position].isSelectedCategory = !itemsCategories[position].isSelectedCategory
         clothesCategoryAdapter.notifyItemChanged(position)  //.notifyDataSetChanged()
+
+        updateItemsClothes()
     }
 
+    private fun updateItemsClothes(){
+        //obtengo las categorías seleccionadas y según eso muestro la ropa
+        val selectedCategories: List<ClothCategoryData> = itemsCategories.filter { it.isSelectedCategory == false }
+        var newClothes =  mutableListOf<DetailProduct>()
+        println("categorías seleccionadas ${selectedCategories}")
+        for(k in itemsProducts){
+            if( selectedCategories.any {  it.id == k.category } )
+            {
+
+                newClothes.add(k)
+            }
+
+        }
+        if( !selectedCategories.isNullOrEmpty() ){
+            itemClothesAdapter.sellingItems = newClothes
+        }else{
+            itemClothesAdapter.sellingItems = itemsProducts
+        }
+
+
+        itemClothesAdapter.notifyDataSetChanged()
+    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if( toggle.onOptionsItemSelected(item) ){
