@@ -31,10 +31,10 @@ class MySalesActivity : AppCompatActivity() {
         initUI()
 
         //reycler
-        rvSalesManagement = findViewById(R.id.rvSalesManagement)
-        itemClothesAdapter = ItemClothesAdapter(itemsProducts)
-        rvSalesManagement.layoutManager = LinearLayoutManager(this)
-        rvSalesManagement.adapter = itemClothesAdapter
+//        rvSalesManagement = findViewById(R.id.rvSalesManagement)
+//        itemClothesAdapter = ItemClothesAdapter(itemsProducts)
+//        rvSalesManagement.layoutManager = LinearLayoutManager(this)
+//        rvSalesManagement.adapter = itemClothesAdapter
 
 
         //navigation

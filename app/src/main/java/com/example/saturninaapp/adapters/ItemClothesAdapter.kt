@@ -7,7 +7,7 @@ import com.example.saturninaapp.R
 import com.example.saturninaapp.models.DetailProduct
 import com.example.saturninaapp.viewholder.ItemClothesViewHolder
 
-class ItemClothesAdapter( var sellingItems: MutableList<DetailProduct>)
+class ItemClothesAdapter( var sellingItems: MutableList<DetailProduct>, private val OnCLickListener:(DetailProduct) -> Unit)
     :RecyclerView.Adapter<ItemClothesViewHolder>()
 {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemClothesViewHolder {
@@ -17,7 +17,7 @@ class ItemClothesAdapter( var sellingItems: MutableList<DetailProduct>)
 
 
     override fun onBindViewHolder(holder: ItemClothesViewHolder, position: Int) {
-        holder.render(sellingItems[position])
+        holder.render(sellingItems[position], OnCLickListener)
     }
 
     override fun getItemCount(): Int = sellingItems.size

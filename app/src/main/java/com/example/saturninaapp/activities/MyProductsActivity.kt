@@ -31,10 +31,10 @@ class MyProductsActivity : AppCompatActivity(){
         initUI()
 
         //recycler
-        rvProductsManagement = findViewById(R.id.rvProductsManagement)
-        itemClothesAdapter = ItemClothesAdapter(itemsProducts)
-        rvProductsManagement.layoutManager = LinearLayoutManager(this)
-        rvProductsManagement.adapter = itemClothesAdapter
+//        rvProductsManagement = findViewById(R.id.rvProductsManagement)
+//        itemClothesAdapter = ItemClothesAdapter(itemsProducts)
+//        rvProductsManagement.layoutManager = LinearLayoutManager(this)
+//        rvProductsManagement.adapter = itemClothesAdapter
 
 
         //navigation

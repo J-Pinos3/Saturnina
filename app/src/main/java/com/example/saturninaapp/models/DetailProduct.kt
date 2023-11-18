@@ -6,5 +6,6 @@ data class DetailProduct(
     val id: String,
     val imagen: Imagen,
     val name: String,
-    val precio: Double
+    val precio: Double,
+    var contador: Int = 0//unidades pedidas
 )

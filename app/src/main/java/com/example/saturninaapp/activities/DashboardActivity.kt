@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
@@ -52,11 +53,12 @@ class DashboardActivity : AppCompatActivity() {
         val user_token = intent.extras?.getString("USER_TOKEN")
         val bearerToken: String = "Bearer "+user_token
 
-        //try to categories from API
+        //get categories from API
         CoroutineScope(Dispatchers.IO).launch {
             fetchClothCategories(bearerToken)
         }
 
+        //get products from API
         CoroutineScope(Dispatchers.IO).launch {
             fecthItemProducts(bearerToken)
         }
@@ -64,8 +66,6 @@ class DashboardActivity : AppCompatActivity() {
         //recycler to show categories
         rvFilterClothes = findViewById(R.id.rvFilterClothes)
         clothesCategoryAdapter = ClothesCategoryAdapter(itemsCategories){ position -> updateCateories(position) }
-                //Toast.makeText(applicationContext, "${itemsCategories[position].name} was chosen", Toast.LENGTH_SHORT).show()
-
         rvFilterClothes.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         rvFilterClothes.adapter = clothesCategoryAdapter
 
@@ -73,7 +73,7 @@ class DashboardActivity : AppCompatActivity() {
 
         //recycler to show products
         rvProductsDash = findViewById(R.id.rvProductsDash)
-        itemClothesAdapter = ItemClothesAdapter(itemsProducts)
+        itemClothesAdapter = ItemClothesAdapter(itemsProducts){ onItemClothSelected(it) }
         rvProductsDash.layoutManager = LinearLayoutManager(this)
         rvProductsDash.adapter = itemClothesAdapter
 
@@ -119,7 +119,10 @@ class DashboardActivity : AppCompatActivity() {
             true
         }
 
-
+        val flCarritoCompras: FrameLayout = findViewById(R.id.flCarritoCompras)
+        flCarritoCompras.setOnClickListener {
+            Toast.makeText(this, "Carrito Clicado", Toast.LENGTH_SHORT).show()
+        }
     }//ON CREATE
 
     private fun updateCateories(position: Int){
@@ -152,6 +155,11 @@ class DashboardActivity : AppCompatActivity() {
         itemClothesAdapter.notifyDataSetChanged()
     }
 
+
+    private fun onItemClothSelected(product: DetailProduct){
+        Toast.makeText(this, product.id + " " + product.name + " " + product.precio, Toast.LENGTH_SHORT).show()
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if( toggle.onOptionsItemSelected(item) ){
             return true
@@ -174,7 +182,7 @@ class DashboardActivity : AppCompatActivity() {
             val retrofitGetCategories = RetrofitHelper.consumeAPI.getClothesCategories(bearerToken)
             if(retrofitGetCategories.isSuccessful){
                 val listResponse = retrofitGetCategories.body()?.detail
-                println(listResponse.toString() + "  ${listResponse?.size}")
+                //println(listResponse.toString() + "  ${listResponse?.size}")
                 withContext(Dispatchers.Main){
                     if (listResponse != null) {
                         for(k in listResponse){
@@ -206,7 +214,7 @@ class DashboardActivity : AppCompatActivity() {
 
             if(retrofitGetProducts.isSuccessful){
                 val listResponse = retrofitGetProducts.body()?.detail
-                println(listResponse.toString() + "---size--- ${listResponse?.size}")
+                //println(listResponse.toString() + "---size--- ${listResponse?.size}")
                 withContext(Dispatchers.Main){
                     if(listResponse != null){
                         for(k in listResponse){

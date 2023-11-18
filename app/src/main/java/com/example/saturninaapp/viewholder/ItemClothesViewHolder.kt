@@ -15,12 +15,20 @@ class ItemClothesViewHolder(view: View): RecyclerView.ViewHolder(view) {
     private val tvClothItemDescription: TextView = view.findViewById(R.id.tvClothItemDescription)
     private val ivClothItemPhoto: ImageView = view.findViewById(R.id.ivClothItemPhoto)
 
+    private val btnAddToCart: View = view.findViewById(R.id.btnAddToCart)
+    private val btnDeleteFromCart: View = view.findViewById(R.id.btnDeleteFromCart)
+
     //where itemClothes is a data class
-    fun render(detailProduct: DetailProduct){
+    fun render(detailProduct: DetailProduct, OnCLickListener: (DetailProduct) -> Unit){
         tvClothItemDetail.text = detailProduct.name
         tvClothItemPrice.text = "$" + detailProduct.precio
         tvClothItemDescription.text = detailProduct.descripcion
         Picasso.get().load(detailProduct.imagen.secure_url).into(ivClothItemPhoto)
+
+
+        btnAddToCart.setOnClickListener {
+            OnCLickListener(detailProduct)
+        }
 
     }
 }
