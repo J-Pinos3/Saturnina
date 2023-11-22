@@ -1,6 +1,7 @@
 package com.example.saturninaapp.activities
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -26,7 +27,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var tvPasswordProfileOptions: TextView
     //Buttons
     private lateinit var btnSaveProfile: AppCompatButton
-    private lateinit var btnRegresarLogin: AppCompatButton
+    private lateinit var btnRegresarDash: AppCompatButton
 
     //WATCHER
     var profileTextWatcher = object:TextWatcher{
@@ -127,6 +128,12 @@ class ProfileActivity : AppCompatActivity() {
             }
         }//save listener
 
+        btnRegresarDash.setOnClickListener {
+            val intent = Intent(applicationContext, DashboardActivity::class.java)
+            startActivity(intent)
+
+        }
+
 
     }//ON CREATE
 
@@ -139,7 +146,7 @@ class ProfileActivity : AppCompatActivity() {
         tvPasswordProfileOptions = findViewById(R.id.tvPasswordProfileOptions)
 
         btnSaveProfile = findViewById(R.id.btnSaveProfile)
-        btnRegresarLogin = findViewById(R.id.btnRegresarLogin)
+        btnRegresarDash = findViewById(R.id.btnRegresarLogin)
 
 
     }

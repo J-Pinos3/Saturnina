@@ -19,7 +19,11 @@ class ItemClothesViewHolder(view: View): RecyclerView.ViewHolder(view) {
     private val btnDeleteFromCart: View = view.findViewById(R.id.btnDeleteFromCart)
 
     //where itemClothes is a data class
-    fun render(detailProduct: DetailProduct, OnCLickListener: (DetailProduct) -> Unit){
+    fun render(
+        detailProduct: DetailProduct,
+        OnCLickListener: (DetailProduct) -> Unit,
+        OnItemDeleteListener: (DetailProduct) -> Unit
+    ){
         tvClothItemDetail.text = detailProduct.name
         tvClothItemPrice.text = "$" + detailProduct.precio
         tvClothItemDescription.text = detailProduct.descripcion
@@ -28,6 +32,10 @@ class ItemClothesViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
         btnAddToCart.setOnClickListener {
             OnCLickListener(detailProduct)
+        }
+
+        btnDeleteFromCart.setOnClickListener {
+            OnItemDeleteListener(detailProduct)
         }
 
     }

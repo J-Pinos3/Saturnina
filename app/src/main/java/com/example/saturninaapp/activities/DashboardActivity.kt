@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.saturninaapp.R
 import com.example.saturninaapp.adapters.ClothesCategoryAdapter
 import com.example.saturninaapp.adapters.ItemClothesAdapter
-//import com.example.saturninaapp.adapters.OnItemCategoryListener
 import com.example.saturninaapp.models.ClothCategoryData
 import com.example.saturninaapp.models.DetailProduct
 import com.example.saturninaapp.util.RetrofitHelper
@@ -23,6 +22,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
 import java.lang.Exception
 
 class DashboardActivity : AppCompatActivity() {
@@ -44,7 +44,7 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var itemClothesAdapter: ItemClothesAdapter
     private var itemsProducts = mutableListOf<DetailProduct>()
 
-
+    private var cartItems = mutableListOf<DetailProduct>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,7 +73,12 @@ class DashboardActivity : AppCompatActivity() {
 
         //recycler to show products
         rvProductsDash = findViewById(R.id.rvProductsDash)
-        itemClothesAdapter = ItemClothesAdapter(itemsProducts){ onItemClothSelected(it) }
+        //itemClothesAdapter = ItemClothesAdapter(itemsProducts,onItemDeleteSelected()){ onItemClothSelected(it) }
+        itemClothesAdapter = ItemClothesAdapter(itemsProducts,
+            OnCLickListener = { item -> onItemClothSelected(item) },
+            OnItemDeleteListener = {item ->  onItemDeleteSelected(item)}
+
+        )
         rvProductsDash.layoutManager = LinearLayoutManager(this)
         rvProductsDash.adapter = itemClothesAdapter
 
@@ -119,6 +124,7 @@ class DashboardActivity : AppCompatActivity() {
             true
         }
 
+
         val flCarritoCompras: FrameLayout = findViewById(R.id.flCarritoCompras)
         flCarritoCompras.setOnClickListener {
             Toast.makeText(this, "Carrito Clicado", Toast.LENGTH_SHORT).show()
@@ -156,9 +162,48 @@ class DashboardActivity : AppCompatActivity() {
     }
 
 
+    //this function will handle add item to cart
     private fun onItemClothSelected(product: DetailProduct){
         Toast.makeText(this, product.id + " " + product.name + " " + product.precio, Toast.LENGTH_SHORT).show()
+        //if the element is not in the list, add it
+        if( !cartItems.contains(product) ){
+            product.contador++
+            cartItems.add(product)
+            Log.d("Product Added To Cart","${product} added to cart")
+
+        }else {
+            //else just increase its counter
+            var productIndex: Int = cartItems.indexOf(product)
+            cartItems[productIndex].contador ++
+            Log.d("Product Added To Cart"," ${product} ${product.contador}")
+        }
+
+
+
     }
+
+
+    //this function will handle delete Item from cart
+    private fun onItemDeleteSelected(product: DetailProduct){
+        Toast.makeText(this, "DELETE " + product.id + " " + product.name + " " + product.precio, Toast.LENGTH_SHORT).show()
+        //if the element is still in the list, just reduce its counter
+        //if there's no product, do nothing
+        if( cartItems.contains(product) ){
+            var productIndex: Int = cartItems.indexOf(product)
+
+            if( cartItems[productIndex].contador >= 1 ){
+                cartItems[productIndex].contador--
+
+            }
+
+            if(cartItems[productIndex].contador == 0){
+                cartItems.removeAt(productIndex) //si el contador de ese producto es 0, lo eliminamos de la lista
+            }
+
+        }
+
+    }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if( toggle.onOptionsItemSelected(item) ){
