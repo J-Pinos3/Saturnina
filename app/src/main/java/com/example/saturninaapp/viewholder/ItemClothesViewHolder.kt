@@ -22,8 +22,13 @@ class ItemClothesViewHolder(view: View): RecyclerView.ViewHolder(view) {
     fun render(
         detailProduct: DetailProduct,
         OnCLickListener: (DetailProduct) -> Unit,
-        OnItemDeleteListener: (DetailProduct) -> Unit
+        OnItemDeleteListener: (DetailProduct) -> Unit,
+        OnHideButton: (view: View, isVisible: Boolean) -> Unit,
+        isVisible: Boolean
     ){
+
+        OnHideButton(btnDeleteFromCart, isVisible)
+
         tvClothItemDetail.text = detailProduct.name
         tvClothItemPrice.text = "$" + detailProduct.precio
         tvClothItemDescription.text = detailProduct.descripcion

@@ -7,7 +7,7 @@ import retrofit2.create
 object RetrofitHelper {
 
     private val retrofit = Retrofit.Builder()
-            .baseUrl("https://test-back-4kx4.onrender.com/api/v1/")
+            .baseUrl("https://test-back-dev-nprj.3.us-1.fl0.io/api/v1/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 

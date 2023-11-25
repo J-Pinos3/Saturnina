@@ -1,10 +1,14 @@
 package com.example.saturninaapp.activities
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
+import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -17,15 +21,18 @@ import com.example.saturninaapp.adapters.ItemClothesAdapter
 import com.example.saturninaapp.models.ClothCategoryData
 import com.example.saturninaapp.models.DetailProduct
 import com.example.saturninaapp.util.RetrofitHelper
+import com.example.saturninaapp.util.UtilClasses
 import com.google.android.material.navigation.NavigationView
+import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.FileOutputStream
 
 import java.lang.Exception
 
-class DashboardActivity : AppCompatActivity() {
+class DashboardActivity : AppCompatActivity(), UtilClasses {
 
     lateinit var drawer: DrawerLayout
     lateinit var toggle: ActionBarDrawerToggle
@@ -46,10 +53,17 @@ class DashboardActivity : AppCompatActivity() {
 
     private var cartItems = mutableListOf<DetailProduct>()
 
+    private var sharedKey:String = "car_items"
+    public var isAdapterVisible = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
+
         initUi()
+
+
+
         val user_token = intent.extras?.getString("USER_TOKEN")
         val bearerToken: String = "Bearer "+user_token
 
@@ -76,8 +90,9 @@ class DashboardActivity : AppCompatActivity() {
         //itemClothesAdapter = ItemClothesAdapter(itemsProducts,onItemDeleteSelected()){ onItemClothSelected(it) }
         itemClothesAdapter = ItemClothesAdapter(itemsProducts,
             OnCLickListener = { item -> onItemClothSelected(item) },
-            OnItemDeleteListener = {item ->  onItemDeleteSelected(item)}
-
+            OnItemDeleteListener = {item ->  onItemDeleteSelected(item)},
+            OnHideButton = { v,isVisible -> hideButtonDelete(v, isVisible) },
+            isVisible = isAdapterVisible
         )
         rvProductsDash.layoutManager = LinearLayoutManager(this)
         rvProductsDash.adapter = itemClothesAdapter
@@ -128,8 +143,18 @@ class DashboardActivity : AppCompatActivity() {
         val flCarritoCompras: FrameLayout = findViewById(R.id.flCarritoCompras)
         flCarritoCompras.setOnClickListener {
             Toast.makeText(this, "Carrito Clicado", Toast.LENGTH_SHORT).show()
+
+            saveItemsToFile(sharedKey)
+
+            val intent = Intent(applicationContext, CarSalesActivity::class.java)
+            intent.putExtra("CARTKEY", sharedKey)
+            startActivity(intent)
         }
     }//ON CREATE
+
+    private fun hideButtonDelete(v: View, isVis: Boolean){
+        if (isVis) v.visibility = View.GONE else v.visibility = View.VISIBLE
+    }
 
     private fun updateCateories(position: Int){
         itemsCategories[position].isSelectedCategory = !itemsCategories[position].isSelectedCategory
@@ -163,7 +188,7 @@ class DashboardActivity : AppCompatActivity() {
 
 
     //this function will handle add item to cart
-    private fun onItemClothSelected(product: DetailProduct){
+    override fun onItemClothSelected(product: DetailProduct){
         Toast.makeText(this, product.id + " " + product.name + " " + product.precio, Toast.LENGTH_SHORT).show()
         //if the element is not in the list, add it
         if( !cartItems.contains(product) ){
@@ -179,29 +204,49 @@ class DashboardActivity : AppCompatActivity() {
         }
 
 
+        showCartListItems()
+    }
 
+    private fun showCartListItems(){
+        for(i in cartItems.indices){
+            println("CARRITO ${cartItems[i].id} ${cartItems[i].name} ${cartItems[i].contador}")
+        }
+    }
+
+
+    private fun saveItemsToFile(key: String){
+        var sharedPreferences: SharedPreferences = getSharedPreferences(key, MODE_PRIVATE)
+        val gson: Gson = Gson()
+        val editor = sharedPreferences.edit()
+
+        val jsonString = gson.toJson(cartItems)
+        editor.putString(sharedKey, jsonString)
+        editor.apply()
+
+        Toast.makeText(this, "Saved cartItems to sharedPreferences", Toast.LENGTH_SHORT).show()
     }
 
 
     //this function will handle delete Item from cart
-    private fun onItemDeleteSelected(product: DetailProduct){
-        Toast.makeText(this, "DELETE " + product.id + " " + product.name + " " + product.precio, Toast.LENGTH_SHORT).show()
-        //if the element is still in the list, just reduce its counter
-        //if there's no product, do nothing
-        if( cartItems.contains(product) ){
-            var productIndex: Int = cartItems.indexOf(product)
-
-            if( cartItems[productIndex].contador >= 1 ){
-                cartItems[productIndex].contador--
-
-            }
-
-            if(cartItems[productIndex].contador == 0){
-                cartItems.removeAt(productIndex) //si el contador de ese producto es 0, lo eliminamos de la lista
-            }
-
-        }
-
+    override fun onItemDeleteSelected(product: DetailProduct){
+//        Toast.makeText(this, "DELETE " + product.id + " " + product.name + " " + product.precio, Toast.LENGTH_SHORT).show()
+//        //if the element is still in the list, just reduce its counter
+//        //if there's no product, do nothing
+//        if( cartItems.contains(product) ){
+//            var productIndex: Int = cartItems.indexOf(product)
+//
+//            if( cartItems[productIndex].contador >= 1 ){
+//                cartItems[productIndex].contador--
+//
+//            }
+//
+//            if(cartItems[productIndex].contador == 0){
+//                cartItems.removeAt(productIndex) //si el contador de ese producto es 0, lo eliminamos de la lista
+//            }
+//
+//        }
+//
+//        showCartListItems()
     }
 
 
@@ -279,5 +324,7 @@ class DashboardActivity : AppCompatActivity() {
             e.printStackTrace()
         }
     }//FIN DEL MÉTODO FETCH ITEM PRODUCTS
+
+
 
 }
