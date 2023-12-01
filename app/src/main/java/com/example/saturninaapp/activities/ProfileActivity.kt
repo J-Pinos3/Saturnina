@@ -17,6 +17,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.lang.Exception
 
 class ProfileActivity : AppCompatActivity() {
 
@@ -87,9 +88,14 @@ class ProfileActivity : AppCompatActivity() {
                 }
             }else{
                 runOnUiThread{
-                    Log.e("Error al cargar el perfil: ","${retrofitGetProfile.code()} -- ${retrofitGetProfile.errorBody()?.string()}")
-                    val msg = retrofitGetProfile.errorBody()?.string()
-                    println("MENSAJE JSON: " + msg)
+                    try{
+                        Log.e("Error al cargar el perfil: ","${retrofitGetProfile.code()} -- ${retrofitGetProfile.errorBody()?.string()}")
+                        val msg = retrofitGetProfile.errorBody()?.charStream()?.readText()
+                        println("MENSAJE JSON: " + msg)
+                    }catch (e: Exception){
+                        println("no se pudo obtener el mensaje de error de la api")
+                    }
+
                 }
             }
         }

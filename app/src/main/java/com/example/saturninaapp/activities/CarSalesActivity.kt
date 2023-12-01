@@ -1,5 +1,6 @@
 package com.example.saturninaapp.activities
 
+import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -31,16 +32,17 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
     private lateinit var itemClothesAdapter: ItemClothesAdapter
 
     private var itemsProducts = mutableListOf<DetailProduct>()
-    public var isAdapterVisible = true
+    public var isAdapterVisible = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_car_sales)
         val cartKey: String? = intent.extras?.getString("CARTKEY")
         initUI()
-        if (cartKey != null) {
-            loadItemsFromFile(cartKey)
-        }
+
+        loadItemsFromFile(cartKey!!)
+
 
         //reycler
         rvProductsCar = findViewById(R.id.rvProductsCar)
@@ -66,7 +68,10 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
         nav_view_car.setNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.nav_item_one ->{
-                    Toast.makeText(this, "Item 1", Toast.LENGTH_SHORT).show()
+                    saveItemsToFile(cartKey)
+
+                    val intent = Intent(this, DashboardActivity::class.java)
+                    startActivity(intent)
                 }
                 R.id.nav_item_two ->{
                     Toast.makeText(this, "Item 2", Toast.LENGTH_SHORT).show()
@@ -103,14 +108,24 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
     }
 
 
-    private fun loadItemsFromFile(key: String){
-        var sharedPreferences: SharedPreferences = getSharedPreferences(key, MODE_PRIVATE)
+    private fun loadItemsFromFile(Key: String){
+        var sharedPreferences: SharedPreferences = getSharedPreferences(Key, MODE_PRIVATE)
         val gson = Gson()
 
-        val jsonString = sharedPreferences.getString(key,"")
+        val jsonString = sharedPreferences.getString(Key,"")
         val type = object : TypeToken< MutableList<DetailProduct> >() {}.type
         itemsProducts = (gson.fromJson(jsonString, type) ?: emptyList<DetailProduct>()) as MutableList<DetailProduct>
 
+    }
+
+    private fun saveItemsToFile(Key: String){
+        var sharedPreferences: SharedPreferences = getSharedPreferences(Key, MODE_PRIVATE)
+        val gson= Gson()
+        val editor = sharedPreferences.edit()
+
+        val jsonString = gson.toJson(itemsProducts)
+        editor.putString(Key, jsonString)
+        editor.apply()
     }
 
 
@@ -135,6 +150,7 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
             Log.d("Product Added To Cart"," ${product} ${product.contador}")
         }
 
+        NotifyListItemChanged()
         showCartListItems()
     }
 
@@ -156,8 +172,12 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
 
         }
 
+        NotifyListItemChanged()
         showCartListItems()
     }
 
+    private fun NotifyListItemChanged(){
+        itemClothesAdapter.notifyDataSetChanged()
+    }
 
 }//FIN DE LA CLASE CAR SALES ACTIVITY

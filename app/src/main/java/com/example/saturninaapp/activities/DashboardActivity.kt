@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
@@ -24,10 +25,12 @@ import com.example.saturninaapp.util.RetrofitHelper
 import com.example.saturninaapp.util.UtilClasses
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.w3c.dom.Text
 import java.io.FileOutputStream
 
 import java.lang.Exception
@@ -54,12 +57,14 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
     private var cartItems = mutableListOf<DetailProduct>()
 
     private var sharedKey:String = "car_items"
-    public var isAdapterVisible = false
+    public var isAdapterVisible = true
+
+    private lateinit var cartSalesItemsCount: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
-
+        loadItemsFromFile(sharedKey)
         initUi()
 
 
@@ -220,12 +225,21 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
         val editor = sharedPreferences.edit()
 
         val jsonString = gson.toJson(cartItems)
-        editor.putString(sharedKey, jsonString)
+        editor.putString(key, jsonString)
         editor.apply()
 
         Toast.makeText(this, "Saved cartItems to sharedPreferences", Toast.LENGTH_SHORT).show()
     }
 
+
+    private fun loadItemsFromFile(key: String){
+        var sharedPreferences: SharedPreferences = getSharedPreferences(key, MODE_PRIVATE)
+        val gson = Gson()
+
+        val jsonString = sharedPreferences.getString(key,"")
+        val type = object : TypeToken<MutableList<DetailProduct>>() {}.type
+        cartItems = (gson.fromJson(jsonString, type) ?: emptyList<DetailProduct>()) as MutableList<DetailProduct>
+    }
 
     //this function will handle delete Item from cart
     override fun onItemDeleteSelected(product: DetailProduct){
