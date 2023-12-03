@@ -64,8 +64,10 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
-        loadItemsFromFile(sharedKey)
         initUi()
+        showCartListItems()
+        loadItemsFromFile(sharedKey)
+        loadInitialItemsCount()
 
 
 
@@ -97,7 +99,8 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
             OnCLickListener = { item -> onItemClothSelected(item) },
             OnItemDeleteListener = {item ->  onItemDeleteSelected(item)},
             OnHideButton = { v,isVisible -> hideButtonDelete(v, isVisible) },
-            isVisible = isAdapterVisible
+            isVisible = isAdapterVisible,
+            onHideItemCounter = {v, isVisible -> hideItemCartCounter(v, isVisible)}
         )
         rvProductsDash.layoutManager = LinearLayoutManager(this)
         rvProductsDash.adapter = itemClothesAdapter
@@ -161,6 +164,10 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
         if (isVis) v.visibility = View.GONE else v.visibility = View.VISIBLE
     }
 
+    private fun hideItemCartCounter(v: View, isVis: Boolean){
+        if (isVis) v.visibility = View.GONE else v.visibility = View.VISIBLE
+    }
+
     private fun updateCateories(position: Int){
         itemsCategories[position].isSelectedCategory = !itemsCategories[position].isSelectedCategory
         clothesCategoryAdapter.notifyItemChanged(position)  //.notifyDataSetChanged()
@@ -199,13 +206,15 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
         if( !cartItems.contains(product) ){
             product.contador++
             cartItems.add(product)
-            Log.d("Product Added To Cart","${product} added to cart")
+            increaseCartItemsCount()
+            Log.d("Dash: Product Added To Cart","${product} ")
 
         }else {
             //else just increase its counter
             var productIndex: Int = cartItems.indexOf(product)
             cartItems[productIndex].contador ++
-            Log.d("Product Added To Cart"," ${product} ${product.contador}")
+            increaseCartItemsCount()
+            Log.d("Dash: Product counter increased"," ${product} ${product.contador}")
         }
 
 
@@ -239,6 +248,19 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
         val jsonString = sharedPreferences.getString(key,"")
         val type = object : TypeToken<MutableList<DetailProduct>>() {}.type
         cartItems = (gson.fromJson(jsonString, type) ?: emptyList<DetailProduct>()) as MutableList<DetailProduct>
+    }
+
+    private fun loadInitialItemsCount(){
+        var suma: Int = 0
+        for(k in cartItems){
+            suma += k.contador
+        }
+
+        cartSalesItemsCount.text = suma.toString()
+    }
+
+    private fun increaseCartItemsCount(){
+        cartSalesItemsCount.text = (cartSalesItemsCount.text.toString().toInt() + 1).toString()
     }
 
     //this function will handle delete Item from cart
@@ -275,6 +297,9 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
         //navigation
         drawer = findViewById(R.id.drawerLayout)
         nav_view = findViewById(R.id.nav_view)
+
+        //cart items count
+        cartSalesItemsCount = findViewById(R.id.action_cart_count)
     }
 
 

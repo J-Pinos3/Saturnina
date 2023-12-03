@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
@@ -30,9 +31,11 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
     //for the recycler view that'll show items in the dashboard
     private lateinit var rvProductsCar: RecyclerView
     private lateinit var itemClothesAdapter: ItemClothesAdapter
-
     private var itemsProducts = mutableListOf<DetailProduct>()
+
     public var isAdapterVisible = false
+
+    private lateinit var cartSalesItemsCount: TextView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,8 +43,8 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
         setContentView(R.layout.activity_car_sales)
         val cartKey: String? = intent.extras?.getString("CARTKEY")
         initUI()
-
         loadItemsFromFile(cartKey!!)
+        loadCartItemsCount()
 
 
         //reycler
@@ -50,7 +53,8 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
             OnCLickListener = { item -> onItemClothSelected(item) },
             OnItemDeleteListener = {item ->  onItemDeleteSelected(item)},
             OnHideButton = { v,isVisible -> hideButtonDelete(v, isVisible) },
-            isVisible = isAdapterVisible
+            isVisible = isAdapterVisible,
+            onHideItemCounter = {v, isVisible -> hideItemCartCounter(v,isVisible) }
 
         )
         rvProductsCar.layoutManager = LinearLayoutManager(this)
@@ -93,7 +97,9 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
         if (isVis) v.visibility = View.GONE else v.visibility = View.VISIBLE
     }
 
-
+    private fun hideItemCartCounter(v: View, isVis: Boolean){
+        if (isVis) v.visibility = View.GONE else v.visibility = View.VISIBLE
+    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if( toggle.onOptionsItemSelected(item) ){
@@ -105,6 +111,9 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
     private fun initUI(){
         drawer = findViewById(R.id.drawerLayoutCar)
         nav_view_car = findViewById(R.id.nav_view_car)
+
+        //cart items count
+        cartSalesItemsCount = findViewById(R.id.action_cart_count)
     }
 
 
@@ -141,13 +150,15 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
         if( !itemsProducts.contains(product) ){
             product.contador++
             itemsProducts.add(product)
-            Log.d("Product Added To Cart","${product} added to cart")
+            increaseCarItemsCount()
+            Log.d("CarSales: Product Added To Cart","${product} ")
 
         }else {
             //else just increase its counter
             var productIndex: Int = itemsProducts.indexOf(product)
             itemsProducts[productIndex].contador ++
-            Log.d("Product Added To Cart"," ${product} ${product.contador}")
+            increaseCarItemsCount()
+            Log.d("CarSales: Product counter increased"," ${product} ${product.contador}")
         }
 
         NotifyListItemChanged()
@@ -163,7 +174,7 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
 
             if( itemsProducts[productIndex].contador >= 1 ){
                 itemsProducts[productIndex].contador--
-
+                decreaseCarItemsCount()
             }
 
             if(itemsProducts[productIndex].contador == 0){
@@ -174,6 +185,23 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
 
         NotifyListItemChanged()
         showCartListItems()
+    }
+
+    private fun loadCartItemsCount(){
+        var suma: Int = 0
+        for(k in itemsProducts){
+            suma += k.contador
+        }
+
+        cartSalesItemsCount.text = (cartSalesItemsCount.text.toString().toInt() + 1).toString()
+    }
+
+    private fun increaseCarItemsCount(){
+        cartSalesItemsCount.text = (cartSalesItemsCount.text.toString().toInt() + 1).toString()
+    }
+
+    private fun decreaseCarItemsCount(){
+        cartSalesItemsCount.text = (cartSalesItemsCount.text.toString().toInt() - 1).toString()
     }
 
     private fun NotifyListItemChanged(){

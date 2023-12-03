@@ -18,16 +18,20 @@ class ItemClothesViewHolder(view: View): RecyclerView.ViewHolder(view) {
     private val btnAddToCart: View = view.findViewById(R.id.btnAddToCart)
     private val btnDeleteFromCart: View = view.findViewById(R.id.btnDeleteFromCart)
 
+    private val tvItemCounter: TextView = view.findViewById(R.id.tvItemCounter)
+
     //where itemClothes is a data class
     fun render(
         detailProduct: DetailProduct,
         OnCLickListener: (DetailProduct) -> Unit,
         OnItemDeleteListener: (DetailProduct) -> Unit,
         OnHideButton: (view: View, isVisible: Boolean) -> Unit,
-        isVisible: Boolean
+        isVisible: Boolean,
+        onHideItemCounter: (view: View, isVisible: Boolean) -> Unit
     ){
 
         OnHideButton(btnDeleteFromCart, isVisible)
+        onHideItemCounter(tvItemCounter as View, isVisible)
 
         tvClothItemDetail.text = detailProduct.name
         tvClothItemPrice.text = "$" + detailProduct.precio

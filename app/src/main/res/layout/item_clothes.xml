@@ -2,6 +2,7 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="281dp"
     android:layout_height="wrap_content"
     app:cardBackgroundColor="@color/cloth_item_bg"
@@ -15,11 +16,12 @@
 
         <ImageView
             android:id="@+id/ivClothItemPhoto"
-            android:layout_width="183dp"
+            android:layout_width="193dp"
             android:layout_height="150dp"
             android:src="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
             app:layout_constraintTop_toTopOf="parent" />
 
         <View
@@ -27,10 +29,27 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="11dp"
+            android:layout_marginTop="15dp"
             android:background="@drawable/ic_add_to_cart"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:visibility="visible"/>
+
+
+        <TextView
+            android:id="@+id/tvItemCounter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="11dp"
+            android:layout_marginTop="11dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnAddToCart"
+            android:text="x5"
+            android:gravity="center_vertical|center_horizontal"
+            android:textSize="28sp"
+            android:textAlignment="center"
+            android:visibility="visible"
+            />
 
 
         <View
@@ -41,7 +60,7 @@
             android:layout_marginTop="11dp"
             android:background="@drawable/ic_delete_from_cart"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnAddToCart"
+            app:layout_constraintTop_toBottomOf="@id/tvItemCounter"
             android:visibility="visible"/>
 
         <TextView
@@ -102,7 +121,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.17" />
+            app:layout_constraintGuide_percent="0.14" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
