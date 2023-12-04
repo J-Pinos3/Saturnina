@@ -28,6 +28,8 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
     lateinit var toggle: ActionBarDrawerToggle
     lateinit var nav_view_car: NavigationView
 
+    lateinit var tvTotalPrice: TextView
+
     //for the recycler view that'll show items in the dashboard
     private lateinit var rvProductsCar: RecyclerView
     private lateinit var itemClothesAdapter: ItemClothesAdapter
@@ -37,6 +39,12 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
 
     private lateinit var cartSalesItemsCount: TextView
 
+//    override fun onResume() {
+//        super.onResume()
+//        val cartKey: String? = intent.extras?.getString("CARTKEY")
+//        loadItemsFromFile(cartKey!!)
+//        loadCartItemsCount()
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +53,7 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
         initUI()
         loadItemsFromFile(cartKey!!)
         loadCartItemsCount()
+        loadInitialPrice()
 
 
         //reycler
@@ -114,6 +123,9 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
 
         //cart items count
         cartSalesItemsCount = findViewById(R.id.action_cart_count)
+
+        //cart total price
+        tvTotalPrice = findViewById(R.id.tvTotalPrice)
     }
 
 
@@ -125,7 +137,9 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
         val type = object : TypeToken< MutableList<DetailProduct> >() {}.type
         itemsProducts = (gson.fromJson(jsonString, type) ?: emptyList<DetailProduct>()) as MutableList<DetailProduct>
 
+        println("carrito de productos: " + itemsProducts.toString())
     }
+
 
     private fun saveItemsToFile(Key: String){
         var sharedPreferences: SharedPreferences = getSharedPreferences(Key, MODE_PRIVATE)
@@ -161,6 +175,7 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
             Log.d("CarSales: Product counter increased"," ${product} ${product.contador}")
         }
 
+        increaseTotalPricebyProduct(product)
         NotifyListItemChanged()
         showCartListItems()
     }
@@ -180,6 +195,7 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
             if(itemsProducts[productIndex].contador == 0){
                 itemsProducts.removeAt(productIndex) //si el contador de ese producto es 0, lo eliminamos de la lista
             }
+            decreaseTotalPricebyProduct(product)
 
         }
 
@@ -187,14 +203,36 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
         showCartListItems()
     }
 
+
+    private fun increaseTotalPricebyProduct(currentProduct: DetailProduct){
+        var currentPrice = (currentProduct.precio )
+        tvTotalPrice.text = ( tvTotalPrice.text.toString().toDouble() +  currentPrice).toString()
+    }
+
+
+    private fun decreaseTotalPricebyProduct(currentProduct: DetailProduct){
+        var currentPrice = (currentProduct.precio)
+        tvTotalPrice.text = ( tvTotalPrice.text.toString().toDouble() -  currentPrice).toString()
+    }
+
+    private fun loadInitialPrice(): Unit{
+        var suma: Double = 0.0
+        for(k in itemsProducts){
+            suma += k.precio * k.contador
+        }
+        tvTotalPrice.text = suma.toString()
+    }
+
+
     private fun loadCartItemsCount(){
         var suma: Int = 0
         for(k in itemsProducts){
             suma += k.contador
         }
 
-        cartSalesItemsCount.text = (cartSalesItemsCount.text.toString().toInt() + 1).toString()
+        cartSalesItemsCount.text = suma.toString()
     }
+
 
     private fun increaseCarItemsCount(){
         cartSalesItemsCount.text = (cartSalesItemsCount.text.toString().toInt() + 1).toString()

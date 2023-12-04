@@ -116,7 +116,7 @@
             app:layout_constraintEnd_toEndOf="@id/guidelineRight"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginTop="10dp"
-            android:paddingHorizontal="20dp"/>
+            android:paddingHorizontal="0dp"/>
 
         <!-- GUIDELINES -->
 
@@ -132,14 +132,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.07" />
+            app:layout_constraintGuide_percent="0.05" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineRight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.93" />
+            app:layout_constraintGuide_percent="0.95" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
