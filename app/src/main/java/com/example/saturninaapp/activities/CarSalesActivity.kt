@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.widget.AppCompatButton
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,6 +29,7 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
     lateinit var toggle: ActionBarDrawerToggle
     lateinit var nav_view_car: NavigationView
 
+    lateinit var btnMakeSale: AppCompatButton
     lateinit var tvTotalPrice: TextView
 
     //for the recycler view that'll show items in the dashboard
@@ -69,6 +71,13 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
         rvProductsCar.layoutManager = LinearLayoutManager(this)
         rvProductsCar.adapter = itemClothesAdapter
 
+
+        //complete sale button
+        btnMakeSale.setOnClickListener {
+            val intent = Intent(this, CompleteSaleActivity::class.java)
+            intent.putExtra("TOTAL_CART_ITEMS", cartSalesItemsCount.text.toString())
+            startActivity(intent)
+        }
 
         //navigation
         val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_main)
@@ -120,6 +129,9 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
     private fun initUI(){
         drawer = findViewById(R.id.drawerLayoutCar)
         nav_view_car = findViewById(R.id.nav_view_car)
+
+        //complete sale button
+        btnMakeSale = findViewById(R.id.btnMakeSale)
 
         //cart items count
         cartSalesItemsCount = findViewById(R.id.action_cart_count)
