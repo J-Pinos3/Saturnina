@@ -72,7 +72,7 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
 
 
         val user_token = intent.extras?.getString("USER_TOKEN")
-        val bearerToken: String = "Bearer "+user_token
+        val bearerToken: String = "Bearer $user_token"
 
         //get categories from API
         CoroutineScope(Dispatchers.IO).launch {
@@ -131,10 +131,14 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
                     //Toast.makeText(this, "Item 2", Toast.LENGTH_SHORT).show()
                 }
                 R.id.nav_item_three ->{
-                    Toast.makeText(this, "Item 3", Toast.LENGTH_SHORT).show()
+                    //val intent = Intent(this, AboutActivity::class.java)
+                    //startActivity(intent)
+                    //Toast.makeText(this, "Item 3", Toast.LENGTH_SHORT).show()
                 }
                 R.id.nav_item_four ->{
-                    Toast.makeText(this, "Item 4", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, ManagementOptionsActivity::class.java)
+                    startActivity(intent)
+                    //Toast.makeText(this, "Item 4", Toast.LENGTH_SHORT).show()
                 }
 
                 R.id.nav_item_five ->{
@@ -156,6 +160,7 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
 
             val intent = Intent(applicationContext, CarSalesActivity::class.java)
             intent.putExtra("CARTKEY", sharedKey)
+            intent.putExtra("USER_TOKENTO_PROFILE", user_token)
             startActivity(intent)
         }
     }//ON CREATE
@@ -203,6 +208,9 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
     override fun onItemClothSelected(product: DetailProduct){
         Toast.makeText(this, product.id + " " + product.name + " " + product.precio, Toast.LENGTH_SHORT).show()
         //if the element is not in the list, add it
+        val existingProduct = cartItems.find { it.id == product.id }
+
+        /*
         if( !cartItems.contains(product) ){
             product.contador++
             cartItems.add(product)
@@ -216,8 +224,20 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
             increaseCartItemsCount()
             Log.d("Dash: Product counter increased"," ${product} ${product.contador}")
         }
+        */
 
+        if( existingProduct == null){
+            product.contador++
+            cartItems.add(product)
+            increaseCartItemsCount()
+            Log.d("Dash: Product Added To Cart","${product} ")
 
+        }else {
+            //else just increase its counter
+            existingProduct.contador++
+            increaseCartItemsCount()
+            Log.d("Dash: Product counter increased"," ${existingProduct} ${existingProduct.contador}")
+        }
         showCartListItems()
     }
 

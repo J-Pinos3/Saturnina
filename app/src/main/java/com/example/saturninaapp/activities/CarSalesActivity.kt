@@ -52,6 +52,9 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_car_sales)
         val cartKey: String? = intent.extras?.getString("CARTKEY")
+        val user_token = intent.extras?.getString("USER_TOKENTO_PROFILE")
+        val bearerToken: String = "Bearer $user_token"
+
         initUI()
         loadItemsFromFile(cartKey!!)
         loadCartItemsCount()
@@ -76,6 +79,7 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
         btnMakeSale.setOnClickListener {
             val intent = Intent(this, CompleteSaleActivity::class.java)
             intent.putExtra("TOTAL_CART_ITEMS", cartSalesItemsCount.text.toString())
+            intent.putExtra("USER_TOKENTO_PROFILE", user_token)
             startActivity(intent)
         }
 
@@ -96,13 +100,25 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
                     startActivity(intent)
                 }
                 R.id.nav_item_two ->{
-                    Toast.makeText(this, "Item 2", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, ProfileActivity::class.java)
+                    intent.putExtra("USER_TOKEN_PROFILE", user_token)
+                    startActivity(intent)
+
+                    //Toast.makeText(this, "Item 2", Toast.LENGTH_SHORT).show()
                 }
                 R.id.nav_item_three ->{
-                    Toast.makeText(this, "Item 3", Toast.LENGTH_SHORT).show()
+
+                //Toast.makeText(this, "Item 3", Toast.LENGTH_SHORT).show()
                 }
                 R.id.nav_item_four ->{
-                    Toast.makeText(this, "Item 4", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, ManagementOptionsActivity::class.java)
+                    startActivity(intent)
+                    //Toast.makeText(this, "Item 4", Toast.LENGTH_SHORT).show()
+                }
+                R.id.nav_item_five ->{
+                    val intent = Intent(applicationContext, LoginActivity::class.java)
+                    startActivity(intent)
+                    finish()
                 }
             }
 
