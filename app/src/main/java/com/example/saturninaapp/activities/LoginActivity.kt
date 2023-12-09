@@ -45,7 +45,7 @@ class LoginActivity : AppCompatActivity() {
                         Log.d("Login exitoso", "${UserResponseLogine?.detail?.token!!} ${UserResponseLogine.detail.nombre}" )
                         val user_token = UserResponseLogine?.detail?.token!!
 
-                        val intent = Intent(applicationContext, DashboardActivity::class.java)
+                        val intent = Intent(applicationContext, IntroDashboardNews::class.java)
                         intent.putExtra("USER_TOKEN", user_token)
                         startActivity(intent)
                     }
