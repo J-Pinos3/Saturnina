@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
@@ -31,6 +32,9 @@ class IntroDashboardNews : AppCompatActivity() {
     lateinit var toggle: ActionBarDrawerToggle
     lateinit var nav_view_main_news: NavigationView
 
+    private lateinit var tvGotoFirstFilter: TextView
+    private lateinit var tvGotoSecondFilter: TextView
+
     //clothes categories
     //private lateinit var clothesCategoryAdapter: ClothesCategoryAdapter
     private val itemsCategories = mutableListOf<ClothCategoryData>()
@@ -39,7 +43,7 @@ class IntroDashboardNews : AppCompatActivity() {
     private lateinit var rvSecondCategoryClothes: RecyclerView
     private lateinit var firstCarouselAdapter: ClothesCarouselAdapter
     private lateinit var secondCarouselAdapter: ClothesCarouselAdapter
-    private val firstCategoryItems = mutableListOf<DetailProduct>()
+    private var firstCategoryItems = mutableListOf<DetailProduct>()
     private var secondCategoryItems = mutableListOf<DetailProduct>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,17 +58,17 @@ class IntroDashboardNews : AppCompatActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             fetchIntroClothCategories(bearerToken)
             Log.d("DEBUG", "Categories fetched: $itemsCategories")
-        }
 
-        CoroutineScope(Dispatchers.IO).async{
-            fecthIntroItemProducts(bearerToken)
+            fecthIntroItemProducts(bearerToken, { ShuffleLists() })
             Log.d("DEBUG", "Products fetched: $firstCategoryItems")
         }
+
+
 
         //val firstFilteredList = getProductsofRandomCat(firstCategoryItems)
         //Log.i("firtst filter", firstFilteredList.toString())
         rvFirstCategoryClothes = findViewById(R.id.rvFirstCategoryClothes)//get products of a random category
-        firstCarouselAdapter = ClothesCarouselAdapter(firstCategoryItems)
+        //firstCarouselAdapter = ClothesCarouselAdapter(firstCategoryItems)
         rvFirstCategoryClothes.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         rvFirstCategoryClothes.adapter = firstCarouselAdapter
 
@@ -72,12 +76,22 @@ class IntroDashboardNews : AppCompatActivity() {
         //secondCategoryItems = getProductsofRandomCat(firstCategoryItems)
         //Log.i("second filter", secondCategoryItems.toString())
         rvSecondCategoryClothes = findViewById(R.id.rvSecondCategoryClothes)//get products of a random category
-        secondCarouselAdapter = ClothesCarouselAdapter(secondCategoryItems)
+        //secondCarouselAdapter = ClothesCarouselAdapter(secondCategoryItems)
         rvSecondCategoryClothes.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         rvSecondCategoryClothes.adapter = secondCarouselAdapter
 
 
+        tvGotoFirstFilter.setOnClickListener {
+            if (user_token != null) {
+                navigateToDashboard(user_token)
+            }
+        }
 
+        tvGotoSecondFilter.setOnClickListener {
+            if (user_token != null) {
+                navigateToDashboard(user_token)
+            }
+        }
 
 
         //navigation
@@ -129,14 +143,41 @@ class IntroDashboardNews : AppCompatActivity() {
     }//ON CREATE
 
 
+    fun ShuffleLists() {
+
+        val random1 = getRandonCategory()
+        val random2 = getRandonCategory()
+        firstCategoryItems = getProductsofRandomCat(firstCategoryItems, random1)
+        secondCategoryItems = getProductsofRandomCat(secondCategoryItems, random2)
+        Log.i("first cat", firstCategoryItems.toString() + "  category $random1")
+        Log.i("second cat", secondCategoryItems.toString()  + "  category $random2")
+
+        firstCarouselAdapter.productSections = firstCategoryItems
+        secondCarouselAdapter.productSections = secondCategoryItems
+
+        firstCarouselAdapter.notifyDataSetChanged()
+        secondCarouselAdapter.notifyDataSetChanged()
+
+    }
+
 
     private fun initUI() {
         //navigation
         drawer = findViewById(R.id.drawerLayoutMainNews)
         nav_view_main_news = findViewById(R.id.nav_view_main_news)
 
+        tvGotoFirstFilter = findViewById(R.id.tvGotoFirstFilter)
+        tvGotoSecondFilter = findViewById(R.id.tvGotoSecondFilter)
+
         firstCarouselAdapter = ClothesCarouselAdapter(mutableListOf<DetailProduct>())
         secondCarouselAdapter = ClothesCarouselAdapter(mutableListOf<DetailProduct>())
+    }
+
+
+    private fun navigateToDashboard(token: String){
+        val intent = Intent(this, DashboardActivity::class.java)
+        intent.putExtra("USER_TOKEN", token)
+        startActivity(intent)
     }
 
     private fun getRandonCategory(): String{
@@ -151,9 +192,8 @@ class IntroDashboardNews : AppCompatActivity() {
 
     }
 
-    private fun getProductsofRandomCat(listaProductos: MutableList<DetailProduct> ): MutableList<DetailProduct> {
 
-        val randomCategoryID: String = getRandonCategory()
+    private fun getProductsofRandomCat(listaProductos: MutableList<DetailProduct>,randomCategoryID: String ): MutableList<DetailProduct> {
 
         val filteredList =  listaProductos.filter { it.category == randomCategoryID }
         return filteredList.toMutableList()
@@ -194,7 +234,7 @@ class IntroDashboardNews : AppCompatActivity() {
     }//FIN DEL MÉTODO FETCH INTRO CLOTH CATEGORIES
 
 
-    suspend fun fecthIntroItemProducts(bearerToken: String){
+    suspend fun fecthIntroItemProducts(bearerToken: String, onProductsFetched: () -> Unit){
         try {
             val retrofitGetProducts = RetrofitHelper.consumeAPI.getItemsProducts(bearerToken)
 
@@ -208,6 +248,8 @@ class IntroDashboardNews : AppCompatActivity() {
                             firstCategoryItems.add(DetailProduct(k.category, k.descripcion, k.id, k.imagen, k.name, k.precio))
                             secondCategoryItems.add(DetailProduct(k.category, k.descripcion, k.id, k.imagen, k.name, k.precio))
                         }
+                        onProductsFetched()
+
                         firstCarouselAdapter.notifyDataSetChanged()
                         secondCarouselAdapter.notifyDataSetChanged()
                     }
@@ -222,5 +264,6 @@ class IntroDashboardNews : AppCompatActivity() {
             e.printStackTrace()
         }
     }//FIN DEL MÉTODO FETCH INTRO ITEM PRODUCTS
+
 
 }

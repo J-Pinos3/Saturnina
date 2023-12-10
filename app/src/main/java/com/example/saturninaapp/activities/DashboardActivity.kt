@@ -45,7 +45,7 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
     private lateinit var rvFilterClothes: RecyclerView
     private lateinit var clothesCategoryAdapter: ClothesCategoryAdapter
     //private var itemsCategories = mutableListOf<ClothCategoryData>()
-    private val itemsCategories = mutableListOf<ClothCategoryData>()
+    private val itemsCategories = mutableListOf<ClothCategoryData>(ClothCategoryData("1","Todo"))
 
 
 
