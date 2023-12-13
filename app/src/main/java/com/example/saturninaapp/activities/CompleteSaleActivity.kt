@@ -48,7 +48,7 @@ class CompleteSaleActivity : AppCompatActivity() {
         initUI()
         val totalItems: String? = intent.extras?.getString("TOTAL_CART_ITEMS")
         val userToken = intent.extras?.getString("USER_TOKENTO_PROFILE")
-        val bearerToken: String = "Bearer $userToken"
+        val bearerToken = "Bearer $userToken"
         cartSalesItemsCount.text = totalItems
 
         CoroutineScope(Dispatchers.IO).launch {
@@ -76,31 +76,36 @@ class CompleteSaleActivity : AppCompatActivity() {
         nav_view_complete_sale.setNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.nav_item_one ->{
-
-                    val intent = Intent(this, DashboardActivity::class.java)
+                    val intent = Intent(this, IntroDashboardNews::class.java)
+                    intent.putExtra("USER_TOKEN", userToken)
                     startActivity(intent)
-                    //Toast.makeText(this, "Item 1", Toast.LENGTH_SHORT).show()
                 }
-                R.id.nav_item_two ->{
 
+                R.id.nav_item_two ->{
+                    val intent = Intent(this, DashboardActivity::class.java)
+                    intent.putExtra("USER_TOKEN", userToken)
+                    startActivity(intent)
+                }
+
+                R.id.nav_item_three ->{
                     val intent = Intent(this, ProfileActivity::class.java)
                     intent.putExtra("USER_TOKEN_PROFILE", userToken)
                     startActivity(intent)
-                    //Toast.makeText(this, "Item 2", Toast.LENGTH_SHORT).show()
                 }
-                R.id.nav_item_three ->{
-                    //Toast.makeText(this, "Item 3", Toast.LENGTH_SHORT).show()
-                }
+
                 R.id.nav_item_four ->{
+                    //NOSOTROS
+                }
+
+                R.id.nav_item_five ->{
                     val intent = Intent(this, ManagementOptionsActivity::class.java)
                     startActivity(intent)
-                    //Toast.makeText(this, "Item 4", Toast.LENGTH_SHORT).show()
                 }
-                R.id.nav_item_five ->{
+
+                R.id.nav_item_six ->{
                     val intent = Intent(applicationContext, LoginActivity::class.java)
                     startActivity(intent)
                     finish()
-                    //Toast.makeText(this, "Item 4", Toast.LENGTH_SHORT).show()
                 }
 
             }

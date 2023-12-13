@@ -45,7 +45,7 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
     private lateinit var rvFilterClothes: RecyclerView
     private lateinit var clothesCategoryAdapter: ClothesCategoryAdapter
     //private var itemsCategories = mutableListOf<ClothCategoryData>()
-    private val itemsCategories = mutableListOf<ClothCategoryData>(ClothCategoryData("1","Todo"))
+    private val itemsCategories = mutableListOf<ClothCategoryData>()
 
 
 
@@ -70,9 +70,11 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
         loadInitialItemsCount()
 
 
-
         val user_token = intent.extras?.getString("USER_TOKEN")
         val bearerToken: String = "Bearer $user_token"
+
+        val random_category_id = intent.extras?.getString("RANDOM_CATEGORY_ID")
+
 
         //get categories from API
         CoroutineScope(Dispatchers.IO).launch {
@@ -106,6 +108,12 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
         rvProductsDash.adapter = itemClothesAdapter
 
 
+        if( intent.hasExtra("codIntro") ){
+            if( !random_category_id.isNullOrEmpty() ){
+                updateRandomItems(random_category_id)
+            }
+        }
+
         //navigation
 
         val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_main)
@@ -118,30 +126,31 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
         nav_view.setNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.nav_item_one ->{
-                    val intent = Intent(this, DashboardActivity::class.java)
+                    val intent = Intent(this, IntroDashboardNews::class.java)
+                    intent.putExtra("USER_TOKEN", user_token)
                     startActivity(intent)
 
-                    //Toast.makeText(this, "Item 1", Toast.LENGTH_SHORT).show()
+
                 }
                 R.id.nav_item_two ->{
+                    //THIS IS THE DASHBOARD ACTIVITY
+                }
+                R.id.nav_item_three ->{
                     val intent = Intent(this, ProfileActivity::class.java)
                     intent.putExtra("USER_TOKEN_PROFILE", user_token)
                     startActivity(intent)
 
-                    //Toast.makeText(this, "Item 2", Toast.LENGTH_SHORT).show()
-                }
-                R.id.nav_item_three ->{
-                    //val intent = Intent(this, AboutActivity::class.java)
-                    //startActivity(intent)
-                    //Toast.makeText(this, "Item 3", Toast.LENGTH_SHORT).show()
                 }
                 R.id.nav_item_four ->{
-                    val intent = Intent(this, ManagementOptionsActivity::class.java)
-                    startActivity(intent)
-                    //Toast.makeText(this, "Item 4", Toast.LENGTH_SHORT).show()
+                    //NOSOTROS
                 }
 
                 R.id.nav_item_five ->{
+                    val intent = Intent(applicationContext, ManagementOptionsActivity::class.java)
+                    startActivity(intent)
+                }
+
+                R.id.nav_item_six ->{
                     val intent = Intent(applicationContext, LoginActivity::class.java)
                     startActivity(intent)
                     finish()
@@ -178,6 +187,22 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
         clothesCategoryAdapter.notifyItemChanged(position)  //.notifyDataSetChanged()
 
         updateItemsClothes()
+    }
+
+    private fun updateRandomItems(idcategoria: String){
+        val randomProducts = mutableListOf<DetailProduct>()
+        for(k in itemsProducts){
+            if(k.id == idcategoria){
+                randomProducts.add(k)
+            }
+        }
+
+        if( !randomProducts.isNullOrEmpty() ){
+            itemClothesAdapter.sellingItems = randomProducts
+        }else{
+            itemClothesAdapter.sellingItems = itemsProducts
+        }
+        itemClothesAdapter.notifyDataSetChanged()
     }
 
     private fun updateItemsClothes(){

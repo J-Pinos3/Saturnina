@@ -94,28 +94,34 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
         nav_view_car.setNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.nav_item_one ->{
-                    saveItemsToFile(cartKey)
-
-                    val intent = Intent(this, DashboardActivity::class.java)
+                    val intent = Intent(this, IntroDashboardNews::class.java)
+                    intent.putExtra("USER_TOKEN", user_token)
                     startActivity(intent)
                 }
+
                 R.id.nav_item_two ->{
+                    saveItemsToFile(cartKey)
+                    val intent = Intent(this, DashboardActivity::class.java)
+                    intent.putExtra("USER_TOKEN", user_token)
+                    startActivity(intent)
+                }
+
+                R.id.nav_item_three ->{
                     val intent = Intent(this, ProfileActivity::class.java)
                     intent.putExtra("USER_TOKEN_PROFILE", user_token)
                     startActivity(intent)
-
-                    //Toast.makeText(this, "Item 2", Toast.LENGTH_SHORT).show()
                 }
-                R.id.nav_item_three ->{
 
-                //Toast.makeText(this, "Item 3", Toast.LENGTH_SHORT).show()
-                }
                 R.id.nav_item_four ->{
+                    //NOSOTROS
+                }
+
+                R.id.nav_item_five ->{
                     val intent = Intent(this, ManagementOptionsActivity::class.java)
                     startActivity(intent)
-                    //Toast.makeText(this, "Item 4", Toast.LENGTH_SHORT).show()
                 }
-                R.id.nav_item_five ->{
+
+                R.id.nav_item_six ->{
                     val intent = Intent(applicationContext, LoginActivity::class.java)
                     startActivity(intent)
                     finish()

@@ -46,6 +46,9 @@ class IntroDashboardNews : AppCompatActivity() {
     private var firstCategoryItems = mutableListOf<DetailProduct>()
     private var secondCategoryItems = mutableListOf<DetailProduct>()
 
+    private var random1: String = ""
+    private var random2: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_intro_dashboard_news)
@@ -59,7 +62,7 @@ class IntroDashboardNews : AppCompatActivity() {
             fetchIntroClothCategories(bearerToken)
             Log.d("DEBUG", "Categories fetched: $itemsCategories")
 
-            fecthIntroItemProducts(bearerToken, { ShuffleLists() })
+            fecthIntroItemProducts(bearerToken) { ShuffleLists() }
             Log.d("DEBUG", "Products fetched: $firstCategoryItems")
         }
 
@@ -83,13 +86,13 @@ class IntroDashboardNews : AppCompatActivity() {
 
         tvGotoFirstFilter.setOnClickListener {
             if (user_token != null) {
-                navigateToDashboard(user_token)
+                navigateToDashboard(user_token,random1)
             }
         }
 
         tvGotoSecondFilter.setOnClickListener {
             if (user_token != null) {
-                navigateToDashboard(user_token)
+                navigateToDashboard(user_token, random2)
             }
         }
 
@@ -106,31 +109,29 @@ class IntroDashboardNews : AppCompatActivity() {
         nav_view_main_news.setNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.nav_item_one ->{
-                      //THIS WILL BE THE NEW MAIN ACTIVITY?????¡?
-//                    val intent = Intent(this, DashboardActivity::class.java)
-//                    startActivity(intent)
-
-                    //Toast.makeText(this, "Item 1", Toast.LENGTH_SHORT).show()
+                      //THIS the INTRO DASHBOARD NEWS
                 }
                 R.id.nav_item_two ->{
+                    val intent = Intent(this, DashboardActivity::class.java)
+                    intent.putExtra("USER_TOKEN", user_token)
+                    startActivity(intent)
+
+                }
+                R.id.nav_item_three ->{
                     val intent = Intent(this, ProfileActivity::class.java)
                     intent.putExtra("USER_TOKEN_PROFILE", user_token)
                     startActivity(intent)
-
-                    //Toast.makeText(this, "Item 2", Toast.LENGTH_SHORT).show()
-                }
-                R.id.nav_item_three ->{
-                    //val intent = Intent(this, AboutActivity::class.java)
-                    //startActivity(intent)
-                    //Toast.makeText(this, "Item 3", Toast.LENGTH_SHORT).show()
                 }
                 R.id.nav_item_four ->{
-                    val intent = Intent(this, ManagementOptionsActivity::class.java)
-                    startActivity(intent)
-                    //Toast.makeText(this, "Item 4", Toast.LENGTH_SHORT).show()
+                    //NOSOTROS
                 }
 
                 R.id.nav_item_five ->{
+                    val intent = Intent(this, ManagementOptionsActivity::class.java)
+                    startActivity(intent)
+                }
+
+                R.id.nav_item_six ->{
                     val intent = Intent(applicationContext, LoginActivity::class.java)
                     startActivity(intent)
                     finish()
@@ -145,8 +146,8 @@ class IntroDashboardNews : AppCompatActivity() {
 
     fun ShuffleLists() {
 
-        val random1 = getRandonCategory()
-        val random2 = getRandonCategory()
+        random1 = getRandonCategory()
+        random2 = getRandonCategory()
         firstCategoryItems = getProductsofRandomCat(firstCategoryItems, random1)
         secondCategoryItems = getProductsofRandomCat(secondCategoryItems, random2)
         Log.i("first cat", firstCategoryItems.toString() + "  category $random1")
@@ -174,9 +175,11 @@ class IntroDashboardNews : AppCompatActivity() {
     }
 
 
-    private fun navigateToDashboard(token: String){
+    private fun navigateToDashboard(token: String, categoryID: String){
         val intent = Intent(this, DashboardActivity::class.java)
         intent.putExtra("USER_TOKEN", token)
+        intent.putExtra("RANDOM_CATEGORY_ID", categoryID)
+        intent.putExtra("codIntro", 11)
         startActivity(intent)
     }
 

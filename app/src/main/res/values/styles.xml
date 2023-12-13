@@ -47,4 +47,12 @@
     <dimen name="h3TextSize">22sp</dimen>
 
 
+    <style name="MyTextViewStyle">
+        <item name="android:background">@drawable/custom_background</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">18sp</item>
+
+    </style>
+
+
 </resources>

@@ -24,17 +24,17 @@
             android:id="@+id/tvGotoFirstFilter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="36dp"
             app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
             app:layout_constraintTop_toTopOf="@id/guidelineTop"
+            style="@style/MyTextViewStyle"
             android:text="@string/show_every_cloth"
-            android:textSize="18sp"
             />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvFirstCategoryClothes"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="7dp"
             app:layout_constraintEnd_toEndOf="@+id/guidelineRight"
             app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
             app:layout_constraintTop_toBottomOf="@id/tvGotoFirstFilter"/>
@@ -44,11 +44,11 @@
             android:id="@+id/tvGotoSecondFilter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="36dp"
             app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
             app:layout_constraintTop_toBottomOf="@id/rvFirstCategoryClothes"
+            style="@style/MyTextViewStyle"
             android:text="@string/show_every_cloth"
-            android:textSize="18sp"
             />
 
 
@@ -57,7 +57,7 @@
             android:id="@+id/rvSecondCategoryClothes"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="7dp"
             app:layout_constraintBottom_toBottomOf="@id/guidelineBottom"
             app:layout_constraintEnd_toEndOf="@id/guidelineRight"
             app:layout_constraintStart_toStartOf="@id/guidelineLeft"

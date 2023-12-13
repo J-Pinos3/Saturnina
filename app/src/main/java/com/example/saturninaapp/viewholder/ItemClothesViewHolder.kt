@@ -37,7 +37,10 @@ class ItemClothesViewHolder(view: View): RecyclerView.ViewHolder(view) {
         tvClothItemPrice.text = "$" + detailProduct.precio
         tvClothItemDescription.text = detailProduct.descripcion
         tvItemCounter.text = detailProduct.contador.toString()
-        Picasso.get().load(detailProduct.imagen.secure_url).into(ivClothItemPhoto)
+        Picasso.get().load(detailProduct.imagen.secure_url)
+            .fit()
+            .centerCrop()
+            .into(ivClothItemPhoto)
 
 
         btnAddToCart.setOnClickListener {
