@@ -12,16 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.saturninaapp.R
 import com.example.saturninaapp.adapters.ClothesCarouselAdapter
-import com.example.saturninaapp.adapters.ClothesCategoryAdapter
 import com.example.saturninaapp.models.ClothCategoryData
 import com.example.saturninaapp.models.DetailProduct
+import com.example.saturninaapp.models.Imagen
 import com.example.saturninaapp.util.RetrofitHelper
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.random.Random
@@ -150,8 +147,8 @@ class IntroDashboardNews : AppCompatActivity() {
         random2 = getRandonCategory()
         firstCategoryItems = getProductsofRandomCat(firstCategoryItems, random1)
         secondCategoryItems = getProductsofRandomCat(secondCategoryItems, random2)
-        Log.i("first cat", firstCategoryItems.toString() + "  category $random1")
-        Log.i("second cat", secondCategoryItems.toString()  + "  category $random2")
+        Log.i("first cat", firstCategoryItems.toString() + "  categoria1 $random1")
+        Log.i("second cat", secondCategoryItems.toString()  + "  categoria2 $random2")
 
         firstCarouselAdapter.productSections = firstCategoryItems
         secondCarouselAdapter.productSections = secondCategoryItems
@@ -247,9 +244,15 @@ class IntroDashboardNews : AppCompatActivity() {
                 withContext(Dispatchers.Main){
                     if(listResponse != null){
                         for(k in listResponse){
-                            println("Cate: ${k.category}  Name: ${k.name}  Desc: ${k.descripcion}   IMG: ${k.imagen.secure_url}   Price: ${k.precio}")
-                            firstCategoryItems.add(DetailProduct(k.category, k.descripcion, k.id, k.imagen, k.name, k.precio))
-                            secondCategoryItems.add(DetailProduct(k.category, k.descripcion, k.id, k.imagen, k.name, k.precio))
+                            println("Cate: ${k.category}  Name: ${k.name}  Desc: ${k.descripcion}  Price: ${k.precio}")
+
+                            val colores = k.colores ?: emptyList()
+                            val tallas = k.tallas ?: emptyList()
+
+                            firstCategoryItems.add(DetailProduct(k.category,colores, k.descripcion, k.id, k.imagen, k.name, k.precio, tallas))
+                            secondCategoryItems.add(DetailProduct(k.category,colores, k.descripcion, k.id, k.imagen, k.name, k.precio, tallas))
+
+                            //k.imagen?.get(0)?.secure_url
                         }
                         onProductsFetched()
 
@@ -270,3 +273,19 @@ class IntroDashboardNews : AppCompatActivity() {
 
 
 }
+
+//                            if(imagen is Imagen ){
+//                                print("imagen111 ${imagen}")
+//                                firstCategoryItems.add(DetailProduct(k.category,colores, k.descripcion, k.id, listOf(imagen.secure_url), k.name, k.precio, tallas))
+//                                secondCategoryItems.add(DetailProduct(k.category,colores, k.descripcion, k.id, listOf(imagen.secure_url), k.name, k.precio, tallas))
+//
+//                            }else if(imagen is List<*>){
+//                                val images = imagen.filterIsInstance<Imagen>()
+//                                firstCategoryItems.add(DetailProduct(k.category,colores, k.descripcion, k.id, images, k.name, k.precio, tallas))
+//                                secondCategoryItems.add(DetailProduct(k.category,colores, k.descripcion, k.id, images, k.name, k.precio, tallas))
+//                                print("imagenes222 ${images}")
+//                            }else{
+//                                firstCategoryItems.add(DetailProduct(k.category,colores,k.descripcion, k.id, imagen, k.name, k.precio, tallas))
+//                                secondCategoryItems.add(DetailProduct(k.category,colores,k.descripcion, k.id, imagen, k.name, k.precio, tallas))
+//                                print("imagen333 ${imagen}")
+//                            }

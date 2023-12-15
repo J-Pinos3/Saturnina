@@ -2,21 +2,24 @@ package com.example.saturninaapp.activities
 
 import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.AppCompatButton
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.saturninaapp.R
+import com.example.saturninaapp.models.DetailProduct
 import com.example.saturninaapp.models.DetailXUser
 import com.example.saturninaapp.util.RetrofitHelper
 import com.google.android.material.navigation.NavigationView
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -31,6 +34,8 @@ class CompleteSaleActivity : AppCompatActivity() {
     private lateinit var userOwner: DetailXUser
 
     lateinit var btnAcceptSale: AppCompatButton
+    private var finalListOfProducts = mutableListOf<DetailProduct>()
+    private lateinit var etOrderAddress: EditText
 
 
     private val pickImage = registerForActivityResult( ActivityResultContracts.GetContent() ){
@@ -48,9 +53,13 @@ class CompleteSaleActivity : AppCompatActivity() {
         initUI()
         val totalItems: String? = intent.extras?.getString("TOTAL_CART_ITEMS")
         val userToken = intent.extras?.getString("USER_TOKENTO_PROFILE")
+        val cartKey: String? = intent.extras?.getString("CARTKEY")
         val bearerToken = "Bearer $userToken"
-        cartSalesItemsCount.text = totalItems
+        if (totalItems != null) {
+            showTotalCartItems(totalItems)
+        }
 
+        loadItemsFromFiles(cartKey!!)
         CoroutineScope(Dispatchers.IO).launch {
             userOwner = bringUserData(bearerToken)
         }
@@ -124,10 +133,35 @@ class CompleteSaleActivity : AppCompatActivity() {
         //cart items count
         cartSalesItemsCount = findViewById(R.id.action_cart_count)
 
+        //order address
+        etOrderAddress = findViewById(R.id.etOrderAddress)
+
         //send order button / accept sale
         btnAcceptSale = findViewById(R.id.btnAcceptSale)
     }
 
+    private fun showTotalCartItems(numberOfitems: String){
+        cartSalesItemsCount.text = numberOfitems
+    }
+
+    private fun loadItemsFromFiles(key: String){
+        var sharedPreferences: SharedPreferences = getSharedPreferences(key, MODE_PRIVATE)
+        val gson = Gson()
+
+        val jsonString = sharedPreferences.getString(key, "")
+        val type = object : TypeToken< MutableList<DetailProduct> >() {}.type
+        finalListOfProducts = (gson.fromJson(jsonString, type)  ?: emptyList<DetailProduct>()) as MutableList<DetailProduct>
+
+    }
+
+    //final price of purchase
+    private fun getTotalValueOfCart(): Double{
+        var suma: Double = 0.0
+        for(k in finalListOfProducts){
+            suma += k.precio * k.contador
+        }
+        return suma
+    }
 
     suspend fun bringUserData(bearerToken: String): DetailXUser{
         val currentUser: DetailXUser

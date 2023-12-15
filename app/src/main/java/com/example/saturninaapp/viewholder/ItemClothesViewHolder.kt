@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.saturninaapp.R
 import com.example.saturninaapp.models.DetailProduct
+import com.example.saturninaapp.models.Imagen
 import com.squareup.picasso.Picasso
 
 class ItemClothesViewHolder(view: View): RecyclerView.ViewHolder(view) {
@@ -37,7 +38,11 @@ class ItemClothesViewHolder(view: View): RecyclerView.ViewHolder(view) {
         tvClothItemPrice.text = "$" + detailProduct.precio
         tvClothItemDescription.text = detailProduct.descripcion
         tvItemCounter.text = detailProduct.contador.toString()
-        Picasso.get().load(detailProduct.imagen.secure_url)
+
+        //imagen[0]  because now its a List of images for the moment I'll just show the first one till I implement the carousel of images
+        ivClothItemPhoto.scaleType = ImageView.ScaleType.CENTER_CROP
+        Picasso.get().
+            load(detailProduct.imagen[0].secure_url)
             .fit()
             .centerCrop()
             .into(ivClothItemPhoto)

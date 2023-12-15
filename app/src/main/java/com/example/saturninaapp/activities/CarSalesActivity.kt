@@ -79,6 +79,7 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
         btnMakeSale.setOnClickListener {
             val intent = Intent(this, CompleteSaleActivity::class.java)
             intent.putExtra("TOTAL_CART_ITEMS", cartSalesItemsCount.text.toString())
+            intent.putExtra("CARTKEY", cartKey)
             intent.putExtra("USER_TOKENTO_PROFILE", user_token)
             startActivity(intent)
         }

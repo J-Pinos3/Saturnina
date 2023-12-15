@@ -21,6 +21,7 @@ import com.example.saturninaapp.adapters.ClothesCategoryAdapter
 import com.example.saturninaapp.adapters.ItemClothesAdapter
 import com.example.saturninaapp.models.ClothCategoryData
 import com.example.saturninaapp.models.DetailProduct
+import com.example.saturninaapp.models.Imagen
 import com.example.saturninaapp.util.RetrofitHelper
 import com.example.saturninaapp.util.UtilClasses
 import com.google.android.material.navigation.NavigationView
@@ -392,8 +393,13 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
                 withContext(Dispatchers.Main){
                     if(listResponse != null){
                         for(k in listResponse){
-                            println("Cate: ${k.category}  Name: ${k.name}  Desc: ${k.descripcion}   IMG: ${k.imagen.secure_url}   Price: ${k.precio}")
-                            itemsProducts.add(DetailProduct(k.category, k.descripcion, k.id, k.imagen, k.name, k.precio))
+                            println("Cate: ${k.category}  Name: ${k.name}  Desc: ${k.descripcion}  Price: ${k.precio}")
+
+                            val colores = k.colores ?: emptyList()
+                            val tallas = k.tallas ?: emptyList()
+
+                            itemsProducts.add(DetailProduct(k.category,colores,k.descripcion, k.id, k.imagen, k.name, k.precio, tallas))
+
                         }
                         itemClothesAdapter.notifyDataSetChanged()
                     }
