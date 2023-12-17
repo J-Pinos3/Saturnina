@@ -41,7 +41,12 @@ class AlwaysListTypeAdapterFactory<E> private constructor() : TypeAdapterFactory
 
         @Throws(IOException::class)
         override fun write(out: JsonWriter, list: List<E>) {
-            throw UnsupportedOperationException()
+            //throw UnsupportedOperationException()
+            out.beginArray()
+            for (item in list) {
+                elementTypeAdapter.write(out, item)
+            }
+            out.endArray()
         }
 
         @Throws(IOException::class)

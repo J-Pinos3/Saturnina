@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.EditText
 import android.widget.TextView
@@ -16,6 +17,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.example.saturninaapp.R
 import com.example.saturninaapp.models.DetailProduct
 import com.example.saturninaapp.models.DetailXUser
+import com.example.saturninaapp.models.ProductOrderInfo
 import com.example.saturninaapp.util.RetrofitHelper
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
@@ -24,7 +26,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import java.io.File
 import java.lang.Exception
+
 
 class CompleteSaleActivity : AppCompatActivity() {
 
@@ -38,10 +45,15 @@ class CompleteSaleActivity : AppCompatActivity() {
     private lateinit var etOrderAddress: EditText
 
 
-    private val pickImage = registerForActivityResult( ActivityResultContracts.GetContent() ){
-        uri: Uri? ->
-        if( uri != null){
-            println("IMAGEN SELECCIONADA: ${uri}")
+    private val pickImage = registerForActivityResult( ActivityResultContracts.StartActivityForResult() ){
+        if(it.resultCode == Activity.RESULT_OK){
+            val data = it.data
+            val imgUri = data?.data
+
+            CoroutineScope(Dispatchers.IO).launch {
+
+            }
+
         }
     }
 
@@ -53,24 +65,21 @@ class CompleteSaleActivity : AppCompatActivity() {
         initUI()
         val totalItems: String? = intent.extras?.getString("TOTAL_CART_ITEMS")
         val userToken = intent.extras?.getString("USER_TOKENTO_PROFILE")
-        val cartKey: String? = intent.extras?.getString("CARTKEY")
+        val cartKey: String = "car_items"
         val bearerToken = "Bearer $userToken"
         if (totalItems != null) {
             showTotalCartItems(totalItems)
         }
 
-        loadItemsFromFiles(cartKey!!)
+        loadItemsFromFiles(cartKey)
         CoroutineScope(Dispatchers.IO).launch {
             userOwner = bringUserData(bearerToken)
         }
 
 
-
-
-
-
         btnAcceptSale.setOnClickListener {
-            pickImage.launch("image/*")
+            val selectBillImage = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+            pickImage.launch(selectBillImage)
         }
 
 
@@ -185,9 +194,7 @@ class CompleteSaleActivity : AppCompatActivity() {
             }else{
                 runOnUiThread {
                     Log.e("COULDN'T BRING USER DATA", "${retrofitGetProfile.code()} --- ${retrofitGetProfile.errorBody()?.toString()}")
-
                 }
-
             }
         }catch (e:Exception){
             println("Error al cargar el usuario para generar la orden " + e.printStackTrace())
@@ -197,5 +204,59 @@ class CompleteSaleActivity : AppCompatActivity() {
     }
 
 
+    suspend fun addDataToOrder(bearerToken: String, userId: String, priceOrder: Double, nombre: String,
+        apellido: String, direccion:String, telefono: String, descripcion: String, image: Uri,  productsData: List<ProductOrderInfo>
+    ){
+        try {
+            //val filepart = MultipartBody.Part.createFormData("billIMG", image.toString())
+            //val listPart = listOf( MultipartBody.Part.createFormData("products", productsData.toString()) )
+            //val filepart = image.toMultipart("billImage")
+            val file = image.path?.let { File(it) }
+            val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
+            val filepart = MultipartBody.Part.createFormData(
+                "billImage",
+                file?.name,
+                requestFile
+            )
 
+            val listPart = mutableListOf<MultipartBody.Part>()
+            for(product in productsData){
+                val productPart = product.toMultipart("product")
+                listPart.add(productPart)
+            }
+
+            val retrofitSendOrder = RetrofitHelper.consumeAPI.createOrder(
+                bearerToken, userId, priceOrder, nombre, apellido, direccion, telefono, descripcion, filepart , listPart )
+
+
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+    }
+
+
+    private fun getListWithIdCounter(listOfProducts: MutableList<DetailProduct>): List<ProductOrderInfo> {
+        val finalList = mutableListOf<ProductOrderInfo>()
+        for( k in listOfProducts.indices ){
+            val currentProduct = ProductOrderInfo(
+                id = listOfProducts[k].id,
+                contador = listOfProducts[k].contador
+            )
+            finalList.add(currentProduct)
+        }
+
+        return finalList
+    }
+
+//    private fun Uri.toMultipart(partName:String): MultipartBody.Part{
+//        val file = File(this.path ?: "")
+//        val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
+//        return MultipartBody.Part.createFormData( partName, file.name, requestFile )
+//    }
+
+    private fun ProductOrderInfo.toMultipart(partName: String): MultipartBody.Part{
+        val json = Gson().toJson(this)
+        val requestPart = RequestBody.create( MediaType.parse("multipart/form-data"), json )
+        return MultipartBody.Part.createFormData( partName, json, requestPart )
+    }
 }

@@ -51,12 +51,12 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_car_sales)
-        val cartKey: String? = intent.extras?.getString("CARTKEY")
+        val cartKey: String = "car_items"
         val user_token = intent.extras?.getString("USER_TOKENTO_PROFILE")
         val bearerToken: String = "Bearer $user_token"
 
         initUI()
-        loadItemsFromFile(cartKey!!)
+        loadItemsFromFile(cartKey)
         loadCartItemsCount()
         loadInitialPrice()
 
@@ -170,9 +170,9 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
 
         val jsonString = sharedPreferences.getString(Key,"")
         val type = object : TypeToken< MutableList<DetailProduct> >() {}.type
-        itemsProducts = (gson.fromJson(jsonString, type) ?: emptyList<DetailProduct>()) as MutableList<DetailProduct>
+        itemsProducts = (gson.fromJson(jsonString, type) ?: mutableListOf<DetailProduct>() )
 
-        println("carrito de productos: " + itemsProducts.toString())
+        println("carrito de productos: $itemsProducts")
     }
 
 

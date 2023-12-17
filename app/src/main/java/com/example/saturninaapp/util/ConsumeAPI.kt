@@ -59,6 +59,7 @@ interface ConsumeAPI {
     @Multipart
     @POST("order")
     suspend fun createOrder(
+        @Header("Authorization") authorization: String,
         @Query("user_id") userId: String,
         @Query("price_order") priceOrder: Double,
         @Query("nombre") nombre: String,

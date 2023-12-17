@@ -182,12 +182,18 @@ class IntroDashboardNews : AppCompatActivity() {
 
     private fun getRandonCategory(): String{
 
-        Log.i("CATEOGIRES SIZE", itemsCategories.size.toString())
-        if(itemsCategories.size != 0 ){
-            val randomCat = Random.nextInt(0, itemsCategories.size)
-            return itemsCategories[randomCat].id
+        Log.i("CATEGORIES SIZE", itemsCategories.size.toString())
+        return if(itemsCategories.size != 0 ){
+            val randomcar = itemsCategories.random()
+            randomcar.id
+            /*
+                val indice = itemsCategories.indexOf(randomcar)
+                return itemsCategories[indice].id
+                val randomCat = Random.nextInt(0, itemsCategories.size)
+                return itemsCategories[randomCat].id
+                 */
         }else{
-            return "0"
+            "0"
         }
 
     }
@@ -195,7 +201,10 @@ class IntroDashboardNews : AppCompatActivity() {
 
     private fun getProductsofRandomCat(listaProductos: MutableList<DetailProduct>,randomCategoryID: String ): MutableList<DetailProduct> {
 
-        val filteredList =  listaProductos.filter { it.category == randomCategoryID }
+        var filteredList =  listaProductos.filter { it.category == randomCategoryID }
+        Log.i("FILTERED LIST WITH RANDOM CAT", "HERE $randomCategoryID and $filteredList ")
+
+
         return filteredList.toMutableList()
     }
 

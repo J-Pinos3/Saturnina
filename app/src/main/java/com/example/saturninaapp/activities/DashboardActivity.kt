@@ -22,10 +22,12 @@ import com.example.saturninaapp.adapters.ItemClothesAdapter
 import com.example.saturninaapp.models.ClothCategoryData
 import com.example.saturninaapp.models.DetailProduct
 import com.example.saturninaapp.models.Imagen
+import com.example.saturninaapp.util.AlwaysListTypeAdapterFactory
 import com.example.saturninaapp.util.RetrofitHelper
 import com.example.saturninaapp.util.UtilClasses
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -112,7 +114,9 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
         if( intent.hasExtra("codIntro") ){
             if( !random_category_id.isNullOrEmpty() ){
                 updateRandomItems(random_category_id)
+                Log.i("RANDOM PRODUCT", "PRODUCTO RANDOM DE CATEGORÍA $random_category_id")
             }
+            Log.i("RANDOM PRODUC1T", "PRODUCTO RANDOM1 DE CATEGORÍA $random_category_id")
         }
 
         //navigation
@@ -169,7 +173,6 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
             saveItemsToFile(sharedKey)
 
             val intent = Intent(applicationContext, CarSalesActivity::class.java)
-            intent.putExtra("CARTKEY", sharedKey)
             intent.putExtra("USER_TOKENTO_PROFILE", user_token)
             startActivity(intent)
         }
@@ -191,12 +194,10 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
     }
 
     private fun updateRandomItems(idcategoria: String){
-        val randomProducts = mutableListOf<DetailProduct>()
-        for(k in itemsProducts){
-            if(k.id == idcategoria){
-                randomProducts.add(k)
-            }
-        }
+        val randomProducts: MutableList<DetailProduct> = itemsProducts.filter { it.category == idcategoria }.toMutableList()
+        Log.i("RANDOM LIST OF PRODUCTS?", "$randomProducts")
+        val randomCategoryChosen = itemsCategories.find { it.id == idcategoria }
+        randomCategoryChosen?.isSelectedCategory = false
 
         if( !randomProducts.isNullOrEmpty() ){
             itemClothesAdapter.sellingItems = randomProducts
@@ -276,7 +277,9 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
 
     private fun saveItemsToFile(key: String){
         var sharedPreferences: SharedPreferences = getSharedPreferences(key, MODE_PRIVATE)
-        val gson: Gson = Gson()
+        val gson: Gson = GsonBuilder()
+            .create()
+        //.registerTypeAdapterFactory(AlwaysListTypeAdapterFactory.create<Imagen>())
         val editor = sharedPreferences.edit()
 
         val jsonString = gson.toJson(cartItems)
@@ -293,7 +296,8 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
 
         val jsonString = sharedPreferences.getString(key,"")
         val type = object : TypeToken<MutableList<DetailProduct>>() {}.type
-        cartItems = (gson.fromJson(jsonString, type) ?: emptyList<DetailProduct>()) as MutableList<DetailProduct>
+        cartItems = (gson.fromJson(jsonString, type) ?: mutableListOf<DetailProduct>() )
+
     }
 
     private fun loadInitialItemsCount(){
