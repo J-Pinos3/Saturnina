@@ -4,12 +4,14 @@ import android.hardware.SensorDirectChannel
 import com.example.saturninaapp.models.ClothCategoryData
 import com.example.saturninaapp.models.ClothCategoryList
 import com.example.saturninaapp.models.LoginCredentials
+import com.example.saturninaapp.models.ProductOrderInfo
 import com.example.saturninaapp.models.UpdateUserProfilePut
 import com.example.saturninaapp.models.User
 import com.example.saturninaapp.models.UserResponseLogin
 import com.example.saturninaapp.models.itemProduct
 import com.google.gson.JsonObject
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -57,17 +59,18 @@ interface ConsumeAPI {
     suspend fun getItemsProducts(@Header("Authorization") authorization: String): Response<itemProduct>
 
     @Multipart
+    @Headers("Content-type: multipart/form-data;")
     @POST("order")
     suspend fun createOrder(
         @Header("Authorization") authorization: String,
-        @Query("user_id") userId: String,
-        @Query("price_order") priceOrder: Double,
-        @Query("nombre") nombre: String,
-        @Query("apellido") apellido: String,
-        @Query("direccion") direccion: String,
-        @Query("telefono") telefono: String,
-        @Query("descripcion") descripcion: String,
-        @Part image: MultipartBody.Part,
-        @Part("products") products: List<MultipartBody.Part>
+        @Part("user_id") userId: RequestBody,
+        @Part("price_order") priceOrder: RequestBody,
+        @Part("nombre") nombre: RequestBody,
+        @Part("apellido") apellido: RequestBody,
+        @Part("direccion") direccion: RequestBody,
+        @Part("telefono") telefono: RequestBody,
+        @Part("descripcion") descripcion: RequestBody,
+        @Part transfer_image: MultipartBody.Part,
+        @Part products: List<MultipartBody.Part>
         ): Response<JsonObject>
 }

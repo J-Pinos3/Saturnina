@@ -1,11 +1,15 @@
 package com.example.saturninaapp.activities
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.database.Cursor
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.FileUtils
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.EditText
@@ -13,6 +17,9 @@ import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.net.toFile
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.saturninaapp.R
 import com.example.saturninaapp.models.DetailProduct
@@ -30,7 +37,10 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
+import java.io.FileReader
+import java.io.InputStream
 import java.lang.Exception
+import javax.xml.transform.stream.StreamResult
 
 
 class CompleteSaleActivity : AppCompatActivity() {
@@ -39,10 +49,15 @@ class CompleteSaleActivity : AppCompatActivity() {
     lateinit var toggle: ActionBarDrawerToggle
     lateinit var nav_view_complete_sale: NavigationView
     private lateinit var userOwner: DetailXUser
+    private var bearerToken = ""
 
     lateinit var btnAcceptSale: AppCompatButton
     private var finalListOfProducts = mutableListOf<DetailProduct>()
     private lateinit var etOrderAddress: EditText
+    private lateinit var etOrderDescription: EditText
+    private lateinit var tvTotalSalePrice: TextView
+    private val MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123
+
 
 
     private val pickImage = registerForActivityResult( ActivityResultContracts.StartActivityForResult() ){
@@ -51,6 +66,31 @@ class CompleteSaleActivity : AppCompatActivity() {
             val imgUri = data?.data
 
             CoroutineScope(Dispatchers.IO).launch {
+
+                if(imgUri != null){
+                    val file = uriToFile(imgUri)
+                    if(file != null && file.exists()){
+                        val totalValue = getTotalValueOfCart()
+                        val idcounterList = getListWithIdCounter(finalListOfProducts)
+
+                        if (ContextCompat.checkSelfPermission(
+                                this@CompleteSaleActivity,
+                                Manifest.permission.READ_EXTERNAL_STORAGE
+                            ) != PackageManager.PERMISSION_GRANTED
+                        ) {
+                            ActivityCompat.requestPermissions(
+                                this@CompleteSaleActivity,
+                                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                                MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
+                            )
+                        }else{
+                            addDataToOrder(bearerToken, userOwner.id, totalValue, userOwner.nombre, userOwner.apellido, etOrderAddress.text.toString(),
+                                userOwner.telefono, etOrderDescription.text.toString(), file, idcounterList)
+                        }
+
+
+                    }
+                }
 
             }
 
@@ -66,7 +106,7 @@ class CompleteSaleActivity : AppCompatActivity() {
         val totalItems: String? = intent.extras?.getString("TOTAL_CART_ITEMS")
         val userToken = intent.extras?.getString("USER_TOKENTO_PROFILE")
         val cartKey: String = "car_items"
-        val bearerToken = "Bearer $userToken"
+        bearerToken = "Bearer $userToken"
         if (totalItems != null) {
             showTotalCartItems(totalItems)
         }
@@ -76,7 +116,7 @@ class CompleteSaleActivity : AppCompatActivity() {
             userOwner = bringUserData(bearerToken)
         }
 
-
+        setTotalValueView()
         btnAcceptSale.setOnClickListener {
             val selectBillImage = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
             pickImage.launch(selectBillImage)
@@ -145,6 +185,12 @@ class CompleteSaleActivity : AppCompatActivity() {
         //order address
         etOrderAddress = findViewById(R.id.etOrderAddress)
 
+        //order description
+        etOrderDescription = findViewById(R.id.etOrderDescription)
+
+        //total value of sale
+        tvTotalSalePrice = findViewById(R.id.tvTotalSalePrice)
+
         //send order button / accept sale
         btnAcceptSale = findViewById(R.id.btnAcceptSale)
     }
@@ -161,6 +207,10 @@ class CompleteSaleActivity : AppCompatActivity() {
         val type = object : TypeToken< MutableList<DetailProduct> >() {}.type
         finalListOfProducts = (gson.fromJson(jsonString, type)  ?: emptyList<DetailProduct>()) as MutableList<DetailProduct>
 
+    }
+
+    private fun setTotalValueView(){
+        tvTotalSalePrice.text = getTotalValueOfCart().toString()
     }
 
     //final price of purchase
@@ -205,32 +255,52 @@ class CompleteSaleActivity : AppCompatActivity() {
 
 
     suspend fun addDataToOrder(bearerToken: String, userId: String, priceOrder: Double, nombre: String,
-        apellido: String, direccion:String, telefono: String, descripcion: String, image: Uri,  productsData: List<ProductOrderInfo>
+        apellido: String, direccion:String, telefono: String, descripcion: String, image: File,  productsData: List<ProductOrderInfo>
     ){
         try {
-            //val filepart = MultipartBody.Part.createFormData("billIMG", image.toString())
-            //val listPart = listOf( MultipartBody.Part.createFormData("products", productsData.toString()) )
-            //val filepart = image.toMultipart("billImage")
-            val file = image.path?.let { File(it) }
-            val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
+            val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), image)
             val filepart = MultipartBody.Part.createFormData(
-                "billImage",
-                file?.name,
+                "transfer_image",
+                image.name,
                 requestFile
             )
 
             val listPart = mutableListOf<MultipartBody.Part>()
             for(product in productsData){
-                val productPart = product.toMultipart("product")
+                val productPart = product.toMultipart("products")
                 listPart.add(productPart)
             }
 
-            val retrofitSendOrder = RetrofitHelper.consumeAPI.createOrder(
-                bearerToken, userId, priceOrder, nombre, apellido, direccion, telefono, descripcion, filepart , listPart )
+            val userIdRequestBody = createPartFromString(userId)
+            val priceOrderRequestBody = createPartFromString(priceOrder.toString())
+            val nombreRequestBody = createPartFromString(nombre)
+            val apellidoRequestBody = createPartFromString(apellido)
+            val direccionRequestBody = createPartFromString(direccion)
+            val telefonoRequestBody = createPartFromString(telefono)
+            val descripcionRequestBody = createPartFromString(descripcion)
 
+            val retrofitSendOrder = RetrofitHelper.consumeAPI.createOrder(
+                bearerToken, userIdRequestBody,
+                priceOrderRequestBody, nombreRequestBody, apellidoRequestBody,
+                direccionRequestBody, telefonoRequestBody,
+                descripcionRequestBody, filepart , listPart )
+
+
+            if(retrofitSendOrder.isSuccessful){
+                val jsonResponse = retrofitSendOrder.body()
+                withContext(Dispatchers.Main){
+                    Log.i("SEND ORDER", "ORDER SENT SUCCESSFULLY: $jsonResponse")
+                }
+
+            }else{
+                runOnUiThread {
+                    val msg = retrofitSendOrder.errorBody().toString()
+                    Log.i("SEND ORDER ERROR", "ORDER COULDN'T BE SENT: ${retrofitSendOrder.errorBody().toString()} -- $msg")
+                }
+            }
 
         }catch (e: Exception){
-            e.printStackTrace()
+            Log.e("SENDING ORDER", "ERROR WHILE SENDING ORDER ${e.message}")
         }
     }
 
@@ -254,9 +324,24 @@ class CompleteSaleActivity : AppCompatActivity() {
 //        return MultipartBody.Part.createFormData( partName, file.name, requestFile )
 //    }
 
+    private fun createPartFromString(value: String): RequestBody {
+        return RequestBody.create(MultipartBody.FORM, value)
+    }
+
     private fun ProductOrderInfo.toMultipart(partName: String): MultipartBody.Part{
         val json = Gson().toJson(this)
-        val requestPart = RequestBody.create( MediaType.parse("multipart/form-data"), json )
-        return MultipartBody.Part.createFormData( partName, json, requestPart )
+        val requestPart = RequestBody.create( MediaType.parse("application/json"), json )
+        return MultipartBody.Part.createFormData( partName,null,requestPart )
+    }
+
+
+    private fun uriToFile(uri: Uri): File? {
+        val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor: Cursor? = contentResolver.query(uri, filePathColumn, null, null, null)
+        cursor?.moveToFirst()
+        val columnIndex: Int? = cursor?.getColumnIndex(filePathColumn[0])
+        val filePath: String? = columnIndex?.let { cursor.getString(it) }
+        cursor?.close()
+        return filePath?.let { File(it) }
     }
 }
