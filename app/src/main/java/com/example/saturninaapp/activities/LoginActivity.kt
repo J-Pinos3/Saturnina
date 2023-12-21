@@ -42,11 +42,13 @@ class LoginActivity : AppCompatActivity() {
                     runOnUiThread{
                         //Log.d("Login exitoso", retrofitPost.body() )
                         val UserResponseLogine = retrofitPost.body()
-                        Log.d("Login exitoso", "${UserResponseLogine?.detail?.token!!} ${UserResponseLogine.detail.nombre}" )
+                        Log.d("Login exitoso", "${UserResponseLogine?.detail?.token!!} ${UserResponseLogine.detail.nombre} ${UserResponseLogine.detail.id}" )
                         val user_token = UserResponseLogine?.detail?.token!!
+                        val user_id = UserResponseLogine.detail.id
 
                         val intent = Intent(applicationContext, IntroDashboardNews::class.java)
                         intent.putExtra("USER_TOKEN", user_token)
+                        intent.putExtra("USER_ID", user_id)
                         startActivity(intent)
                     }
                 }else{

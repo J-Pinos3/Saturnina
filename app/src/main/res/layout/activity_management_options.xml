@@ -47,44 +47,13 @@
         app:layout_constraintVertical_bias="0.30"
         android:layout_marginTop="5dp">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnProfileManagementOptions"
-            style="@style/blueButtonStyle"
-            android:layout_width="291dp"
-            android:layout_height="55dp"
-            android:paddingHorizontal="20dp"
-            android:text="Perfil"
-            android:textColor="@color/black"
-            android:textSize="30sp" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnProductsManagementOptions"
-            style="@style/blueButtonStyle"
-            android:layout_width="291dp"
-            android:layout_height="55dp"
-            android:layout_marginTop="12dp"
-            android:paddingHorizontal="20dp"
-            android:text="Mis Productos"
-            android:textColor="@color/black"
-            android:textSize="30sp" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnCategoriesManagementOptions"
-            style="@style/blueButtonStyle"
-            android:layout_width="291dp"
-            android:layout_height="55dp"
-            android:layout_marginTop="12dp"
-            android:paddingHorizontal="20dp"
-            android:text="Mis Categorías"
-            android:textColor="@color/black"
-            android:textSize="30sp" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnSalesManagementOptions"
             style="@style/blueButtonStyle"
             android:layout_width="291dp"
             android:layout_height="55dp"
-            android:layout_marginTop="12dp"
             android:paddingHorizontal="20dp"
             android:text="Mis Ventas"
             android:textColor="@color/black"

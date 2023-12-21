@@ -59,18 +59,30 @@ interface ConsumeAPI {
     suspend fun getItemsProducts(@Header("Authorization") authorization: String): Response<itemProduct>
 
     @Multipart
-    @Headers("Content-type: multipart/form-data;")
+    @POST("order")
+    suspend fun createOrder(
+        @Header("Authorization") authorization: String,
+        @Part("data") data: RequestBody,
+        @Part transfer_image: MultipartBody.Part
+
+        ): Response<JsonObject>
+}
+
+/*
+*     @Multipart
     @POST("order")
     suspend fun createOrder(
         @Header("Authorization") authorization: String,
         @Part("user_id") userId: RequestBody,
         @Part("price_order") priceOrder: RequestBody,
+        @Part products: List<MultipartBody.Part>,
         @Part("nombre") nombre: RequestBody,
         @Part("apellido") apellido: RequestBody,
         @Part("direccion") direccion: RequestBody,
+        @Part("email") email: RequestBody,
         @Part("telefono") telefono: RequestBody,
         @Part("descripcion") descripcion: RequestBody,
-        @Part transfer_image: MultipartBody.Part,
-        @Part products: List<MultipartBody.Part>
+        @Part transfer_image: MultipartBody.Part
+
         ): Response<JsonObject>
-}
+* */

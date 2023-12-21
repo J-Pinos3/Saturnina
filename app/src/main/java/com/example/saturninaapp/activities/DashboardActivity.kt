@@ -74,6 +74,7 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
 
 
         val user_token = intent.extras?.getString("USER_TOKEN")
+        val user_id = intent.extras?.getString("USER_ID")
         val bearerToken: String = "Bearer $user_token"
 
         val random_category_id = intent.extras?.getString("RANDOM_CATEGORY_ID")
@@ -133,6 +134,7 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
                 R.id.nav_item_one ->{
                     val intent = Intent(this, IntroDashboardNews::class.java)
                     intent.putExtra("USER_TOKEN", user_token)
+                    intent.putExtra("USER_ID", user_id)
                     startActivity(intent)
 
 
@@ -143,6 +145,7 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
                 R.id.nav_item_three ->{
                     val intent = Intent(this, ProfileActivity::class.java)
                     intent.putExtra("USER_TOKEN_PROFILE", user_token)
+                    intent.putExtra("USER_ID", user_id)
                     startActivity(intent)
 
                 }
@@ -152,6 +155,7 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
 
                 R.id.nav_item_five ->{
                     val intent = Intent(applicationContext, ManagementOptionsActivity::class.java)
+                    intent.putExtra("USER_ID", user_id)
                     startActivity(intent)
                 }
 
@@ -174,6 +178,7 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
 
             val intent = Intent(applicationContext, CarSalesActivity::class.java)
             intent.putExtra("USER_TOKENTO_PROFILE", user_token)
+            intent.putExtra("USER_ID", user_id)
             startActivity(intent)
         }
     }//ON CREATE

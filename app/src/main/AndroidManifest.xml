@@ -6,6 +6,10 @@
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32"
+        tools:ignore="ScopedStorage" />
+
 
 
     <application
@@ -18,7 +22,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SaturninaApp"
-        tools:targetApi="tiramisu">
+        tools:targetApi="tiramisu"
+        android:requestLegacyExternalStorage="true">
         <activity
             android:name=".activities.IntroDashboardNews"
             android:exported="false" />
@@ -28,9 +33,6 @@
         <activity
             android:name=".activities.MySalesActivity"
             android:exported="false" />
-        <activity
-            android:name=".activities.MyProductsActivity"
-            android:exported="true" />
         <activity
             android:name=".activities.ProfileActivity"
             android:exported="false" />

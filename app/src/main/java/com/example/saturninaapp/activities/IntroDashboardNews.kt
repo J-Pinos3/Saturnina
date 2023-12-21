@@ -52,6 +52,7 @@ class IntroDashboardNews : AppCompatActivity() {
         initUI()
 
         val user_token = intent.extras?.getString("USER_TOKEN")
+        val user_id = intent.extras?.getString("USER_ID")
         val bearerToken: String = "Bearer $user_token"
 
 
@@ -82,14 +83,14 @@ class IntroDashboardNews : AppCompatActivity() {
 
 
         tvGotoFirstFilter.setOnClickListener {
-            if (user_token != null) {
-                navigateToDashboard(user_token,random1)
+            if (user_token != null && user_id != null) {
+                    navigateToDashboard(user_token,random1, user_id)
             }
         }
 
         tvGotoSecondFilter.setOnClickListener {
-            if (user_token != null) {
-                navigateToDashboard(user_token, random2)
+            if (user_token != null && user_id != null) {
+                    navigateToDashboard(user_token, random2, user_id)
             }
         }
 
@@ -107,16 +108,19 @@ class IntroDashboardNews : AppCompatActivity() {
             when(it.itemId){
                 R.id.nav_item_one ->{
                       //THIS the INTRO DASHBOARD NEWS
+                        //it.isVisible = false
                 }
                 R.id.nav_item_two ->{
                     val intent = Intent(this, DashboardActivity::class.java)
                     intent.putExtra("USER_TOKEN", user_token)
+                    intent.putExtra("USER_ID", user_id)
                     startActivity(intent)
 
                 }
                 R.id.nav_item_three ->{
                     val intent = Intent(this, ProfileActivity::class.java)
                     intent.putExtra("USER_TOKEN_PROFILE", user_token)
+                    intent.putExtra("USER_ID", user_id)
                     startActivity(intent)
                 }
                 R.id.nav_item_four ->{
@@ -125,6 +129,7 @@ class IntroDashboardNews : AppCompatActivity() {
 
                 R.id.nav_item_five ->{
                     val intent = Intent(this, ManagementOptionsActivity::class.java)
+                    intent.putExtra("USER_ID", user_id)
                     startActivity(intent)
                 }
 
@@ -172,10 +177,11 @@ class IntroDashboardNews : AppCompatActivity() {
     }
 
 
-    private fun navigateToDashboard(token: String, categoryID: String){
+    private fun navigateToDashboard(token: String, categoryID: String, userID: String){
         val intent = Intent(this, DashboardActivity::class.java)
         intent.putExtra("USER_TOKEN", token)
         intent.putExtra("RANDOM_CATEGORY_ID", categoryID)
+        intent.putExtra("USER_ID", userID)
         intent.putExtra("codIntro", 11)
         startActivity(intent)
     }

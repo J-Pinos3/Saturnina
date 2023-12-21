@@ -57,8 +57,8 @@ class ProfileActivity : AppCompatActivity() {
         initUI()
 
         val user_token = intent.extras?.getString("USER_TOKEN_PROFILE")
+        var user_id = intent.extras?.getString("USER_ID")
         val bearer_token = "Bearer "+user_token
-        var user_id: String = ""
         var userProfile: UpdateUserProfilePut
         println("Mi Token = ${bearer_token}")
 
@@ -67,8 +67,8 @@ class ProfileActivity : AppCompatActivity() {
             if(retrofitGetProfile.isSuccessful){
                 val userResponseProfile = retrofitGetProfile.body()
                 withContext(Dispatchers.Main) {
-                    //Log.d("Perfil Obtenido exitosamente", "${userResponseProfile?.detail?.token} ${userResponseProfile?.detail?.nombre} ${userResponseProfile?.detail?.apellido}")
-                    user_id = userResponseProfile?.detail?.id.toString()
+                    Log.d("Perfil Obtenido exitosamente", "${userResponseProfile?.detail?.token} ${userResponseProfile?.detail?.nombre} ${userResponseProfile?.detail?.apellido}")
+                    println("user_id = ${user_id}")
 
                     etNameProfile.post {
                         etNameProfile.text = Editable.Factory.getInstance().newEditable(userResponseProfile?.detail?.nombre)
@@ -114,7 +114,7 @@ class ProfileActivity : AppCompatActivity() {
             userProfile = getUserProfileFromUI()
             CoroutineScope(Dispatchers.IO).launch {
 
-                val retrofitUpdateProfile = RetrofitHelper.consumeAPI.updateUserProfile(bearer_token, user_id, userProfile)
+                val retrofitUpdateProfile = RetrofitHelper.consumeAPI.updateUserProfile(bearer_token, user_id!!, userProfile)
                 println("AQUIIIIIIII")
 
                 if( retrofitUpdateProfile.isSuccessful ){
@@ -128,7 +128,7 @@ class ProfileActivity : AppCompatActivity() {
 
                 }else{
                     runOnUiThread {
-                        Log.e("Error al Logearse: ","${retrofitUpdateProfile.code()} -- ${retrofitUpdateProfile.errorBody()?.string()}")
+                        Log.e("Error al actualizar el perfil: ","${retrofitUpdateProfile.code()} -- ${retrofitUpdateProfile.errorBody()?.string()}")
                     }
                 }
             }
@@ -136,6 +136,8 @@ class ProfileActivity : AppCompatActivity() {
 
         btnRegresarDash.setOnClickListener {
             val intent = Intent(applicationContext, DashboardActivity::class.java)
+            intent.putExtra("USER_ID", user_id)
+            intent.putExtra("USER_TOKEN", user_token)
             startActivity(intent)
 
         }

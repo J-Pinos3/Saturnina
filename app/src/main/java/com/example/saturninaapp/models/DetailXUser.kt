@@ -6,5 +6,6 @@ data class DetailXUser(
     val id: String = "",
     val nombre: String = "",
     val telefono: String = "",
-    val token: String = ""
+    val token: String = "",
+    val rol: String = ""
 )

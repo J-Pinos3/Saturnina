@@ -4,12 +4,10 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.FileUtils
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.EditText
@@ -18,8 +16,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.net.toFile
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.saturninaapp.R
 import com.example.saturninaapp.models.DetailProduct
@@ -28,6 +24,8 @@ import com.example.saturninaapp.models.ProductOrderInfo
 import com.example.saturninaapp.util.RetrofitHelper
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -37,10 +35,7 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
-import java.io.FileReader
-import java.io.InputStream
 import java.lang.Exception
-import javax.xml.transform.stream.StreamResult
 
 
 class CompleteSaleActivity : AppCompatActivity() {
@@ -56,7 +51,8 @@ class CompleteSaleActivity : AppCompatActivity() {
     private lateinit var etOrderAddress: EditText
     private lateinit var etOrderDescription: EditText
     private lateinit var tvTotalSalePrice: TextView
-    private val MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123
+    private var user_id = ""
+    private val MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE: Int = 123
 
 
 
@@ -72,22 +68,9 @@ class CompleteSaleActivity : AppCompatActivity() {
                     if(file != null && file.exists()){
                         val totalValue = getTotalValueOfCart()
                         val idcounterList = getListWithIdCounter(finalListOfProducts)
-
-                        if (ContextCompat.checkSelfPermission(
-                                this@CompleteSaleActivity,
-                                Manifest.permission.READ_EXTERNAL_STORAGE
-                            ) != PackageManager.PERMISSION_GRANTED
-                        ) {
-                            ActivityCompat.requestPermissions(
-                                this@CompleteSaleActivity,
-                                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                                MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
-                            )
-                        }else{
-                            addDataToOrder(bearerToken, userOwner.id, totalValue, userOwner.nombre, userOwner.apellido, etOrderAddress.text.toString(),
-                                userOwner.telefono, etOrderDescription.text.toString(), file, idcounterList)
-                        }
-
+                        Log.i("FINAL LIST", "$idcounterList")
+                        addDataToOrder(bearerToken, user_id, totalValue, idcounterList, userOwner.nombre, userOwner.apellido, etOrderAddress.text.toString(),
+                            userOwner.email, userOwner.telefono, etOrderDescription.text.toString(), file)
 
                     }
                 }
@@ -105,6 +88,7 @@ class CompleteSaleActivity : AppCompatActivity() {
         initUI()
         val totalItems: String? = intent.extras?.getString("TOTAL_CART_ITEMS")
         val userToken = intent.extras?.getString("USER_TOKENTO_PROFILE")
+        user_id = intent.extras?.getString("USER_ID").toString()
         val cartKey: String = "car_items"
         bearerToken = "Bearer $userToken"
         if (totalItems != null) {
@@ -113,14 +97,17 @@ class CompleteSaleActivity : AppCompatActivity() {
 
         loadItemsFromFiles(cartKey)
         CoroutineScope(Dispatchers.IO).launch {
-            userOwner = bringUserData(bearerToken)
+            bringUserData(bearerToken, user_id)
         }
 
         setTotalValueView()
         btnAcceptSale.setOnClickListener {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE  )
             val selectBillImage = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
             pickImage.launch(selectBillImage)
+
         }
+
 
 
         //navigation
@@ -136,18 +123,21 @@ class CompleteSaleActivity : AppCompatActivity() {
                 R.id.nav_item_one ->{
                     val intent = Intent(this, IntroDashboardNews::class.java)
                     intent.putExtra("USER_TOKEN", userToken)
+                    intent.putExtra("USER_ID", user_id)
                     startActivity(intent)
                 }
 
                 R.id.nav_item_two ->{
                     val intent = Intent(this, DashboardActivity::class.java)
                     intent.putExtra("USER_TOKEN", userToken)
+                    intent.putExtra("USER_ID", user_id)
                     startActivity(intent)
                 }
 
                 R.id.nav_item_three ->{
                     val intent = Intent(this, ProfileActivity::class.java)
                     intent.putExtra("USER_TOKEN_PROFILE", userToken)
+                    intent.putExtra("USER_ID", user_id)
                     startActivity(intent)
                 }
 
@@ -157,6 +147,7 @@ class CompleteSaleActivity : AppCompatActivity() {
 
                 R.id.nav_item_five ->{
                     val intent = Intent(this, ManagementOptionsActivity::class.java)
+                    intent.putExtra("USER_ID", user_id)
                     startActivity(intent)
                 }
 
@@ -222,8 +213,8 @@ class CompleteSaleActivity : AppCompatActivity() {
         return suma
     }
 
-    suspend fun bringUserData(bearerToken: String): DetailXUser{
-        val currentUser: DetailXUser
+    suspend fun bringUserData(bearerToken: String, user_id: String){
+
         try {
 
             val retrofitGetProfile = RetrofitHelper.consumeAPI.getUserProfile(bearerToken)
@@ -231,16 +222,19 @@ class CompleteSaleActivity : AppCompatActivity() {
                 var userResponseProfile = retrofitGetProfile.body()
 
                 withContext(Dispatchers.Main){
-                    currentUser = DetailXUser(
-                        userResponseProfile?.detail?.apellido.toString(),
+
+
+                    userOwner = DetailXUser(  userResponseProfile?.detail?.apellido.toString(),
                         userResponseProfile?.detail?.email.toString(),
-                        userResponseProfile?.detail?.id.toString(),
+                        user_id,
                         userResponseProfile?.detail?.nombre.toString(),
                         userResponseProfile?.detail?.telefono.toString(),
+                        userResponseProfile?.detail?.token.toString()
                     )
+                    Log.i("USER DATA FOR ORDER", "${userOwner.nombre} + ${userOwner.telefono}")
                 }
 
-                return currentUser
+
             }else{
                 runOnUiThread {
                     Log.e("COULDN'T BRING USER DATA", "${retrofitGetProfile.code()} --- ${retrofitGetProfile.errorBody()?.toString()}")
@@ -250,12 +244,12 @@ class CompleteSaleActivity : AppCompatActivity() {
             println("Error al cargar el usuario para generar la orden " + e.printStackTrace())
         }
 
-        return DetailXUser()
+
     }
 
 
-    suspend fun addDataToOrder(bearerToken: String, userId: String, priceOrder: Double, nombre: String,
-        apellido: String, direccion:String, telefono: String, descripcion: String, image: File,  productsData: List<ProductOrderInfo>
+    suspend fun addDataToOrder(bearerToken: String, userId: String, priceOrder: Double, productsData: List<ProductOrderInfo>, nombre: String,
+        apellido: String, direccion:String, email: String, telefono: String, descripcion: String, image: File
     ){
         try {
             val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), image)
@@ -264,29 +258,56 @@ class CompleteSaleActivity : AppCompatActivity() {
                 image.name,
                 requestFile
             )
+            Log.i("iimage loaded:","${image.absoluteFile}")
 
-            val listPart = mutableListOf<MultipartBody.Part>()
+//            val listPart = mutableListOf<MultipartBody.Part>()
+//            for(product in productsData){
+//                val productPart = product.toMultipart("products")
+//                listPart.add(productPart)
+//            }
+
+            //val gson = Gson()
+            val dataJson = JsonObject()
+
+            val productsArray = JsonArray()
             for(product in productsData){
-                val productPart = product.toMultipart("products")
-                listPart.add(productPart)
+                val productObject = JsonObject()
+                productObject.addProperty("id_producto", product.id)
+                productObject.addProperty("cantidad", product.contador)
+                productsArray.add(productObject)
             }
 
-            val userIdRequestBody = createPartFromString(userId)
-            val priceOrderRequestBody = createPartFromString(priceOrder.toString())
-            val nombreRequestBody = createPartFromString(nombre)
-            val apellidoRequestBody = createPartFromString(apellido)
-            val direccionRequestBody = createPartFromString(direccion)
-            val telefonoRequestBody = createPartFromString(telefono)
-            val descripcionRequestBody = createPartFromString(descripcion)
-
+            dataJson.addProperty("user_id", userId)
+            dataJson.addProperty("price_order", priceOrder)
+            dataJson.add("products", productsArray)
+            dataJson.addProperty("nombre", nombre)
+            dataJson.addProperty("apellido", apellido)
+            dataJson.addProperty("direccion", direccion)
+            dataJson.addProperty("email", email)
+            dataJson.addProperty("telefono", telefono)
+            dataJson.addProperty("descripcion", descripcion)
+            val dataBody = RequestBody.create(MediaType.parse("application/json"), dataJson.toString())
             val retrofitSendOrder = RetrofitHelper.consumeAPI.createOrder(
-                bearerToken, userIdRequestBody,
-                priceOrderRequestBody, nombreRequestBody, apellidoRequestBody,
-                direccionRequestBody, telefonoRequestBody,
-                descripcionRequestBody, filepart , listPart )
+                bearerToken, dataBody, filepart )
+
+//            val userIdRequestBody = createPartFromString(userId)
+//            val priceOrderRequestBody = createPartFromString(priceOrder.toString())
+//            val nombreRequestBody = createPartFromString(nombre)
+//            val apellidoRequestBody = createPartFromString(apellido)
+//            val direccionRequestBody = createPartFromString(direccion)
+//            val telefonoRequestBody = createPartFromString(telefono)
+//            val emailRequestBody = createPartFromString(email)
+//            val descripcionRequestBody = createPartFromString(descripcion)
+//
+//            val retrofitSendOrder = RetrofitHelper.consumeAPI.createOrder(
+//                bearerToken, userIdRequestBody,
+//                priceOrderRequestBody, listPart, nombreRequestBody, apellidoRequestBody,
+//                direccionRequestBody, emailRequestBody,telefonoRequestBody,
+//                descripcionRequestBody, filepart  )
 
 
             if(retrofitSendOrder.isSuccessful){
+                Log.i("SEND ORDER", "AQUIII")
                 val jsonResponse = retrofitSendOrder.body()
                 withContext(Dispatchers.Main){
                     Log.i("SEND ORDER", "ORDER SENT SUCCESSFULLY: $jsonResponse")
@@ -294,13 +315,12 @@ class CompleteSaleActivity : AppCompatActivity() {
 
             }else{
                 runOnUiThread {
-                    val msg = retrofitSendOrder.errorBody().toString()
-                    Log.i("SEND ORDER ERROR", "ORDER COULDN'T BE SENT: ${retrofitSendOrder.errorBody().toString()} -- $msg")
+                    Log.i("SEND ORDER ERROR", "ORDER COULDN'T BE SENT: ${retrofitSendOrder.errorBody()?.string()}")
                 }
             }
 
         }catch (e: Exception){
-            Log.e("SENDING ORDER", "ERROR WHILE SENDING ORDER ${e.message}")
+            Log.e("SENDING ORDER", "ERROR WHILE SENDING ORDER ${e.message} ---**- $e")
         }
     }
 
