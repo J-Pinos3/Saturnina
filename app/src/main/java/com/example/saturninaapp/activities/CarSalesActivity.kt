@@ -9,15 +9,18 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.AppCompatButton
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.saturninaapp.R
 import com.example.saturninaapp.adapters.ItemClothesAdapter
 import com.example.saturninaapp.models.DetailProduct
 import com.example.saturninaapp.util.UtilClasses
+import com.example.saturninaapp.viewmodel.SharedSizeViewModel
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -41,6 +44,7 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
 
     private lateinit var cartSalesItemsCount: TextView
 
+    private val sharedSizesMVVM: SharedSizeViewModel by viewModels()
 //    override fun onResume() {
 //        super.onResume()
 //        val cartKey: String? = intent.extras?.getString("CARTKEY")
@@ -69,7 +73,8 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
             OnItemDeleteListener = {item ->  onItemDeleteSelected(item)},
             OnHideButton = { v,isVisible -> hideButtonDelete(v, isVisible) },
             isVisible = isAdapterVisible,
-            onHideItemCounter = {v, isVisible -> hideItemCartCounter(v,isVisible) }
+            onHideItemCounter = {v, isVisible -> hideItemCartCounter(v,isVisible) },
+            onChooseSize = {item, size -> onSizeSelected(item, size)}
 
         )
         rvProductsCar.layoutManager = LinearLayoutManager(this)
@@ -85,6 +90,10 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
             intent.putExtra("USER_ID", user_id)
             startActivity(intent)
         }
+
+        sharedSizesMVVM.selectedSizes.observe(this, Observer {
+            sizesMap -> itemClothesAdapter.updateSizes(sizesMap)
+        })
 
         //navigation
         val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_main)
@@ -199,6 +208,15 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
         }
     }
 
+    private fun ItemClothesAdapter.updateSizes(newSizes: HashMap<String, String>) {
+        // Actualiza las tallas en tu adaptador con los nuevos datos
+        // Por ejemplo:
+        itemsProducts.forEach { item ->
+            item.tallaSeleccionada = newSizes[item.id] ?: ""
+        }
+        NotifyListItemChanged()
+    }
+
     override fun onItemClothSelected(product: DetailProduct){
         Toast.makeText(this, product.id + " " + product.name + " " + product.precio, Toast.LENGTH_SHORT).show()
         //if the element is not in the list, add it
@@ -244,6 +262,14 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
         showCartListItems()
     }
 
+
+    override fun onSizeSelected(product: DetailProduct, size: String) {
+        val existingProduct = itemsProducts.find { it.id == product.id }
+        if( existingProduct != null ){
+            existingProduct.tallaSeleccionada = size
+        }
+        Log.i("PRODUCT SIZE", "$product")
+    }
 
     private fun increaseTotalPricebyProduct(currentProduct: DetailProduct){
         var currentPrice = (currentProduct.precio )

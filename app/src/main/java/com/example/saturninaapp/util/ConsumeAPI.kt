@@ -4,6 +4,7 @@ import android.hardware.SensorDirectChannel
 import com.example.saturninaapp.models.ClothCategoryData
 import com.example.saturninaapp.models.ClothCategoryList
 import com.example.saturninaapp.models.LoginCredentials
+import com.example.saturninaapp.models.OrdersList
 import com.example.saturninaapp.models.ProductOrderInfo
 import com.example.saturninaapp.models.UpdateUserProfilePut
 import com.example.saturninaapp.models.User
@@ -39,6 +40,7 @@ interface ConsumeAPI {
     @GET("profile")
     suspend fun getUserProfile(@Header("Authorization") authorization:String): Response<UserResponseLogin>//I Use UserResponseLogin because it gives the same data as LoginUser
 
+
     @Headers("Content-type:application/json; charset=UTF-8")
     @PUT("user/{id}")
     suspend fun updateUserProfile(
@@ -58,6 +60,7 @@ interface ConsumeAPI {
     @GET("products")
     suspend fun getItemsProducts(@Header("Authorization") authorization: String): Response<itemProduct>
 
+
     @Multipart
     @POST("order")
     suspend fun createOrder(
@@ -66,6 +69,12 @@ interface ConsumeAPI {
         @Part transfer_image: MultipartBody.Part
 
         ): Response<JsonObject>
+
+
+    @Headers("Content-type:application/json; charset=UTF-8")
+    @GET("orders")
+    suspend fun getAllOrders(@Header("Authorization") authorization: String): Response<OrdersList>
+
 }
 
 /*

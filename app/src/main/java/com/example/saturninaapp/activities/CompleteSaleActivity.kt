@@ -338,11 +338,6 @@ class CompleteSaleActivity : AppCompatActivity() {
         return finalList
     }
 
-//    private fun Uri.toMultipart(partName:String): MultipartBody.Part{
-//        val file = File(this.path ?: "")
-//        val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
-//        return MultipartBody.Part.createFormData( partName, file.name, requestFile )
-//    }
 
     private fun createPartFromString(value: String): RequestBody {
         return RequestBody.create(MultipartBody.FORM, value)
@@ -363,5 +358,10 @@ class CompleteSaleActivity : AppCompatActivity() {
         val filePath: String? = columnIndex?.let { cursor.getString(it) }
         cursor?.close()
         return filePath?.let { File(it) }
+    }
+
+    private fun clearCart(key: String) {
+        val sharedPreferences: SharedPreferences = getSharedPreferences(key, MODE_PRIVATE)
+        sharedPreferences.edit().clear().apply()
     }
 }

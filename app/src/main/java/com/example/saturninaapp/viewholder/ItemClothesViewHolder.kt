@@ -1,6 +1,8 @@
 package com.example.saturninaapp.viewholder
 
+import android.util.Log
 import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.Spinner
@@ -9,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.saturninaapp.R
 import com.example.saturninaapp.models.Colore
 import com.example.saturninaapp.models.DetailProduct
-import com.example.saturninaapp.models.Imagen
 import com.example.saturninaapp.models.Talla
 import com.squareup.picasso.Picasso
 
@@ -34,7 +35,8 @@ class ItemClothesViewHolder(view: View): RecyclerView.ViewHolder(view) {
         OnItemDeleteListener: (DetailProduct) -> Unit,
         OnHideButton: (view: View, isVisible: Boolean) -> Unit,
         isVisible: Boolean,
-        onHideItemCounter: (view: View, isVisible: Boolean) -> Unit
+        onHideItemCounter: (view: View, isVisible: Boolean) -> Unit,
+        onChooseSize: (DetailProduct, size: String) -> Unit
     ){
 
         OnHideButton(btnDeleteFromCart, isVisible)
@@ -54,6 +56,22 @@ class ItemClothesViewHolder(view: View): RecyclerView.ViewHolder(view) {
             .fit()
             .centerCrop()
             .into(ivClothItemPhoto)
+
+
+        spSizesChoice.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                val items = getNameofSizes(detailProduct.tallas)
+                val tallaString = items.get(p2)
+                onChooseSize(detailProduct, tallaString)
+                Log.i("SELECTED SIZE", "you choose $tallaString ")
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                //
+            }
+
+        }
+
 
 
         btnAddToCart.setOnClickListener {

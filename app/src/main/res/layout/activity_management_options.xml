@@ -59,27 +59,7 @@
             android:textColor="@color/black"
             android:textSize="30sp" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnCustomersManagementOptions"
-            style="@style/blueButtonStyle"
-            android:layout_width="291dp"
-            android:layout_height="55dp"
-            android:layout_marginTop="12dp"
-            android:paddingHorizontal="20dp"
-            android:text="Mis Clientes"
-            android:textColor="@color/black"
-            android:textSize="30sp" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnBusinessManagementOptions"
-            style="@style/blueButtonStyle"
-            android:layout_width="291dp"
-            android:layout_height="55dp"
-            android:layout_marginTop="12dp"
-            android:paddingHorizontal="20dp"
-            android:text="Mi Empresa"
-            android:textColor="@color/black"
-            android:textSize="30sp" />
 
 
         <androidx.appcompat.widget.AppCompatButton

@@ -12,6 +12,7 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,6 +26,7 @@ import com.example.saturninaapp.models.Imagen
 import com.example.saturninaapp.util.AlwaysListTypeAdapterFactory
 import com.example.saturninaapp.util.RetrofitHelper
 import com.example.saturninaapp.util.UtilClasses
+import com.example.saturninaapp.viewmodel.SharedSizeViewModel
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -63,6 +65,8 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
     public var isAdapterVisible = true
 
     private lateinit var cartSalesItemsCount: TextView
+
+    private val sharedSizesMVVM: SharedSizeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,7 +110,8 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
             OnItemDeleteListener = {item ->  onItemDeleteSelected(item)},
             OnHideButton = { v,isVisible -> hideButtonDelete(v, isVisible) },
             isVisible = isAdapterVisible,
-            onHideItemCounter = {v, isVisible -> hideItemCartCounter(v, isVisible)}
+            onHideItemCounter = {v, isVisible -> hideItemCartCounter(v, isVisible)},
+            onChooseSize = {item, size -> onSizeSelected(item, size)}
         )
         rvProductsDash.layoutManager = LinearLayoutManager(this)
         rvProductsDash.adapter = itemClothesAdapter
@@ -338,6 +343,19 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
 //        }
 //
 //        showCartListItems()
+    }
+
+
+    override fun onSizeSelected(product: DetailProduct, size: String) {
+        val existingProduct = itemsProducts.find { it.id == product.id }
+        if( existingProduct != null ){
+            existingProduct.tallaSeleccionada = size
+        }
+
+        val sizesMap = sharedSizesMVVM.selectedSizes.value ?: hashMapOf()
+        sizesMap[product.id] = size
+        sharedSizesMVVM.selectedSizes.value = sizesMap
+        Log.i("PRODUCT SIZE", "$product")
     }
 
 

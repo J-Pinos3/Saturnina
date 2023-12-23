@@ -1,6 +1,7 @@
 package com.example.saturninaapp.activities
 
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -45,6 +46,7 @@ class IntroDashboardNews : AppCompatActivity() {
 
     private var random1: String = ""
     private var random2: String = ""
+    private var sharedKey:String = "car_items"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,12 +86,14 @@ class IntroDashboardNews : AppCompatActivity() {
 
         tvGotoFirstFilter.setOnClickListener {
             if (user_token != null && user_id != null) {
+
                     navigateToDashboard(user_token,random1, user_id)
             }
         }
 
         tvGotoSecondFilter.setOnClickListener {
             if (user_token != null && user_id != null) {
+
                     navigateToDashboard(user_token, random2, user_id)
             }
         }
@@ -286,6 +290,11 @@ class IntroDashboardNews : AppCompatActivity() {
         }
     }//FIN DEL MÉTODO FETCH INTRO ITEM PRODUCTS
 
+
+    private fun clearCart(key: String){
+        val sharedPreferences: SharedPreferences = getSharedPreferences(key, MODE_PRIVATE)
+        sharedPreferences.edit().clear().apply()
+    }
 
 }
 

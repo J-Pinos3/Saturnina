@@ -12,4 +12,6 @@ interface UtilClasses {
 
     abstract fun onItemDeleteSelected(product: DetailProduct)
 
+
+    abstract fun onSizeSelected(product: DetailProduct, size: String)
 }
