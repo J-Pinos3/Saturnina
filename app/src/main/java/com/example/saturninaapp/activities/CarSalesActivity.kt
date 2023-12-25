@@ -7,20 +7,22 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.AutoCompleteTextView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.AppCompatButton
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.saturninaapp.R
 import com.example.saturninaapp.adapters.ItemClothesAdapter
+import com.example.saturninaapp.models.Colore
 import com.example.saturninaapp.models.DetailProduct
+import com.example.saturninaapp.models.Talla
 import com.example.saturninaapp.util.UtilClasses
-import com.example.saturninaapp.viewmodel.SharedSizeViewModel
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -44,7 +46,6 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
 
     private lateinit var cartSalesItemsCount: TextView
 
-    private val sharedSizesMVVM: SharedSizeViewModel by viewModels()
 //    override fun onResume() {
 //        super.onResume()
 //        val cartKey: String? = intent.extras?.getString("CARTKEY")
@@ -65,7 +66,6 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
         loadCartItemsCount()
         loadInitialPrice()
 
-
         //reycler
         rvProductsCar = findViewById(R.id.rvProductsCar)
         itemClothesAdapter = ItemClothesAdapter(itemsProducts,
@@ -74,8 +74,8 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
             OnHideButton = { v,isVisible -> hideButtonDelete(v, isVisible) },
             isVisible = isAdapterVisible,
             onHideItemCounter = {v, isVisible -> hideItemCartCounter(v,isVisible) },
-            onChooseSize = {item, size -> onSizeSelected(item, size)}
-
+            onChooseSize = {item, product -> onSizeSelected(item, product)},
+            onChooseColor = {item, product -> onColorSelected(item, product)}
         )
         rvProductsCar.layoutManager = LinearLayoutManager(this)
         rvProductsCar.adapter = itemClothesAdapter
@@ -91,9 +91,6 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
             startActivity(intent)
         }
 
-        sharedSizesMVVM.selectedSizes.observe(this, Observer {
-            sizesMap -> itemClothesAdapter.updateSizes(sizesMap)
-        })
 
         //navigation
         val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_main)
@@ -208,14 +205,6 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
         }
     }
 
-    private fun ItemClothesAdapter.updateSizes(newSizes: HashMap<String, String>) {
-        // Actualiza las tallas en tu adaptador con los nuevos datos
-        // Por ejemplo:
-        itemsProducts.forEach { item ->
-            item.tallaSeleccionada = newSizes[item.id] ?: ""
-        }
-        NotifyListItemChanged()
-    }
 
     override fun onItemClothSelected(product: DetailProduct){
         Toast.makeText(this, product.id + " " + product.name + " " + product.precio, Toast.LENGTH_SHORT).show()
@@ -262,14 +251,53 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
         showCartListItems()
     }
 
+    //SIZES
+    override fun onSizeSelected(spinner: AutoCompleteTextView, product: DetailProduct) {
+        var listofSizes = getNameofSizes(product.tallas)
 
-    override fun onSizeSelected(product: DetailProduct, size: String) {
-        val existingProduct = itemsProducts.find { it.id == product.id }
-        if( existingProduct != null ){
-            existingProduct.tallaSeleccionada = size
+        if(  !product.tallaSeleccionada.isNullOrEmpty() ){
+            var indiceTalla = listofSizes.find { it == product.tallaSeleccionada  }
+            //var indiceTalla = listofSizes.indexOf(product.tallaSeleccionada)
+            //Log.d("SIZES AND INDICES", "${listofSizes} --**-- ${indiceTalla}")
+            spinner.setText(indiceTalla, false)
+        }else{
+            //var element = listofSizes.elementAt(0)
+            spinner.setText( listofSizes.elementAt(0), false )
         }
-        Log.i("PRODUCT SIZE", "$product")
     }
+
+    private fun getNameofSizes(listSizes: List<Talla>): ArrayList<String>{
+        val listaNombres = arrayListOf<String>()
+        for(k in listSizes){
+            listaNombres.add(k.name)
+        }
+        return listaNombres
+    }
+
+    //COLORS
+    override fun onColorSelected(spinner: AutoCompleteTextView, product: DetailProduct) {
+        var listofColors = getNameofColors(product.colores)
+        if( !product.colorSeleccionado.isNullOrEmpty() ){
+            //var indiceColor = listofColors.indexOf(product.colorSeleccionado)
+            var indiceColor = listofColors.find { it == product.colorSeleccionado }
+            spinner.setText(indiceColor, false)
+
+        }else{
+            //var element = listofColors.elementAt(0)
+            spinner.setText(listofColors.elementAt(0), false)
+        }
+    }
+
+    private fun getNameofColors(listColors: List<Colore>): ArrayList<String>{
+        val listaColores = arrayListOf<String>()
+        for(k in listColors){
+            listaColores.add(k.name)
+        }
+        return listaColores
+    }
+
+
+
 
     private fun increaseTotalPricebyProduct(currentProduct: DetailProduct){
         var currentPrice = (currentProduct.precio )

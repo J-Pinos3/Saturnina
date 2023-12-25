@@ -1,32 +1,30 @@
 package com.example.saturninaapp.activities
 
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.AutoCompleteTextView
 import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.saturninaapp.R
 import com.example.saturninaapp.adapters.ClothesCategoryAdapter
 import com.example.saturninaapp.adapters.ItemClothesAdapter
 import com.example.saturninaapp.models.ClothCategoryData
+import com.example.saturninaapp.models.Colore
 import com.example.saturninaapp.models.DetailProduct
-import com.example.saturninaapp.models.Imagen
-import com.example.saturninaapp.util.AlwaysListTypeAdapterFactory
+import com.example.saturninaapp.models.Talla
 import com.example.saturninaapp.util.RetrofitHelper
 import com.example.saturninaapp.util.UtilClasses
-import com.example.saturninaapp.viewmodel.SharedSizeViewModel
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -35,8 +33,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.w3c.dom.Text
-import java.io.FileOutputStream
 
 import java.lang.Exception
 
@@ -65,9 +61,6 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
     public var isAdapterVisible = true
 
     private lateinit var cartSalesItemsCount: TextView
-
-    private val sharedSizesMVVM: SharedSizeViewModel by viewModels()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
@@ -100,8 +93,6 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
         rvFilterClothes.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         rvFilterClothes.adapter = clothesCategoryAdapter
 
-
-
         //recycler to show products
         rvProductsDash = findViewById(R.id.rvProductsDash)
         //itemClothesAdapter = ItemClothesAdapter(itemsProducts,onItemDeleteSelected()){ onItemClothSelected(it) }
@@ -111,7 +102,8 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
             OnHideButton = { v,isVisible -> hideButtonDelete(v, isVisible) },
             isVisible = isAdapterVisible,
             onHideItemCounter = {v, isVisible -> hideItemCartCounter(v, isVisible)},
-            onChooseSize = {item, size -> onSizeSelected(item, size)}
+            onChooseSize = {item, product -> onSizeSelected(item, product)},
+            onChooseColor = {item, product -> onColorSelected(item, product)}
         )
         rvProductsDash.layoutManager = LinearLayoutManager(this)
         rvProductsDash.adapter = itemClothesAdapter
@@ -345,18 +337,52 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
 //        showCartListItems()
     }
 
+    //SIZES
+    override fun onSizeSelected(spinner: AutoCompleteTextView, product: DetailProduct) {
+        var listofSizes = getNameofSizes(product.tallas)
 
-    override fun onSizeSelected(product: DetailProduct, size: String) {
-        val existingProduct = itemsProducts.find { it.id == product.id }
-        if( existingProduct != null ){
-            existingProduct.tallaSeleccionada = size
+        if(  !product.tallaSeleccionada.isNullOrEmpty() ){
+            var indiceTalla = listofSizes.find { it == product.tallaSeleccionada  }
+            //Log.d("SIZES AND INDICES", "${listofSizes} --**-- ${indiceTalla}")
+            spinner.setText(indiceTalla, false)
+
+        }else{
+            //var element = listofSizes.elementAt(0)
+            spinner.setText( listofSizes.elementAt(0), false )
         }
-
-        val sizesMap = sharedSizesMVVM.selectedSizes.value ?: hashMapOf()
-        sizesMap[product.id] = size
-        sharedSizesMVVM.selectedSizes.value = sizesMap
-        Log.i("PRODUCT SIZE", "$product")
     }
+
+    private fun getNameofSizes(listSizes: List<Talla>): ArrayList<String>{
+        val listaNombres = arrayListOf<String>()
+        for(k in listSizes){
+            listaNombres.add(k.name)
+        }
+        return listaNombres
+    }
+
+    //COLORS
+    override fun onColorSelected(spinner: AutoCompleteTextView, product: DetailProduct) {
+        var listofColors = getNameofColors(product.colores)
+        if( !product.colorSeleccionado.isNullOrEmpty() ){
+            //var indiceColor = listofColors.indexOf(product.colorSeleccionado)
+            var indiceColor = listofColors.find { it == product.colorSeleccionado }
+            spinner.setText(indiceColor, false)
+
+        }else{
+
+            spinner.setText(listofColors.elementAt(0), false)
+        }
+    }
+
+
+    private fun getNameofColors(listColors: List<Colore>): ArrayList<String>{
+        val listaColores = arrayListOf<String>()
+        for(k in listColors){
+            listaColores.add(k.name)
+        }
+        return listaColores
+    }
+
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

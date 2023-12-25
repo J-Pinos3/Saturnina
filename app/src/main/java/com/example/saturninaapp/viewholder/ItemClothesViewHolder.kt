@@ -1,11 +1,12 @@
 package com.example.saturninaapp.viewholder
 
+import android.text.Editable
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.ImageView
-import android.widget.Spinner
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.saturninaapp.R
@@ -20,13 +21,14 @@ class ItemClothesViewHolder(view: View): RecyclerView.ViewHolder(view) {
     private val tvClothItemPrice: TextView = view.findViewById(R.id.tvClothItemPrice)
     private val tvClothItemDescription: TextView = view.findViewById(R.id.tvClothItemDescription)
     private val ivClothItemPhoto: ImageView = view.findViewById(R.id.ivClothItemPhoto)
-    private val spSizesChoice: Spinner = view.findViewById(R.id.spSizesChoice)
-    private val spColorsChoice: Spinner = view.findViewById(R.id.spColorsChoice)
+    val spSizesChoice: AutoCompleteTextView = view.findViewById(R.id.spSizesChoice)
+    private val spColorsChoice: AutoCompleteTextView = view.findViewById(R.id.spColorsChoice)
 
     private val btnAddToCart: View = view.findViewById(R.id.btnAddToCart)
     private val btnDeleteFromCart: View = view.findViewById(R.id.btnDeleteFromCart)
 
     private val tvItemCounter: TextView = view.findViewById(R.id.tvItemCounter)
+    private lateinit var sizesList: List<String>
 
     //where itemClothes is a data class
     fun render(
@@ -36,7 +38,8 @@ class ItemClothesViewHolder(view: View): RecyclerView.ViewHolder(view) {
         OnHideButton: (view: View, isVisible: Boolean) -> Unit,
         isVisible: Boolean,
         onHideItemCounter: (view: View, isVisible: Boolean) -> Unit,
-        onChooseSize: (DetailProduct, size: String) -> Unit
+        onChooseSize: (spinner: AutoCompleteTextView, DetailProduct) -> Unit,
+        onChooseColor: (spinner: AutoCompleteTextView, DetailProduct) -> Unit,
     ){
 
         OnHideButton(btnDeleteFromCart, isVisible)
@@ -58,20 +61,27 @@ class ItemClothesViewHolder(view: View): RecyclerView.ViewHolder(view) {
             .into(ivClothItemPhoto)
 
 
-        spSizesChoice.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                val items = getNameofSizes(detailProduct.tallas)
-                val tallaString = items.get(p2)
-                onChooseSize(detailProduct, tallaString)
-                Log.i("SELECTED SIZE", "you choose $tallaString ")
+        onChooseSize(spSizesChoice, detailProduct)
+        onChooseColor(spColorsChoice, detailProduct)
+
+        spSizesChoice.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, view, position, id ->
+                detailProduct.tallaSeleccionada = parent?.getItemAtPosition(position).toString()
+                spSizesChoice.post{
+                    spSizesChoice.text = Editable.Factory.getInstance().newEditable(detailProduct.tallaSeleccionada)
+                }
+                Log.i("SELECTED SIZE", "you choose ${detailProduct}")
             }
 
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-                //
-            }
 
+        spColorsChoice.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, view, position, id ->
+                detailProduct.colorSeleccionado = parent?.getItemAtPosition(position).toString()
+                spColorsChoice.post{
+                    spColorsChoice.text = Editable.Factory.getInstance().newEditable(detailProduct.colorSeleccionado)
+                }
+                Log.i("SELECTED COLOR", "you choose ${detailProduct}")
         }
-
 
 
         btnAddToCart.setOnClickListener {
@@ -83,11 +93,10 @@ class ItemClothesViewHolder(view: View): RecyclerView.ViewHolder(view) {
         }
 
     }
-
-    private fun loadSizesSpinner(spinner: Spinner, detProd: DetailProduct){
-        val sizesList = getNameofSizes(detProd.tallas)
-        val adapter = ArrayAdapter(itemView.context, android.R.layout.simple_spinner_item, sizesList )
-        spinner.adapter = adapter
+    private fun loadSizesSpinner(spinner: AutoCompleteTextView, detProd: DetailProduct){
+        sizesList = getNameofSizes(detProd.tallas)
+        val adapter = ArrayAdapter(itemView.context, R.layout.list_size, sizesList )
+        spinner.setAdapter(adapter)
     }
 
     private fun getNameofSizes(listSizes: List<Talla>): ArrayList<String>{
@@ -98,12 +107,24 @@ class ItemClothesViewHolder(view: View): RecyclerView.ViewHolder(view) {
         return listaNombres
     }
 
+//    private fun setInitialSizeNavigate(spinner: AutoCompleteTextView, detProd: DetailProduct){
+//        if(  !detProd.tallaSeleccionada.isNullOrEmpty() ){
+//            var indiceTalla = sizesList.indexOf(detProd.tallaSeleccionada)
+//            spinner.setSelection(indiceTalla)
+//        }else{
+//            var element = sizesList.elementAt(0)
+//            spinner.setSelection( sizesList.indexOf(element) )
+//        }
+//    }
 
 
-    private fun loadColorsSpinner(spinner: Spinner, detProd: DetailProduct){
+
+
+
+    private fun loadColorsSpinner(spinner: AutoCompleteTextView, detProd: DetailProduct){
         val colorsList = getNameofColores(detProd.colores)
         val adapter = ArrayAdapter(itemView.context, android.R.layout.simple_spinner_item, colorsList )
-        spinner.adapter = adapter
+        spinner.setAdapter(adapter)
     }
 
 
@@ -114,7 +135,6 @@ class ItemClothesViewHolder(view: View): RecyclerView.ViewHolder(view) {
         }
         return listaNombres
     }
-
 
 
 }

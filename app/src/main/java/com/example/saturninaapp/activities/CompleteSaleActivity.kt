@@ -67,7 +67,7 @@ class CompleteSaleActivity : AppCompatActivity() {
                     val file = uriToFile(imgUri)
                     if(file != null && file.exists()){
                         val totalValue = getTotalValueOfCart()
-                        val idcounterList = getListWithIdCounter(finalListOfProducts)
+                        val idcounterList = getListWithIdCounterSizeColor(finalListOfProducts)
                         Log.i("FINAL LIST", "$idcounterList")
                         addDataToOrder(bearerToken, user_id, totalValue, idcounterList, userOwner.nombre, userOwner.apellido, etOrderAddress.text.toString(),
                             userOwner.email, userOwner.telefono, etOrderDescription.text.toString(), file)
@@ -274,6 +274,8 @@ class CompleteSaleActivity : AppCompatActivity() {
                 val productObject = JsonObject()
                 productObject.addProperty("id_producto", product.id)
                 productObject.addProperty("cantidad", product.contador)
+                productObject.addProperty("talla", product.talla)
+                productObject.addProperty("color", product.color)
                 productsArray.add(productObject)
             }
 
@@ -325,12 +327,14 @@ class CompleteSaleActivity : AppCompatActivity() {
     }
 
 
-    private fun getListWithIdCounter(listOfProducts: MutableList<DetailProduct>): List<ProductOrderInfo> {
+    private fun getListWithIdCounterSizeColor(listOfProducts: MutableList<DetailProduct>): List<ProductOrderInfo> {
         val finalList = mutableListOf<ProductOrderInfo>()
         for( k in listOfProducts.indices ){
             val currentProduct = ProductOrderInfo(
                 id = listOfProducts[k].id,
-                contador = listOfProducts[k].contador
+                contador = listOfProducts[k].contador,
+                talla = listOfProducts[k].tallaSeleccionada,
+                color = listOfProducts[k].colorSeleccionado
             )
             finalList.add(currentProduct)
         }

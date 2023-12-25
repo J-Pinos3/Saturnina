@@ -14,7 +14,7 @@ data class DetailProduct(
     val precio: Double,
     val tallas: List<Talla>,
     var tallaSeleccionada: String = "",
-    val colorSeleccionado: String = "",
+    var colorSeleccionado: String = "",
     var contador: Int = 0//unidades pedidas
 )
 
