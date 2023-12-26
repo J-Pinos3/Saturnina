@@ -75,6 +75,14 @@ interface ConsumeAPI {
     @GET("orders")
     suspend fun getAllOrders(@Header("Authorization") authorization: String): Response<OrdersList>
 
+
+    @Headers("Content-type:application/json; charset=UTF-8")
+    @GET("order/{id_user}")
+    suspend fun getOrdersForUser(
+        @Header("Authorizarion") authorization: String,
+        @Path("id_user") userId: String
+    ): Response<OrdersList>
+
 }
 
 /*
