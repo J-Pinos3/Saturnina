@@ -30,6 +30,9 @@ class MySalesActivity : AppCompatActivity() {
         setContentView(R.layout.activity_my_sales)
         initUI()
 
+        val user_token = intent.extras?.getString("USER_TOKEN")
+        val user_id = intent.extras?.getString("USER_ID")
+        val user_rol = intent.extras?.getString("USER_ROL")
 
 
 

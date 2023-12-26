@@ -59,6 +59,7 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
         val cartKey: String = "car_items"
         val user_token = intent.extras?.getString("USER_TOKENTO_PROFILE")
         val user_id = intent.extras?.getString("USER_ID")
+        val user_rol = intent.extras?.getString("USER_ROL")
         val bearerToken: String = "Bearer $user_token"
 
         initUI()
@@ -88,6 +89,7 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
             intent.putExtra("TOTAL_CART_ITEMS", cartSalesItemsCount.text.toString())
             intent.putExtra("USER_TOKENTO_PROFILE", user_token)
             intent.putExtra("USER_ID", user_id)
+            intent.putExtra("USER_ROL", user_rol)
             startActivity(intent)
         }
 
@@ -106,6 +108,7 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
                     val intent = Intent(this, IntroDashboardNews::class.java)
                     intent.putExtra("USER_TOKEN", user_token)
                     intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
                     startActivity(intent)
                 }
 
@@ -114,6 +117,7 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
                     val intent = Intent(this, DashboardActivity::class.java)
                     intent.putExtra("USER_TOKEN", user_token)
                     intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
                     startActivity(intent)
                 }
 
@@ -121,6 +125,7 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
                     val intent = Intent(this, ProfileActivity::class.java)
                     intent.putExtra("USER_TOKEN_PROFILE", user_token)
                     intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
                     startActivity(intent)
                 }
 
@@ -130,7 +135,9 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
 
                 R.id.nav_item_five ->{
                     val intent = Intent(this, ManagementOptionsActivity::class.java)
+                    intent.putExtra("USER_TOKEN", user_token)
                     intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
                     startActivity(intent)
                 }
 

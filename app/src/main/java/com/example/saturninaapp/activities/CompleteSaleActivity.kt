@@ -88,6 +88,7 @@ class CompleteSaleActivity : AppCompatActivity() {
         initUI()
         val totalItems: String? = intent.extras?.getString("TOTAL_CART_ITEMS")
         val userToken = intent.extras?.getString("USER_TOKENTO_PROFILE")
+        val user_rol = intent.extras?.getString("USER_ROL")
         user_id = intent.extras?.getString("USER_ID").toString()
         val cartKey: String = "car_items"
         bearerToken = "Bearer $userToken"
@@ -124,6 +125,7 @@ class CompleteSaleActivity : AppCompatActivity() {
                     val intent = Intent(this, IntroDashboardNews::class.java)
                     intent.putExtra("USER_TOKEN", userToken)
                     intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
                     startActivity(intent)
                 }
 
@@ -131,6 +133,7 @@ class CompleteSaleActivity : AppCompatActivity() {
                     val intent = Intent(this, DashboardActivity::class.java)
                     intent.putExtra("USER_TOKEN", userToken)
                     intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
                     startActivity(intent)
                 }
 
@@ -138,6 +141,7 @@ class CompleteSaleActivity : AppCompatActivity() {
                     val intent = Intent(this, ProfileActivity::class.java)
                     intent.putExtra("USER_TOKEN_PROFILE", userToken)
                     intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
                     startActivity(intent)
                 }
 
@@ -147,7 +151,9 @@ class CompleteSaleActivity : AppCompatActivity() {
 
                 R.id.nav_item_five ->{
                     val intent = Intent(this, ManagementOptionsActivity::class.java)
+                    intent.putExtra("USER_TOKEN", userToken)
                     intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
                     startActivity(intent)
                 }
 

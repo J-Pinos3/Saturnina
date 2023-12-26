@@ -58,6 +58,7 @@ class ProfileActivity : AppCompatActivity() {
 
         val user_token = intent.extras?.getString("USER_TOKEN_PROFILE")
         var user_id = intent.extras?.getString("USER_ID")
+        val user_rol = intent.extras?.getString("USER_ROL")
         val bearer_token = "Bearer "+user_token
         var userProfile: UpdateUserProfilePut
         println("Mi Token = ${bearer_token}")
@@ -138,6 +139,7 @@ class ProfileActivity : AppCompatActivity() {
             val intent = Intent(applicationContext, DashboardActivity::class.java)
             intent.putExtra("USER_ID", user_id)
             intent.putExtra("USER_TOKEN", user_token)
+            intent.putExtra("USER_ROL", user_rol)
             startActivity(intent)
 
         }
