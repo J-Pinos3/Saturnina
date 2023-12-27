@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activities.ShowOrderInfoActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnBacktoSalesActivity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mis Ventas"
+            android:textSize="20dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guidelineLeft"
+            app:layout_constraintBottom_toTopOf="@id/guidelineTop"/>
+
+
+        <ImageView
+            android:id="@+id/ivBillOrderImage"
+            android:layout_width="0dp"
+            android:layout_height="350dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+            app:layout_constraintEnd_toStartOf="@id/guidelineRight"
+            app:layout_constraintTop_toBottomOf="@id/guidelineTop" />
+
+        <TextView
+            android:id="@+id/tvOrderInfoDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+            app:layout_constraintTop_toBottomOf="@id/ivBillOrderImage"
+            android:text="2015 - 25 - 05 5161206"/>
+
+        <TextView
+            android:id="@+id/tvOrderInfoFirstName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+            app:layout_constraintTop_toBottomOf="@id/tvOrderInfoDate"
+            android:text="Usuario dfgbfdjgbkjdfg"
+            android:textSize="20sp"/>
+
+
+        <TextView
+            android:id="@+id/tvOrderInfoLastName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+            app:layout_constraintTop_toBottomOf="@id/tvOrderInfoFirstName"
+            android:text="Apellido njbfzjfg"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/tvOrderInfoEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+            app:layout_constraintTop_toBottomOf="@id/tvOrderInfoLastName"
+            android:text="MorraIntrínseca@gmail.com"
+            android:textSize="20sp"/>
+
+
+        <TextView
+            android:id="@+id/tvOrderInfoAddress"
+            android:layout_width="wrap_content"
+            app:layout_constrainedWidth="true"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="@id/guidelineRight"
+            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+            app:layout_constraintTop_toBottomOf="@id/tvOrderInfoEmail"
+            android:text="Avenida Amazonas y Gaspar de Villaroel Sentido O-E, Edificio la Esperanza número CGTH-1561 "
+            android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/tvOrderInfoCellPhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+            app:layout_constraintTop_toBottomOf="@id/tvOrderInfoAddress"
+            android:text="036164941"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/tvOrderInfoDescription"
+            android:layout_width="wrap_content"
+            app:layout_constrainedWidth="true"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+            app:layout_constraintEnd_toEndOf="@id/guidelineRight"
+            app:layout_constraintTop_toBottomOf="@id/tvOrderInfoCellPhone"
+            android:text="Esta es la descripçion de lo que quiero en mi pedido, órale plebe"
+            android:textSize="20sp"/>
+
+        <!-- GUIDELINES -->
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_end="680dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.03" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.97" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+</ScrollView>

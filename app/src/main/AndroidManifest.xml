@@ -25,6 +25,9 @@
         android:theme="@style/Theme.SaturninaApp"
         tools:targetApi="tiramisu">
         <activity
+            android:name=".activities.ShowOrderInfoActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.ShowProductInfo"
             android:exported="false" />
         <activity

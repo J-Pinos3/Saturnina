@@ -17,9 +17,11 @@ class OrdersViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
 
     @SuppressLint("SetTextI18n")
-    fun render(orderResult: OrderResult){
+    fun render(orderResult: OrderResult,
+               OnShowOrderInfo: (OrderResult) -> Unit){
+
         ivIconShowSale.setOnClickListener {
-            //TODO(NAVIGATE TO ORDER INFO ACTIVITY)
+            OnShowOrderInfo(orderResult)
         }
 
         tvSalesUserName.text = orderResult.id_orden.nombre + " " + orderResult.id_orden.apellido

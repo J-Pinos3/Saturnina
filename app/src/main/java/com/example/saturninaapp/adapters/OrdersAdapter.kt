@@ -7,7 +7,8 @@ import com.example.saturninaapp.R
 import com.example.saturninaapp.models.OrderResult
 import com.example.saturninaapp.viewholder.OrdersViewHolder
 
-class OrdersAdapter(private val ordersList: MutableList<OrderResult>)
+class OrdersAdapter(private val ordersList: MutableList<OrderResult>,
+    val OnShowOrderInfo: (OrderResult)-> Unit )
     : RecyclerView.Adapter<OrdersViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrdersViewHolder {
@@ -17,7 +18,7 @@ class OrdersAdapter(private val ordersList: MutableList<OrderResult>)
 
 
     override fun onBindViewHolder(holder: OrdersViewHolder, position: Int) {
-        holder.render(ordersList[position])
+        holder.render(ordersList[position], OnShowOrderInfo)
     }
 
     override fun getItemCount(): Int = ordersList.size

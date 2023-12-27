@@ -1,5 +1,7 @@
 package com.example.saturninaapp.models
 
+import java.io.Serializable
+
 data class OrderResult(
     val cantidad: Int,
     val color: String,
@@ -9,4 +11,4 @@ data class OrderResult(
     val id_producto: IdProducto,
     val status: String,
     val talla: String
-)
+): Serializable
