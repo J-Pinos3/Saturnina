@@ -4,20 +4,13 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.MenuItem
-import android.widget.Toast
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.AppCompatButton
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.saturninaapp.R
-import com.example.saturninaapp.adapters.ItemClothesAdapter
 import com.example.saturninaapp.adapters.OrdersAdapter
-import com.example.saturninaapp.models.DetailProduct
 import com.example.saturninaapp.models.OrderResult
 import com.example.saturninaapp.util.RetrofitHelper
-import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -35,44 +28,47 @@ class MySalesActivity : AppCompatActivity() {
 
     private val ROL_USER: String = "rol:vuqn7k4vw0m1a3wt7fkb"
     private val ROL_ADMIN: String = "rol:74rvq7jatzo6ac19mc79"
+    private var user_token: String = ""
+    private var user_id: String = ""
+    private var user_rol: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_sales)
         initUI()
 
-        val user_token = intent.extras?.getString("USER_TOKEN")
-        val user_id = intent.extras?.getString("USER_ID")
-        val user_rol = intent.extras?.getString("USER_ROL")
+        user_token = intent.extras?.getString("USER_TOKEN").toString()
+        user_id = intent.extras?.getString("USER_ID").toString()
+        user_rol = intent.extras?.getString("USER_ROL").toString()
         val bearerToken = "Bearer $user_token"
 
 
-        salesOrdersAdapter = OrdersAdapter(itemSalesOrders) { order -> showOrderInformation(order) }
-        rvSalesManagement.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        rvSalesManagement.adapter = salesOrdersAdapter
 
-
+        println("USER ROL: ${user_rol}")
         when(user_rol){
             ROL_USER -> {
+                Log.i("INSIDE ROL USER ", "HERE")
                 CoroutineScope(Dispatchers.IO).launch {
-                    if (user_id != null) {
-                        bringOrdersFromSpecificUser(bearerToken, user_id)
-                    }
+                    bringOrdersFromSpecificUser(bearerToken, user_id)
                 }
             }
 
             ROL_ADMIN -> {
+                Log.i("INSIDE ROL ADMIN ", "HERE")
                 CoroutineScope(Dispatchers.IO).launch(){
                     getOrdersFromAllUsers(bearerToken)
                 }
             }
 
             else -> {
-                println("Esto no debería pasar :(")
+                Log.i("SOMEWHERE ", " BUT NOT HERE")
             }
         }
 
 
+        salesOrdersAdapter = OrdersAdapter(itemSalesOrders) { order -> showOrderInformation(order) }
+        rvSalesManagement.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        rvSalesManagement.adapter = salesOrdersAdapter
 
     }//ON CREATE
 
@@ -88,6 +84,9 @@ class MySalesActivity : AppCompatActivity() {
     private fun showOrderInformation(orderSelected: OrderResult){
         val intent = Intent(this, ShowOrderInfoActivity::class.java)
         intent.putExtra("ORDER_SELECTED", orderSelected)
+        intent.putExtra("USER_TOKEN", user_token)
+        intent.putExtra("USER_ID", user_id)
+        intent.putExtra("USER_ROL", user_rol)
         startActivity(intent)
     }
 
@@ -111,7 +110,9 @@ class MySalesActivity : AppCompatActivity() {
                 }
 
             }else{
-                //NOT SUCCESSFUL
+                val msg = retrofitGetAllOrders.errorBody()?.charStream().toString()
+                Log.e("ERROR GETTING ALL ORDERS ", "${retrofitGetAllOrders.code()} --**--  ${retrofitGetAllOrders.errorBody()?.toString()}")
+                println("MESSAGE: $msg")
             }
 
         }catch (e: Exception){
@@ -128,6 +129,7 @@ class MySalesActivity : AppCompatActivity() {
                 val listResponse = retrofitGetAllOrders.body()?.detail
 
                 withContext(Dispatchers.Main){
+                    /*
                     listResponse?.forEach { detailOrder ->
                         detailOrder.result.let { orderResults ->
                             for(orderData in orderResults){
@@ -136,6 +138,16 @@ class MySalesActivity : AppCompatActivity() {
                             }
                         }
                     }
+                    */
+                    if(listResponse != null){
+                        for(k in listResponse){
+                            for(order in k.result){
+                                itemSalesOrders.add(OrderResult(order.cantidad, order.color, order.fecha, order.id, order.id_orden, order.id_producto, order.status, order.talla))
+                            }
+                        }
+                        salesOrdersAdapter.notifyDataSetChanged()
+                    }
+
                 }
 
             }else{
