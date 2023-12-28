@@ -6,50 +6,60 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnBacktoSalesActivity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Mis Ventas"
-            android:textSize="20sp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@id/guidelineLeft"
-            app:layout_constraintBottom_toTopOf="@id/guidelineTop"/>
+            android:textSize="20sp"/>
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintStart_toEndOf="@id/guidelineLeft"-->
+<!--            app:layout_constraintBottom_toTopOf="@id/guidelineTop"-->
 
 
         <ImageView
             android:id="@+id/ivBillOrderImage"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="290dp"
             android:layout_marginTop="10dp"
             android:background="@color/black"
-            android:scaleType="centerCrop"
-            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-            app:layout_constraintEnd_toStartOf="@id/guidelineRight"
-            app:layout_constraintTop_toBottomOf="@id/guidelineTop" />
+            android:scaleType="centerCrop"/>
+<!--            app:layout_constraintStart_toStartOf="@id/guidelineLeft"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/guidelineRight"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/guidelineTop" -->
+
 
         <TextView
             android:id="@+id/tvOrderInfoDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-            app:layout_constraintTop_toBottomOf="@id/ivBillOrderImage"
-            android:text="2015 - 25 - 05 5161206"/>
+            android:text="2015 - 25 - 05 5161206"
+            />
+<!--            app:layout_constraintStart_toStartOf="@id/guidelineLeft"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/ivBillOrderImage"-->
+
 
         <TextView
             android:id="@+id/tvOrderInfoFirstName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-            app:layout_constraintTop_toBottomOf="@id/tvOrderInfoDate"
             android:text="Nombre dfgbfdjgbkjdfg"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            />
+<!--            app:layout_constraintStart_toStartOf="@id/guidelineLeft"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/tvOrderInfoDate"-->
+
 
 
         <TextView
@@ -57,20 +67,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-            app:layout_constraintTop_toBottomOf="@id/tvOrderInfoFirstName"
             android:text="Apellido njbfzjfg"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            />
+<!--            app:layout_constraintStart_toStartOf="@id/guidelineLeft"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/tvOrderInfoFirstName"-->
+
 
         <TextView
             android:id="@+id/tvOrderInfoEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-            app:layout_constraintTop_toBottomOf="@id/tvOrderInfoLastName"
             android:text="MorraIntrínseca@gmail.com"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            />
+<!--            app:layout_constraintStart_toStartOf="@id/guidelineLeft"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/tvOrderInfoLastName"-->
+
 
 
         <TextView
@@ -79,21 +93,25 @@
             app:layout_constrainedWidth="true"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            app:layout_constraintEnd_toEndOf="@id/guidelineRight"
-            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-            app:layout_constraintTop_toBottomOf="@id/tvOrderInfoEmail"
             android:text="Avenida Amazonas y Gaspar de Villaroel Sentido O-E, Edificio la Esperanza número CGTH-1561 "
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            />
+<!--            app:layout_constraintEnd_toEndOf="@id/guidelineRight"-->
+<!--            app:layout_constraintStart_toStartOf="@id/guidelineLeft"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/tvOrderInfoEmail"-->
+
 
         <TextView
             android:id="@+id/tvOrderInfoCellPhone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-            app:layout_constraintTop_toBottomOf="@id/tvOrderInfoAddress"
             android:text="036164941"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            />
+<!--            app:layout_constraintStart_toStartOf="@id/guidelineLeft"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/tvOrderInfoAddress"-->
+
 
         <TextView
             android:id="@+id/tvOrderInfoDescription"
@@ -101,11 +119,13 @@
             app:layout_constrainedWidth="true"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-            app:layout_constraintEnd_toEndOf="@id/guidelineRight"
-            app:layout_constraintTop_toBottomOf="@id/tvOrderInfoCellPhone"
             android:text="Esta es la descripçion de lo que quiero en mi pedido, órale plebe"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            />
+<!--            app:layout_constraintStart_toStartOf="@id/guidelineLeft"-->
+<!--            app:layout_constraintEnd_toEndOf="@id/guidelineRight"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/tvOrderInfoCellPhone"-->
+
 
         <View
             android:id="@+id/vBlackLine1"
@@ -113,129 +133,207 @@
             app:layout_constrainedWidth="true"
             android:layout_height="5dp"
             android:layout_marginTop="15dp"
-            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-            app:layout_constraintEnd_toEndOf="@id/guidelineRight"
-            app:layout_constraintTop_toBottomOf="@id/tvOrderInfoDescription"
-            android:background="@color/black"/>
+            android:background="@color/black"
+            />
+<!--            app:layout_constraintStart_toStartOf="@id/guidelineLeft"-->
+<!--            app:layout_constraintEnd_toEndOf="@id/guidelineRight"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/tvOrderInfoDescription"-->
 
-        <TextView
-            android:id="@+id/tvLabelOrderTotalPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-            app:layout_constraintTop_toBottomOf="@+id/vBlackLine1"
-            android:text="Precio Total: "
-            android:textSize="20sp"/>
 
-        <TextView
-            android:id="@+id/tvOrderInfoTotalPrice"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="30dp"
-            app:layout_constraintEnd_toEndOf="@id/guidelineRight"
-            app:layout_constraintTop_toBottomOf="@id/vBlackLine1"
-            android:text="$1210.65"
-            android:textSize="20sp"/>
+            android:orientation="horizontal"
+            android:weightSum="3">
+            <TextView
+                android:id="@+id/tvLabelOrderTotalPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:layout_marginTop="15dp"
+                android:text="Precio Total: "
+                android:textSize="20sp"
+                />
+            <!--            app:layout_constraintStart_toStartOf="@id/guidelineLeft"-->
+            <!--            app:layout_constraintTop_toBottomOf="@+id/vBlackLine1"-->
+
+
+            <TextView
+                android:id="@+id/tvOrderInfoTotalPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginTop="15dp"
+                android:textAlignment="textEnd"
+                android:layout_marginEnd="10dp"
+                android:text="$1210.65"
+                android:textSize="20sp"
+                />
+            <!--            app:layout_constraintEnd_toEndOf="@id/guidelineRight"-->
+            <!--            app:layout_constraintTop_toBottomOf="@id/vBlackLine1"-->
+        </LinearLayout>
+
+
 
         <TextView
             android:id="@+id/tvOrderInfoProductName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-            app:layout_constraintTop_toBottomOf="@id/tvLabelOrderTotalPrice"
             android:text="Producto sad adakjsd"
-            android:textSize="20sp"/>
-
-        <TextView
-            android:id="@+id/tvLabelOrderSelectedSize"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-            app:layout_constraintTop_toBottomOf="@id/tvOrderInfoProductName"
-            android:text="Talla: "
-            android:textSize="20sp"/>
-
-
-        <TextView
-            android:id="@+id/tvOrderInfoSelectedSize"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="30dp"
-            android:text="Talla 5XL"
             android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="@id/guidelineRight"
-            app:layout_constraintTop_toBottomOf="@id/tvOrderInfoProductName" />
+            />
+<!--            app:layout_constraintStart_toStartOf="@id/guidelineLeft"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/tvLabelOrderTotalPrice"-->
 
-        <TextView
-            android:id="@+id/tvLabelOrderSelectedColor"
-            android:layout_width="wrap_content"
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-            app:layout_constraintTop_toBottomOf="@id/tvLabelOrderSelectedSize"
-            android:text="Color: "
-            android:textSize="20sp"/>
+            android:orientation="horizontal"
+            android:weightSum="3">
+            <TextView
+                android:id="@+id/tvLabelOrderSelectedSize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:layout_marginTop="10dp"
+                android:text="Talla: "
+                android:textSize="20sp"
+                />
+            <!--            app:layout_constraintStart_toStartOf="@id/guidelineLeft"-->
+            <!--            app:layout_constraintTop_toBottomOf="@id/tvOrderInfoProductName"-->
 
 
-        <TextView
-            android:id="@+id/tvOrderInfoSelectedColor"
-            android:layout_width="wrap_content"
+
+            <TextView
+                android:id="@+id/tvOrderInfoSelectedSize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginTop="10dp"
+                android:textAlignment="textEnd"
+                android:layout_marginEnd="10dp"
+                android:text="Talla 5XL"
+                android:textSize="20sp"
+                />
+            <!--            app:layout_constraintEnd_toEndOf="@id/guidelineRight"-->
+            <!--            app:layout_constraintTop_toBottomOf="@id/tvOrderInfoProductName"-->
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="30dp"
-            app:layout_constraintEnd_toEndOf="@id/guidelineRight"
-            app:layout_constraintTop_toBottomOf="@id/tvOrderInfoSelectedSize"
-            android:text="Azul marino eléctrico"
-            android:textSize="20sp"/>
+            android:weightSum="3"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvLabelOrderSelectedColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:layout_marginTop="10dp"
+                android:text="Color: "
+                android:textSize="20sp"
+                />
+
+            <!--            app:layout_constraintStart_toStartOf="@id/guidelineLeft"-->
+            <!--            app:layout_constraintTop_toBottomOf="@id/tvLabelOrderSelectedSize"-->
 
 
-        <TextView
-            android:id="@+id/tvLabelOrderQuantity"
-            android:layout_width="wrap_content"
+
+            <TextView
+                android:id="@+id/tvOrderInfoSelectedColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:textAlignment="textEnd"
+                android:layout_marginEnd="10dp"
+                android:text="Azul marino eléctrico"
+                android:textSize="20sp"
+                />
+            <!--            app:layout_constraintEnd_toEndOf="@id/guidelineRight"-->
+            <!--            app:layout_constraintTop_toBottomOf="@id/tvOrderInfoSelectedSize"-->
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-            app:layout_constraintTop_toBottomOf="@id/tvLabelOrderSelectedColor"
-            android:text="Unidades: "
-            android:textSize="20sp"/>
+            android:weightSum="3"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tvOrderInfoQuantity"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/tvLabelOrderQuantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:layout_marginTop="10dp"
+                android:text="Unidades: "
+                android:textSize="20sp"
+                />
+            <!--            app:layout_constraintStart_toStartOf="@id/guidelineLeft"-->
+            <!--            app:layout_constraintTop_toBottomOf="@id/tvLabelOrderSelectedColor"-->
+
+
+            <TextView
+                android:id="@+id/tvOrderInfoQuantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginTop="10dp"
+                android:textAlignment="textEnd"
+                android:layout_marginEnd="10dp"
+                android:text="20"
+                android:textSize="20sp"
+                />
+            <!--            app:layout_constraintEnd_toEndOf="@id/guidelineRight"-->
+            <!--            app:layout_constraintTop_toBottomOf="@id/tvOrderInfoSelectedColor"-->
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="30dp"
-            app:layout_constraintEnd_toEndOf="@id/guidelineRight"
-            app:layout_constraintTop_toBottomOf="@id/tvOrderInfoSelectedColor"
-            android:text="20" android:textSize="20sp" />
+            android:weightSum="3"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvLabelOrderUnitPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Precio Unitario: "
+                android:textSize="20sp"
+                />
+            <!--            app:layout_constraintStart_toStartOf="@id/guidelineLeft"-->
+            <!--            app:layout_constraintTop_toBottomOf="@id/tvLabelOrderQuantity"-->
 
 
-        <TextView
-            android:id="@+id/tvLabelOrderUnitPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-            app:layout_constraintTop_toBottomOf="@id/tvLabelOrderQuantity"
-            android:text="Precio Unitario: "  android:textSize="20sp"/>
-
-        <TextView
-            android:id="@+id/tvOrderInfoUnitPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="30dp"
-            app:layout_constraintEnd_toEndOf="@id/guidelineRight"
-            app:layout_constraintTop_toBottomOf="@id/tvOrderInfoQuantity"
-            android:text="$400.00" android:textSize="20sp"/>
+            <TextView
+                android:id="@+id/tvOrderInfoUnitPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textAlignment="textEnd"
+                android:layout_marginEnd="10dp"
+                android:text="$400.00"
+                android:textSize="20sp"
+                />
+            <!--            app:layout_constraintEnd_toEndOf="@id/guidelineRight"-->
+            <!--            app:layout_constraintTop_toBottomOf="@id/tvOrderInfoQuantity"-->
+        </LinearLayout>
 
 
-        <!-- GUIDELINES -->
+
+
+
+        <!-- GUIDELINES
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineTop"
@@ -257,11 +355,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.97" />
+            -->
 
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
+    </LinearLayout>
 
 </ScrollView>
