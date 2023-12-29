@@ -1,70 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.ShowProductInfo"
-    android:orientation="vertical">
-
-    <org.imaginativeworld.whynotimagecarousel.ImageCarousel
-        android:id="@+id/icCarousel"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        app:showCaption="false"/>
-
-    <TextView
-        android:id="@+id/tvProductInfoName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Nombre"
-        android:layout_marginTop="5dp"
-        android:textSize="25sp"/>
-
-
-    <TextView
-        android:id="@+id/tvProductInfoDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Descripción"
-        android:layout_marginTop="10dp"
-        android:textSize="25sp"/>
+    android:padding="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+>
 
-        <Spinner
-            android:id="@+id/spProductInfoSizes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp" />
-
-        <Spinner
-            android:id="@+id/spProductInfoColors"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp">
+        <org.imaginativeworld.whynotimagecarousel.ImageCarousel
+            android:id="@+id/icCarousel"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            app:showCaption="false"/>
 
         <TextView
+            android:id="@+id/tvProductInfoName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Precio:"
-            android:textSize="25sp"
-            android:layout_marginEnd="24dp"/>
-
-        <TextView
-            android:id="@+id/tvProductInfoPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="$20.00"
+            android:text="Nombre"
+            android:layout_marginTop="10dp"
             android:textSize="25sp"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilProductInfoSizes"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <AutoCompleteTextView
+                android:id="@+id/spProductInfoSizesChoice"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Tallas"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilProductInfoColors"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <AutoCompleteTextView
+                android:id="@+id/spProductInfoColorsChoice"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Colores"
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tvProductInfoDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Descripción"
+            android:layout_marginTop="10dp"
+            android:textSize="25sp"/>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Precio:"
+                android:textSize="25sp"
+                android:layout_marginEnd="24dp"/>
+
+            <TextView
+                android:id="@+id/tvProductInfoPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="$20.00"
+                android:textSize="25sp"/>
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="@color/black"
+            android:layout_marginTop="20dp"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="COMENTARIOS"
+            android:textStyle="bold"
+            android:textSize="25sp"/>
+
+
+
+        <EditText
+            android:id="@+id/etProductInfoCommentary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:inputType="textMultiLine"
+            android:hint="Comentario: "/>
+
+
+        <RatingBar
+            android:id="@+id/rbProductInfoRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:progressTint="@color/g_red"
+            android:rating="2"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvComments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"/>
+
     </LinearLayout>
-</LinearLayout>
+
+
+
+
+</ScrollView>

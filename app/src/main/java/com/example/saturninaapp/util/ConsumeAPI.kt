@@ -3,6 +3,8 @@ package com.example.saturninaapp.util
 import android.hardware.SensorDirectChannel
 import com.example.saturninaapp.models.ClothCategoryData
 import com.example.saturninaapp.models.ClothCategoryList
+import com.example.saturninaapp.models.CommentaryData
+import com.example.saturninaapp.models.CommentsRawList
 import com.example.saturninaapp.models.LoginCredentials
 import com.example.saturninaapp.models.OrdersList
 import com.example.saturninaapp.models.ProductOrderInfo
@@ -83,6 +85,18 @@ interface ConsumeAPI {
         @Path("id_user") userId: String
     ): Response<OrdersList>
 
+
+    @Headers("Content-type:application/json; charset=UTF-8")
+    @GET("comments")
+    suspend fun getAllComments(@Header("Authorization") authorization: String ): Response<CommentsRawList>
+
+
+    @Headers("Content-type:application/json; charset=UTF-8")
+    @POST("comments")
+    suspend fun creatCommentary(
+        @Header("Authorization") authorization: String,
+        @Body dataCommentary: CommentaryData
+        ): Response<JsonObject>
 }
 
 /*

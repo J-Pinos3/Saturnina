@@ -9,7 +9,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="10dp">
 
@@ -307,6 +307,7 @@
                 android:id="@+id/tvLabelOrderUnitPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="2"
                 android:layout_marginTop="10dp"
                 android:text="Precio Unitario: "
                 android:textSize="20sp"
@@ -319,6 +320,7 @@
                 android:id="@+id/tvOrderInfoUnitPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:layout_marginTop="10dp"
                 android:textAlignment="textEnd"
                 android:layout_marginEnd="10dp"
