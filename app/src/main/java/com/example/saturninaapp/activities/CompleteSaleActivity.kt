@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.MenuItem
 import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
@@ -170,6 +171,12 @@ class CompleteSaleActivity : AppCompatActivity() {
 
     }//ON CREATE
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if( toggle.onOptionsItemSelected(item) ){
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
     private fun initUI() {
         //navigation

@@ -1,25 +1,38 @@
 package com.example.saturninaapp.activities
 
+import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.Toolbar
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.saturninaapp.R
 import com.example.saturninaapp.adapters.CommentsAdapter
 import com.example.saturninaapp.models.ResultComment
 import com.example.saturninaapp.util.RetrofitHelper
+import com.google.android.material.navigation.NavigationView
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.imaginativeworld.whynotimagecarousel.CarouselItem
 import org.imaginativeworld.whynotimagecarousel.ImageCarousel
 
 class ShowProductInfo : AppCompatActivity() {
+
+    lateinit var drawer: DrawerLayout
+    lateinit var toggle: ActionBarDrawerToggle
+    lateinit var nav_view_produt_info: NavigationView
 
     private val imagesList = mutableListOf<CarouselItem>()
     private lateinit var icCarousel: ImageCarousel
@@ -41,15 +54,27 @@ class ShowProductInfo : AppCompatActivity() {
     private lateinit var spProductInfoSizesChoice: AutoCompleteTextView
     private lateinit var spProductInfoColorsChoice: AutoCompleteTextView
 
+    private var fileKey: String = "user_data"
+    private var user_token: String = ""
+    private var user_id: String = ""
+    private var user_rol: String = ""
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_product_info)
         initUI()
 
+        loadIdTokenRoleFromFile(fileKey)
         commentsAdapter = CommentsAdapter(itemsCommentaries)
         rvComments.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         rvComments.adapter = commentsAdapter
 
+        val bearerToken = "Bearer $user_token"
+
+        CoroutineScope(Dispatchers.IO).launch {
+            bringAllComments(bearerToken)
+        }
 
         imagesList.add(
             CarouselItem(
@@ -65,14 +90,79 @@ class ShowProductInfo : AppCompatActivity() {
 
         icCarousel.addData(imagesList)
 
-
         //IMPROVE SPINNERS https://stackoverflow.com/questions/2927012/how-can-i-change-decrease-the-android-spinner-size
+
+
+        //navigation
+        val toolbar: Toolbar = findViewById(R.id.toolbar_main)
+        setSupportActionBar(toolbar)
+        toggle = ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open,R.string.navigation_drawer_close)
+        drawer.addDrawerListener(toggle)
+        toggle.syncState()
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        nav_view_produt_info.setNavigationItemSelectedListener {
+            when(it.itemId){
+                R.id.nav_item_one->{
+                    val intent = Intent(this, IntroDashboardNews::class.java)
+                    intent.putExtra("USER_TOKEN", user_token)
+                    intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
+                    startActivity(intent)
+                }
+
+                R.id.nav_item_two->{
+                    //saveItemsToFile(cartKey)
+                    val intent = Intent(this, DashboardActivity::class.java)
+                    intent.putExtra("USER_TOKEN", user_token)
+                    intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
+                    startActivity(intent)
+                }
+
+                R.id.nav_item_three->{
+                    val intent = Intent(this, ProfileActivity::class.java)
+                    intent.putExtra("USER_TOKEN_PROFILE", user_token)
+                    intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
+                    startActivity(intent)
+                }
+
+                R.id.nav_item_four ->{
+                    //NOSOTROS
+                }
+
+                R.id.nav_item_five ->{
+                    val intent = Intent(this, ManagementOptionsActivity::class.java)
+                    intent.putExtra("USER_TOKEN", user_token)
+                    intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
+                    startActivity(intent)
+                }
+
+                R.id.nav_item_six ->{
+                    val intent = Intent(applicationContext, LoginActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+            }
+            true
+        }
+
 
     }//ON CREATE
 
-
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if( toggle.onOptionsItemSelected(item) ){
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
     private fun initUI() {
+        drawer = findViewById(R.id.drawerLayoutProductInfo)
+        nav_view_produt_info = findViewById(R.id.nav_view_produt_info)
+
         //carousel of images
         icCarousel = findViewById(R.id.icCarousel)
 
@@ -137,6 +227,13 @@ class ShowProductInfo : AppCompatActivity() {
         }catch (e: Exception){
             Log.e("ERROR CONSUMING BRING COMMENTS API: ", e.message.toString())
         }
+    }
+
+    private fun loadIdTokenRoleFromFile(key: String){
+        val sharedPreferences: SharedPreferences = getSharedPreferences(key, MODE_PRIVATE)
+        user_token = sharedPreferences.getString("USER-TOKEN","").toString()
+        user_id =  sharedPreferences.getString("USER-ID","").toString()
+        user_rol =  sharedPreferences.getString("USER-ROL","").toString()
     }
 
 }

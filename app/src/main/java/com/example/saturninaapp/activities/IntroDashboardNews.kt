@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
@@ -172,6 +173,12 @@ class IntroDashboardNews : AppCompatActivity() {
 
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if( toggle.onOptionsItemSelected(item) ){
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
     private fun initUI() {
         //navigation
