@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.RatingBar
@@ -18,7 +19,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.saturninaapp.R
 import com.example.saturninaapp.adapters.CommentsAdapter
+import com.example.saturninaapp.models.Colore
+import com.example.saturninaapp.models.DetailProduct
 import com.example.saturninaapp.models.ResultComment
+import com.example.saturninaapp.models.Talla
 import com.example.saturninaapp.util.RetrofitHelper
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.CoroutineScope
@@ -65,17 +69,26 @@ class ShowProductInfo : AppCompatActivity() {
         setContentView(R.layout.activity_show_product_info)
         initUI()
 
+        val bearerToken = "Bearer $user_token"
+        val productData = intent.getSerializableExtra("PRODUCT_DATA") as DetailProduct
+        CoroutineScope(Dispatchers.IO).launch {
+            bringAllComments(bearerToken)
+        }
+
+
+        loadScreenItemsWithProductData(productData, spProductInfoColorsChoice, spProductInfoSizesChoice)
+
+
+
         loadIdTokenRoleFromFile(fileKey)
         commentsAdapter = CommentsAdapter(itemsCommentaries)
         rvComments.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         rvComments.adapter = commentsAdapter
 
-        val bearerToken = "Bearer $user_token"
 
-        CoroutineScope(Dispatchers.IO).launch {
-            bringAllComments(bearerToken)
-        }
 
+
+/*
         imagesList.add(
             CarouselItem(
                 imageUrl = "https://cdn-p.smehost.net/sites/7f9737f2506941499994d771a29ad47a/wp-content/uploads/2021/03/Screen-Shot-2021-03-04-at-1.06.09-PM.png"
@@ -89,7 +102,7 @@ class ShowProductInfo : AppCompatActivity() {
         )
 
         icCarousel.addData(imagesList)
-
+*/
         //IMPROVE SPINNERS https://stackoverflow.com/questions/2927012/how-can-i-change-decrease-the-android-spinner-size
 
 
@@ -152,11 +165,34 @@ class ShowProductInfo : AppCompatActivity() {
 
     }//ON CREATE
 
+
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if( toggle.onOptionsItemSelected(item) ){
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun loadScreenItemsWithProductData(product: DetailProduct, spColors: AutoCompleteTextView, spSizes:AutoCompleteTextView){
+        loadArrayOfImages(product)
+        tvProductInfoName.text = product.name
+        tvProductInfoDescription.text = product.descripcion
+        tvProductInfoPrice.text = product.precio.toString()
+
+        loadSizesToSpinner(spSizes, product)
+        loadColorsToSpinner(spColors, product)
+    }
+
+    private fun loadArrayOfImages(product: DetailProduct ){
+        for(k in product.imagen){
+            imagesList.add(
+                CarouselItem(
+                    k.secure_url
+                )
+            )
+        }
+        icCarousel.addData(imagesList)
     }
 
     private fun initUI() {
@@ -178,6 +214,35 @@ class ShowProductInfo : AppCompatActivity() {
         spProductInfoColorsChoice = findViewById(R.id.spProductInfoColorsChoice)
     }
 
+
+    private fun loadSizesToSpinner(spinner: AutoCompleteTextView, detProd: DetailProduct){
+        val sizesList = getListNameofSizes(detProd.tallas)
+        val adapter = ArrayAdapter(this, R.layout.list_size, sizesList )
+        spinner.setAdapter(adapter)
+    }
+
+    private fun getListNameofSizes(listSizes: List<Talla>): ArrayList<String>{
+        val listaNombres = arrayListOf<String>()
+        for(k in listSizes){
+            listaNombres.add(k.name)
+        }
+        return listaNombres
+    }
+
+
+    private fun loadColorsToSpinner(spinner: AutoCompleteTextView, detProd: DetailProduct){
+        val colorsList = getListNameOfColores(detProd.colores)
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, colorsList )
+        spinner.setAdapter(adapter)
+    }
+
+    private fun getListNameOfColores(listColors: List<Colore>): ArrayList<String>{
+        val listaNombres = arrayListOf<String>()
+        for(k in listColors){
+            listaNombres.add(k.name)
+        }
+        return listaNombres
+    }
 
 
     suspend fun createUserCommentary(bearerToken: String, descripcion: String, user_id: String, id_producto:String, calificacion: Int){
@@ -213,6 +278,7 @@ class ShowProductInfo : AppCompatActivity() {
                     if(listResponse != null){
                         for(k in listResponse){
                             for(comment in k.result){
+                                println(comment.calificacion.toString() + " " + comment.user_id + " " + comment.descripcion + "-*-*-*-*-")
                                 itemsCommentaries.add(ResultComment(comment.calificacion, comment.descripcion,
                                     comment.id, comment.id_producto, comment.user_id))
                             }
@@ -229,11 +295,13 @@ class ShowProductInfo : AppCompatActivity() {
         }
     }
 
+
     private fun loadIdTokenRoleFromFile(key: String){
         val sharedPreferences: SharedPreferences = getSharedPreferences(key, MODE_PRIVATE)
         user_token = sharedPreferences.getString("USER-TOKEN","").toString()
         user_id =  sharedPreferences.getString("USER-ID","").toString()
         user_rol =  sharedPreferences.getString("USER-ROL","").toString()
     }
+
 
 }

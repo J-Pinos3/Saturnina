@@ -49,6 +49,7 @@ class ItemClothesViewHolder(view: View): RecyclerView.ViewHolder(view) {
         itemView.setOnClickListener {
             //Toast.makeText(itemView.context, "WHAT WOULD YOU LIKE TO DO ?", Toast.LENGTH_SHORT).show()
             val intent = Intent(itemView.context, ShowProductInfo::class.java)
+            intent.putExtra("PRODUCT_DATA", detailProduct)
             itemView.context.startActivity(intent)
         }
 
