@@ -1,13 +1,9 @@
 package com.example.saturninaapp.util
 
-import android.hardware.SensorDirectChannel
-import com.example.saturninaapp.models.ClothCategoryData
 import com.example.saturninaapp.models.ClothCategoryList
-import com.example.saturninaapp.models.CommentaryData
 import com.example.saturninaapp.models.CommentsRawList
 import com.example.saturninaapp.models.LoginCredentials
 import com.example.saturninaapp.models.OrdersList
-import com.example.saturninaapp.models.ProductOrderInfo
 import com.example.saturninaapp.models.UpdateUserProfilePut
 import com.example.saturninaapp.models.User
 import com.example.saturninaapp.models.UserResponseLogin
@@ -25,7 +21,6 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
-import retrofit2.http.Query
 
 interface ConsumeAPI {
 
@@ -93,9 +88,12 @@ interface ConsumeAPI {
 
     @Headers("Content-type:application/json; charset=UTF-8")
     @POST("comments")
-    suspend fun creatCommentary(
+    suspend fun createCommentary(
         @Header("Authorization") authorization: String,
-        @Body dataCommentary: CommentaryData
+        @Body descripcion: String,
+        @Body user_id: String,
+        @Body id_producto: String,
+        @Body calificacion: Int
         ): Response<JsonObject>
 }
 

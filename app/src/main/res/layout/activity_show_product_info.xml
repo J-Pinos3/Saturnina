@@ -122,6 +122,18 @@
             android:progressTint="@color/g_red"
             android:rating="2"/>
 
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnSendCommentary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingHorizontal="5dp"
+            style="@style/blueButtonStyle"
+            android:text="Enviar Comentario"
+            android:textColor="@color/black"
+            android:textSize="20sp"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvComments"
             android:layout_width="match_parent"

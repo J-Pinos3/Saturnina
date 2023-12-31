@@ -99,13 +99,13 @@ class MySalesActivity : AppCompatActivity() {
                 val listResponse = retrofitGetAllOrders.body()?.detail
 
                 withContext(Dispatchers.Main){
-                    listResponse?.forEach { detailOrder ->
-                        detailOrder.result.let { orderResults ->
-                            for(orderData in orderResults){
-                                itemSalesOrders.add( OrderResult(orderData.cantidad, orderData.color, orderData.fecha,
-                                    orderData.id, orderData.id_orden, orderData.id_producto, orderData.status, orderData.talla) )
+                    if(listResponse != null){
+                        for(k in listResponse){
+                            for(order in k.result){
+                                itemSalesOrders.add(OrderResult(order.cantidad, order.color, order.fecha, order.id, order.id_orden, order.id_producto, order.status, order.talla))
                             }
                         }
+                        salesOrdersAdapter.notifyDataSetChanged()
                     }
                 }
 
