@@ -53,7 +53,7 @@ class ShowProductInfo : AppCompatActivity() {
 
     private lateinit var rvComments: RecyclerView
     private lateinit var commentsAdapter: CommentsAdapter
-    private val itemsCommentaries = mutableListOf<ResultComment>()
+    private var itemsCommentaries = mutableListOf<ResultComment>()
 
     private lateinit var spProductInfoSizesChoice: AutoCompleteTextView
     private lateinit var spProductInfoColorsChoice: AutoCompleteTextView
@@ -69,6 +69,7 @@ class ShowProductInfo : AppCompatActivity() {
         setContentView(R.layout.activity_show_product_info)
         initUI()
 
+        loadIdTokenRoleFromFile(fileKey)
         val bearerToken = "Bearer $user_token"
         val productData = intent.getSerializableExtra("PRODUCT_DATA") as DetailProduct
         CoroutineScope(Dispatchers.IO).launch {
@@ -80,7 +81,8 @@ class ShowProductInfo : AppCompatActivity() {
 
 
 
-        loadIdTokenRoleFromFile(fileKey)
+        itemsCommentaries = filterCommentsOfProduct(itemsCommentaries, productData)
+
         commentsAdapter = CommentsAdapter(itemsCommentaries)
         rvComments.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         rvComments.adapter = commentsAdapter
@@ -296,11 +298,22 @@ class ShowProductInfo : AppCompatActivity() {
     }
 
 
+    private fun filterCommentsOfProduct(commentariesList: MutableList<ResultComment>, product: DetailProduct): ArrayList<ResultComment> = commentariesList.filter { it.id_producto == product.id } as ArrayList<ResultComment>
+    /*
+       I SHOULD FILTER BY PRODUCT ID, THE CODE BELOW IS JUST AN EXAMPLE
+       val filteredList = commentariesList.filter { it.user_id.id == user_id }
+       return filteredList as ArrayList<ResultComment>
+
+       INSTEAD OF (RETURN) = commentariesList.filter { it.user_id.id == user_id } as ArrayList<ResultComment>
+    */
+
+
     private fun loadIdTokenRoleFromFile(key: String){
         val sharedPreferences: SharedPreferences = getSharedPreferences(key, MODE_PRIVATE)
         user_token = sharedPreferences.getString("USER-TOKEN","").toString()
         user_id =  sharedPreferences.getString("USER-ID","").toString()
         user_rol =  sharedPreferences.getString("USER-ROL","").toString()
+        println(user_token + " -- " + user_id + " -- " + user_rol + "III")
     }
 
 
