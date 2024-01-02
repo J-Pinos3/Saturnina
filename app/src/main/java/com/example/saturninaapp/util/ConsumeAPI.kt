@@ -1,6 +1,7 @@
 package com.example.saturninaapp.util
 
 import com.example.saturninaapp.models.ClothCategoryList
+import com.example.saturninaapp.models.CommentaryData
 import com.example.saturninaapp.models.CommentsRawList
 import com.example.saturninaapp.models.LoginCredentials
 import com.example.saturninaapp.models.OrdersList
@@ -90,11 +91,8 @@ interface ConsumeAPI {
     @POST("comments")
     suspend fun createCommentary(
         @Header("Authorization") authorization: String,
-        @Body descripcion: String,
-        @Body user_id: String,
-        @Body id_producto: String,
-        @Body calificacion: Int
-        ): Response<JsonObject>
+        @Body commentaryData: CommentaryData
+    ): Response<JsonObject>
 }
 
 /*

@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.saturninaapp.R
 import com.example.saturninaapp.adapters.CommentsAdapter
 import com.example.saturninaapp.models.Colore
+import com.example.saturninaapp.models.CommentaryData
 import com.example.saturninaapp.models.DetailProduct
 import com.example.saturninaapp.models.ResultComment
 import com.example.saturninaapp.models.Talla
@@ -27,6 +28,7 @@ import com.example.saturninaapp.util.RetrofitHelper
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.imaginativeworld.whynotimagecarousel.CarouselItem
@@ -73,7 +75,7 @@ class ShowProductInfo : AppCompatActivity() {
         val bearerToken = "Bearer $user_token"
         val productData = intent.getSerializableExtra("PRODUCT_DATA") as DetailProduct
         CoroutineScope(Dispatchers.IO).launch {
-            bringAllComments(bearerToken)
+            bringAllComments(bearerToken, { itemsCommentaries, productData ->  filterCommentsOfProduct(itemsCommentaries, productData) }, productData )
         }
 
 
@@ -81,13 +83,23 @@ class ShowProductInfo : AppCompatActivity() {
 
 
 
-        itemsCommentaries = filterCommentsOfProduct(itemsCommentaries, productData)
-
         commentsAdapter = CommentsAdapter(itemsCommentaries)
         rvComments.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         rvComments.adapter = commentsAdapter
 
 
+        btnSendCommentary.setOnClickListener {
+            if( !checkUserComments(itemsCommentaries,user_id, productData) ){
+
+                if( !etProductInfoCommentary.text.isNullOrEmpty() && !rbProductInfoRating.rating.toString().isNullOrEmpty() ){
+
+                    CoroutineScope(Dispatchers.IO).launch {
+                        createUserCommentary(bearerToken, etProductInfoCommentary.text.toString(), user_id, productData.id, rbProductInfoRating.rating.toInt())
+                    }
+
+                }
+            }
+        }//listener
 
 
 /*
@@ -249,7 +261,9 @@ class ShowProductInfo : AppCompatActivity() {
 
     suspend fun createUserCommentary(bearerToken: String, descripcion: String, user_id: String, id_producto:String, calificacion: Int){
         try{
-            val retrofitCreateNewComment = RetrofitHelper.consumeAPI.createCommentary(bearerToken, descripcion, user_id, id_producto, calificacion)
+            Log.i("DATA TO CREATE COMMENT ", " desc $descripcion  user $user_id  idprod $id_producto  calif $calificacion")
+            val commentaryData = CommentaryData(descripcion, user_id, id_producto, calificacion)
+            val retrofitCreateNewComment = RetrofitHelper.consumeAPI.createCommentary(bearerToken, commentaryData)
 
             if(retrofitCreateNewComment.isSuccessful){
                 val jsonResponse = retrofitCreateNewComment.body()
@@ -260,7 +274,7 @@ class ShowProductInfo : AppCompatActivity() {
             }else{
                 runOnUiThread {
                     val error = retrofitCreateNewComment.errorBody()?.charStream().toString()
-                    Log.e("ERROR CREATING COMMENT: ", "COULDN'T CREATE NEW COMMENT: ${retrofitCreateNewComment.code()} --**-- $error")
+                    Log.e("ERROR CREATING COMMENT: ", "COULDN'T CREATE NEW COMMENT: ${retrofitCreateNewComment.code()} --**-- $error -*-*-*- ${retrofitCreateNewComment.errorBody().toString()}")
                 }
             }
 
@@ -270,7 +284,7 @@ class ShowProductInfo : AppCompatActivity() {
     }
 
 
-    suspend fun bringAllComments(bearerToken: String){
+    suspend fun bringAllComments(bearerToken: String, onFilterComments: (commentariesList: MutableList<ResultComment>, product: DetailProduct) -> Unit, productData: DetailProduct){
         try {
             val retrofitGetAllComments = RetrofitHelper.consumeAPI.getAllComments(bearerToken)
 
@@ -280,12 +294,13 @@ class ShowProductInfo : AppCompatActivity() {
                     if(listResponse != null){
                         for(k in listResponse){
                             for(comment in k.result){
-                                println(comment.calificacion.toString() + " " + comment.user_id + " " + comment.descripcion + "-*-*-*-*-")
+                                println(comment.calificacion.toString() + " " + comment.user_id + " " + comment.descripcion +  " " + comment.id_producto + "-*-*-*-*-")
                                 itemsCommentaries.add(ResultComment(comment.calificacion, comment.descripcion,
                                     comment.id, comment.id_producto, comment.user_id))
                             }
                         }
                         commentsAdapter.notifyDataSetChanged()
+                        onFilterComments(itemsCommentaries, productData)
                     }
                 }
 
@@ -298,7 +313,30 @@ class ShowProductInfo : AppCompatActivity() {
     }
 
 
-    private fun filterCommentsOfProduct(commentariesList: MutableList<ResultComment>, product: DetailProduct): ArrayList<ResultComment> = commentariesList.filter { it.id_producto == product.id } as ArrayList<ResultComment>
+    private fun checkUserComments(commentariesList: MutableList<ResultComment>, user_id: String, product: DetailProduct): Boolean{
+
+        var hasComments = false
+        val productFound =  commentariesList.find { it.id_producto == product.id && it.user_id.id == user_id}
+        for(k in commentariesList){
+            if(k == productFound){
+                hasComments = true
+                break
+            }
+        }
+
+
+        return hasComments
+    }
+
+
+    private fun filterCommentsOfProduct(commentariesList: MutableList<ResultComment>, product: DetailProduct) {
+        println("PRODUCT ID FOR FILTERING: ${product.id}")
+        val filteredList = commentariesList.filter { it.id_producto == product.id }.toMutableList()
+        Log.i("FILTERED COMMENTS BY PRODUCT: ", filteredList.toString())
+
+        commentsAdapter.commentsList = filteredList
+        commentsAdapter.notifyDataSetChanged()
+    }
     /*
        I SHOULD FILTER BY PRODUCT ID, THE CODE BELOW IS JUST AN EXAMPLE
        val filteredList = commentariesList.filter { it.user_id.id == user_id }

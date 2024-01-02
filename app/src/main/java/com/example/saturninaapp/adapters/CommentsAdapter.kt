@@ -7,7 +7,7 @@ import com.example.saturninaapp.R
 import com.example.saturninaapp.models.ResultComment
 import com.example.saturninaapp.viewholder.CommentsViewHolder
 
-class CommentsAdapter(private val commentsList: MutableList<ResultComment>)
+class CommentsAdapter(var commentsList: MutableList<ResultComment>)
     :RecyclerView.Adapter<CommentsViewHolder>()
 {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentsViewHolder {
