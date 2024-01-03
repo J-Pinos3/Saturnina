@@ -24,6 +24,7 @@ import com.example.saturninaapp.models.CommentaryData
 import com.example.saturninaapp.models.DetailProduct
 import com.example.saturninaapp.models.ResultComment
 import com.example.saturninaapp.models.Talla
+import com.example.saturninaapp.models.UserId
 import com.example.saturninaapp.util.RetrofitHelper
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.CoroutineScope
@@ -56,6 +57,7 @@ class ShowProductInfo : AppCompatActivity() {
     private lateinit var rvComments: RecyclerView
     private lateinit var commentsAdapter: CommentsAdapter
     private var itemsCommentaries = mutableListOf<ResultComment>()
+    private var filteredCommentaries = mutableListOf<ResultComment>()
 
     private lateinit var spProductInfoSizesChoice: AutoCompleteTextView
     private lateinit var spProductInfoColorsChoice: AutoCompleteTextView
@@ -89,7 +91,7 @@ class ShowProductInfo : AppCompatActivity() {
 
 
         btnSendCommentary.setOnClickListener {
-            if( !checkUserComments(itemsCommentaries,user_id, productData) ){
+            if( !checkUserComments(filteredCommentaries,user_id, productData) ){
 
                 if( !etProductInfoCommentary.text.isNullOrEmpty() && !rbProductInfoRating.rating.toString().isNullOrEmpty() ){
 
@@ -263,17 +265,23 @@ class ShowProductInfo : AppCompatActivity() {
         try{
             Log.i("DATA TO CREATE COMMENT ", " desc $descripcion  user $user_id  idprod $id_producto  calif $calificacion")
             val commentaryData = CommentaryData(descripcion, user_id, id_producto, calificacion)
+
+            val resultComment = ResultComment(calificacion, descripcion,"",id_producto, UserId())
+
+
             val retrofitCreateNewComment = RetrofitHelper.consumeAPI.createCommentary(bearerToken, commentaryData)
 
             if(retrofitCreateNewComment.isSuccessful){
-                val jsonResponse = retrofitCreateNewComment.body()
+                val jsonResponse = retrofitCreateNewComment.body()?.asString
 
                 withContext(Dispatchers.Main){
+
+                    insertNewCommentIntoList(resultComment)
                     Log.i("CREATE COMMENT: ", "COMMENT CREATED SUCCESSFULLY: ${jsonResponse.toString()}")
                 }
             }else{
                 runOnUiThread {
-                    val error = retrofitCreateNewComment.errorBody()?.charStream().toString()
+                    val error = retrofitCreateNewComment.errorBody()?.string()
                     Log.e("ERROR CREATING COMMENT: ", "COULDN'T CREATE NEW COMMENT: ${retrofitCreateNewComment.code()} --**-- $error -*-*-*- ${retrofitCreateNewComment.errorBody().toString()}")
                 }
             }
@@ -305,7 +313,7 @@ class ShowProductInfo : AppCompatActivity() {
                 }
 
             }else{
-                Log.e("ERROR GETTING COMMENTS: ", "COULDN'T GET COMMENTS: ${retrofitGetAllComments.code()} --**-- ${retrofitGetAllComments.errorBody().toString()}")
+                Log.e("ERROR GETTING COMMENTS: ", "COULDN'T GET COMMENTS: ${retrofitGetAllComments.code()} --**-- ${retrofitGetAllComments.errorBody()?.string()}")
             }
         }catch (e: Exception){
             Log.e("ERROR CONSUMING BRING COMMENTS API: ", e.message.toString())
@@ -331,10 +339,10 @@ class ShowProductInfo : AppCompatActivity() {
 
     private fun filterCommentsOfProduct(commentariesList: MutableList<ResultComment>, product: DetailProduct) {
         println("PRODUCT ID FOR FILTERING: ${product.id}")
-        val filteredList = commentariesList.filter { it.id_producto == product.id }.toMutableList()
-        Log.i("FILTERED COMMENTS BY PRODUCT: ", filteredList.toString())
+        filteredCommentaries = commentariesList.filter { it.id_producto == product.id }.toMutableList()
+        Log.i("FILTERED COMMENTS BY PRODUCT: ", filteredCommentaries.toString())
 
-        commentsAdapter.commentsList = filteredList
+        commentsAdapter.commentsList = filteredCommentaries
         commentsAdapter.notifyDataSetChanged()
     }
     /*
@@ -354,5 +362,11 @@ class ShowProductInfo : AppCompatActivity() {
         println(user_token + " -- " + user_id + " -- " + user_rol + "III")
     }
 
+    private fun insertNewCommentIntoList(commentaryData: ResultComment){
+        filteredCommentaries.add(commentaryData)
+        commentsAdapter.commentsList = filteredCommentaries
+        commentsAdapter.notifyDataSetChanged()
+
+    }
 
 }

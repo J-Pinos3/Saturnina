@@ -54,6 +54,7 @@ class CompleteSaleActivity : AppCompatActivity() {
     private lateinit var tvTotalSalePrice: TextView
     private var user_id = ""
     private val MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE: Int = 123
+    private var cartKey :String = ""
 
 
 
@@ -71,7 +72,7 @@ class CompleteSaleActivity : AppCompatActivity() {
                         val idcounterList = getListWithIdCounterSizeColor(finalListOfProducts)
                         Log.i("FINAL LIST", "$idcounterList")
                         addDataToOrder(bearerToken, user_id, totalValue, idcounterList, userOwner.nombre, userOwner.apellido, etOrderAddress.text.toString(),
-                            userOwner.email, userOwner.telefono, etOrderDescription.text.toString(), file)
+                            userOwner.email, userOwner.telefono, etOrderDescription.text.toString(), file, cartKey)
 
                     }
                 }
@@ -91,7 +92,7 @@ class CompleteSaleActivity : AppCompatActivity() {
         val userToken = intent.extras?.getString("USER_TOKENTO_PROFILE")
         val user_rol = intent.extras?.getString("USER_ROL")
         user_id = intent.extras?.getString("USER_ID").toString()
-        val cartKey: String = "car_items"
+        cartKey = "car_items"
         bearerToken = "Bearer $userToken"
         if (totalItems != null) {
             showTotalCartItems(totalItems)
@@ -262,7 +263,7 @@ class CompleteSaleActivity : AppCompatActivity() {
 
 
     suspend fun addDataToOrder(bearerToken: String, userId: String, priceOrder: Double, productsData: List<ProductOrderInfo>, nombre: String,
-        apellido: String, direccion:String, email: String, telefono: String, descripcion: String, image: File
+        apellido: String, direccion:String, email: String, telefono: String, descripcion: String, image: File, key: String
     ){
         try {
             val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), image)
@@ -326,6 +327,7 @@ class CompleteSaleActivity : AppCompatActivity() {
                 val jsonResponse = retrofitSendOrder.body()
                 withContext(Dispatchers.Main){
                     Log.i("SEND ORDER", "ORDER SENT SUCCESSFULLY: $jsonResponse")
+                    clearCart(key)
                 }
 
             }else{
