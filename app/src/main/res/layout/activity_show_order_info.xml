@@ -49,7 +49,7 @@
 <!--            app:layout_constraintTop_toBottomOf="@id/ivBillOrderImage"-->
 
 
-        <TextView
+        <EditText
             android:id="@+id/tvOrderInfoFirstName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
 
 
 
-        <TextView
+        <EditText
             android:id="@+id/tvOrderInfoLastName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -74,11 +74,12 @@
 <!--            app:layout_constraintTop_toBottomOf="@id/tvOrderInfoFirstName"-->
 
 
-        <TextView
+        <EditText
             android:id="@+id/tvOrderInfoEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:inputType="textEmailAddress"
             android:text="MorraIntrínseca@gmail.com"
             android:textSize="20sp"
             />
@@ -87,7 +88,7 @@
 
 
 
-        <TextView
+        <EditText
             android:id="@+id/tvOrderInfoAddress"
             android:layout_width="wrap_content"
             app:layout_constrainedWidth="true"
@@ -101,11 +102,12 @@
 <!--            app:layout_constraintTop_toBottomOf="@id/tvOrderInfoEmail"-->
 
 
-        <TextView
+        <EditText
             android:id="@+id/tvOrderInfoCellPhone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:inputType="phone"
             android:text="036164941"
             android:textSize="20sp"
             />
@@ -113,7 +115,7 @@
 <!--            app:layout_constraintTop_toBottomOf="@id/tvOrderInfoAddress"-->
 
 
-        <TextView
+        <EditText
             android:id="@+id/tvOrderInfoDescription"
             android:layout_width="wrap_content"
             app:layout_constrainedWidth="true"
@@ -125,6 +127,15 @@
 <!--            app:layout_constraintStart_toStartOf="@id/guidelineLeft"-->
 <!--            app:layout_constraintEnd_toEndOf="@id/guidelineRight"-->
 <!--            app:layout_constraintTop_toBottomOf="@id/tvOrderInfoCellPhone"-->
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnUpdateUserOrderData"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Guardar Cambios"
+            android:textSize="20sp"/>
 
 
         <View

@@ -82,6 +82,17 @@ interface ConsumeAPI {
     ): Response<OrdersList>
 
 
+    @Multipart
+    @POST("order/{id_user}")
+    suspend fun updateUserOrder(
+        @Header("Authorizarion") authorization: String,
+        @Part("data") data: RequestBody,
+        @Part transfer_image: MultipartBody.Part,
+        @Path("id_user") userId: String
+    ): Response<JsonObject>
+
+
+
     @Headers("Content-type:application/json; charset=UTF-8")
     @GET("comments")
     suspend fun getAllComments(@Header("Authorization") authorization: String ): Response<CommentsRawList>

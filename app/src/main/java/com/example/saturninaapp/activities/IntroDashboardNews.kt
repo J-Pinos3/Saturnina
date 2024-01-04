@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.widget.FrameLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
@@ -19,6 +21,8 @@ import com.example.saturninaapp.models.DetailProduct
 import com.example.saturninaapp.models.Imagen
 import com.example.saturninaapp.util.RetrofitHelper
 import com.google.android.material.navigation.NavigationView
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -49,6 +53,10 @@ class IntroDashboardNews : AppCompatActivity() {
     private var random2: String = ""
     private var sharedKey:String = "car_items"
 
+    private var itemsProducts = mutableListOf<DetailProduct>()
+
+    private lateinit var introDashboardItemsCount: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_intro_dashboard_news)
@@ -59,6 +67,8 @@ class IntroDashboardNews : AppCompatActivity() {
         val user_rol = intent.extras?.getString("USER_ROL")
         val bearerToken: String = "Bearer $user_token"
 
+        loadItemsFromFile(sharedKey)
+        loadCartItemsCount()
 
         CoroutineScope(Dispatchers.Main).launch {
             fetchIntroClothCategories(bearerToken)
@@ -153,6 +163,20 @@ class IntroDashboardNews : AppCompatActivity() {
             true
         }
 
+
+        //navigate
+        val flCarritoComprasIcon: FrameLayout = findViewById(R.id.flCarritoCompras)
+        flCarritoComprasIcon.setOnClickListener {
+            Toast.makeText(this, "Carrito Clicado", Toast.LENGTH_SHORT).show()
+
+
+            val intent = Intent(applicationContext, CarSalesActivity::class.java)
+            intent.putExtra("USER_TOKENTO_PROFILE", user_token)
+            intent.putExtra("USER_ID", user_id)
+            intent.putExtra("USER_ROL", user_rol)
+            startActivity(intent)
+        }
+
     }//ON CREATE
 
 
@@ -185,11 +209,23 @@ class IntroDashboardNews : AppCompatActivity() {
         drawer = findViewById(R.id.drawerLayoutMainNews)
         nav_view_main_news = findViewById(R.id.nav_view_main_news)
 
+        //cart items count
+        introDashboardItemsCount = findViewById(R.id.action_cart_count)
+
         tvGotoFirstFilter = findViewById(R.id.tvGotoFirstFilter)
         tvGotoSecondFilter = findViewById(R.id.tvGotoSecondFilter)
 
         firstCarouselAdapter = ClothesCarouselAdapter(mutableListOf<DetailProduct>())
         secondCarouselAdapter = ClothesCarouselAdapter(mutableListOf<DetailProduct>())
+    }
+
+    private fun loadCartItemsCount(){
+        var suma: Int = 0
+        for(k in itemsProducts){
+            suma += k.contador
+        }
+
+        introDashboardItemsCount.text = suma.toString()
     }
 
 
@@ -307,6 +343,17 @@ class IntroDashboardNews : AppCompatActivity() {
     private fun clearCart(key: String){
         val sharedPreferences: SharedPreferences = getSharedPreferences(key, MODE_PRIVATE)
         sharedPreferences.edit().clear().apply()
+    }
+
+    private fun loadItemsFromFile(Key: String){
+        var sharedPreferences: SharedPreferences = getSharedPreferences(Key, MODE_PRIVATE)
+        val gson = Gson()
+
+        val jsonString = sharedPreferences.getString(Key,"")
+        val type = object : TypeToken<MutableList<DetailProduct>>() {}.type
+        itemsProducts = (gson.fromJson(jsonString, type) ?: mutableListOf<DetailProduct>() )
+
+        println("carrito de productos: $itemsProducts")
     }
 
 }
