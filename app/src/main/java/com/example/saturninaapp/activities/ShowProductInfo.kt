@@ -34,6 +34,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.imaginativeworld.whynotimagecarousel.CarouselItem
 import org.imaginativeworld.whynotimagecarousel.ImageCarousel
+import org.json.JSONObject
 
 class ShowProductInfo : AppCompatActivity() {
 
@@ -237,10 +238,12 @@ class ShowProductInfo : AppCompatActivity() {
         spinner.setAdapter(adapter)
     }
 
-    private fun getListNameofSizes(listSizes: List<Talla>): ArrayList<String>{
+    private fun getListNameofSizes(listSizes: List<Talla>?): ArrayList<String>{
         val listaNombres = arrayListOf<String>()
-        for(k in listSizes){
-            listaNombres.add(k.name)
+        if (listSizes != null) {
+            for(k in listSizes){
+                listaNombres.add(k.name)
+            }
         }
         return listaNombres
     }
@@ -252,10 +255,12 @@ class ShowProductInfo : AppCompatActivity() {
         spinner.setAdapter(adapter)
     }
 
-    private fun getListNameOfColores(listColors: List<Colore>): ArrayList<String>{
+    private fun getListNameOfColores(listColors: List<Colore>?): ArrayList<String>{
         val listaNombres = arrayListOf<String>()
-        for(k in listColors){
-            listaNombres.add(k.name)
+        if (listColors != null) {
+            for(k in listColors){
+                listaNombres.add(k.name)
+            }
         }
         return listaNombres
     }
@@ -272,17 +277,24 @@ class ShowProductInfo : AppCompatActivity() {
             val retrofitCreateNewComment = RetrofitHelper.consumeAPI.createCommentary(bearerToken, commentaryData)
 
             if(retrofitCreateNewComment.isSuccessful){
-                val jsonResponse = retrofitCreateNewComment.body()?.asString
+                val jsonResponse = retrofitCreateNewComment.body()?.toString()
+                val jsonObject = jsonResponse?.let { JSONObject(it) }
+                val detailObject = jsonObject?.getJSONObject("detail")
+                val msg = detailObject?.getString("msg")
+
 
                 withContext(Dispatchers.Main){
 
                     insertNewCommentIntoList(resultComment)
-                    Log.i("CREATE COMMENT: ", "COMMENT CREATED SUCCESSFULLY: ${jsonResponse.toString()}")
+                    Log.i("CREATE COMMENT: ", "COMMENT CREATED SUCCESSFULLY: $msg")
                 }
             }else{
                 runOnUiThread {
                     val error = retrofitCreateNewComment.errorBody()?.string()
-                    Log.e("ERROR CREATING COMMENT: ", "COULDN'T CREATE NEW COMMENT: ${retrofitCreateNewComment.code()} --**-- $error -*-*-*- ${retrofitCreateNewComment.errorBody().toString()}")
+                    val errorBody = error?.let { JSONObject(it) }
+                    val detail = errorBody?.getJSONObject("detail")
+                    val msg = detail?.getString("msg")
+                    Log.e("ERROR CREATING COMMENT: ", "COULDN'T CREATE NEW COMMENT: ${retrofitCreateNewComment.code()} --**-- $msg  --**-- $error -*-*-*- ${retrofitCreateNewComment.errorBody().toString()}")
                 }
             }
 

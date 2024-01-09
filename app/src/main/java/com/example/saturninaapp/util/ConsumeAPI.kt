@@ -4,6 +4,7 @@ import com.example.saturninaapp.models.ClothCategoryList
 import com.example.saturninaapp.models.CommentaryData
 import com.example.saturninaapp.models.CommentsRawList
 import com.example.saturninaapp.models.LoginCredentials
+import com.example.saturninaapp.models.OrderStatusData
 import com.example.saturninaapp.models.OrdersList
 import com.example.saturninaapp.models.UpdateUserProfilePut
 import com.example.saturninaapp.models.User
@@ -12,6 +13,7 @@ import com.example.saturninaapp.models.itemProduct
 import com.google.gson.JsonObject
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.json.JSONObject
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -73,6 +75,14 @@ interface ConsumeAPI {
     @GET("orders")
     suspend fun getAllOrders(@Header("Authorization") authorization: String): Response<OrdersList>
 
+    @Headers("Content-type:application/json; charset=UTF-8")
+    @PUT("orders/{id_order_detail}")
+    suspend fun uptdateOrderStatus(
+        @Header("Authorizarion") authorization: String,
+        @Body orderStatusData: OrderStatusData,
+        @Path("id_order_detail") id_order_detail: String
+    ): Response<JsonObject>
+
 
     @Headers("Content-type:application/json; charset=UTF-8")
     @GET("order/{id_user}")
@@ -83,7 +93,7 @@ interface ConsumeAPI {
 
 
     @Multipart
-    @POST("order/{id_user}")
+    @PUT("order/{id_user}")
     suspend fun updateUserOrder(
         @Header("Authorizarion") authorization: String,
         @Part("data") data: RequestBody,

@@ -38,16 +38,50 @@
 <!--            app:layout_constraintTop_toBottomOf="@id/guidelineTop" -->
 
 
-        <TextView
-            android:id="@+id/tvOrderInfoDate"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_marginTop="20dp"
-            android:text="2015 - 25 - 05 5161206"
-            />
-<!--            app:layout_constraintStart_toStartOf="@id/guidelineLeft"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/ivBillOrderImage"-->
+            android:weightSum="3">
+            <TextView
+                android:id="@+id/tvOrderInfoDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2015 - 25 - 05 5161206"
+                android:layout_weight="2"
+                />
+            <!--            app:layout_constraintStart_toStartOf="@id/guidelineLeft"-->
+            <!--            app:layout_constraintTop_toBottomOf="@id/ivBillOrderImage"-->
 
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilOrderStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="10dp">
+
+                <AutoCompleteTextView
+                    android:id="@+id/spOrderStatusChoice"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:hint="Status"
+                    android:textSize="15dp"
+                    android:visibility="visible" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/etStatusDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:inputType="textMultiLine"
+            android:hint="Estado de la órden: "
+            android:visibility="visible"/>
 
         <EditText
             android:id="@+id/tvOrderInfoFirstName"

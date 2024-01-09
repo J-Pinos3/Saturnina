@@ -262,21 +262,30 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
     override fun onSizeSelected(spinner: AutoCompleteTextView, product: DetailProduct) {
         var listofSizes = getNameofSizes(product.tallas)
 
-        if(  !product.tallaSeleccionada.isNullOrEmpty() ){
-            var indiceTalla = listofSizes.find { it == product.tallaSeleccionada  }
-            //var indiceTalla = listofSizes.indexOf(product.tallaSeleccionada)
-            //Log.d("SIZES AND INDICES", "${listofSizes} --**-- ${indiceTalla}")
-            spinner.setText(indiceTalla, false)
+        if(listofSizes.isNotEmpty()){
+            spinner.isEnabled = true
+            if(  !product.tallaSeleccionada.isNullOrEmpty() ){
+                var indiceTalla = listofSizes.find { it == product.tallaSeleccionada  }
+                //var indiceTalla = listofSizes.indexOf(product.tallaSeleccionada)
+                //Log.d("SIZES AND INDICES", "${listofSizes} --**-- ${indiceTalla}")
+                spinner.setText(indiceTalla, false)
+            }else{
+                //var element = listofSizes.elementAt(0)
+                spinner.setText( listofSizes.elementAt(0), false )
+            }
         }else{
-            //var element = listofSizes.elementAt(0)
-            spinner.setText( listofSizes.elementAt(0), false )
+            spinner.setText( "N/A", false )
+            spinner.isEnabled = false
         }
+
     }
 
-    private fun getNameofSizes(listSizes: List<Talla>): ArrayList<String>{
+    private fun getNameofSizes(listSizes: List<Talla>?): ArrayList<String>{
         val listaNombres = arrayListOf<String>()
-        for(k in listSizes){
-            listaNombres.add(k.name)
+        if (listSizes != null) {
+            for(k in listSizes){
+                listaNombres.add(k.name)
+            }
         }
         return listaNombres
     }
@@ -284,21 +293,30 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
     //COLORS
     override fun onColorSelected(spinner: AutoCompleteTextView, product: DetailProduct) {
         var listofColors = getNameofColors(product.colores)
-        if( !product.colorSeleccionado.isNullOrEmpty() ){
-            //var indiceColor = listofColors.indexOf(product.colorSeleccionado)
-            var indiceColor = listofColors.find { it == product.colorSeleccionado }
-            spinner.setText(indiceColor, false)
 
+        if(listofColors.isNotEmpty()){
+            if( !product.colorSeleccionado.isNullOrEmpty() ){
+                //var indiceColor = listofColors.indexOf(product.colorSeleccionado)
+                var indiceColor = listofColors.find { it == product.colorSeleccionado }
+                spinner.setText(indiceColor, false)
+
+            }else{
+                //var element = listofColors.elementAt(0)
+                spinner.setText(listofColors.elementAt(0), false)
+            }
         }else{
-            //var element = listofColors.elementAt(0)
-            spinner.setText(listofColors.elementAt(0), false)
+            spinner.setText("N/A", false)
+            spinner.isEnabled = false
         }
+
     }
 
-    private fun getNameofColors(listColors: List<Colore>): ArrayList<String>{
+    private fun getNameofColors(listColors: List<Colore>?): ArrayList<String>{
         val listaColores = arrayListOf<String>()
-        for(k in listColors){
-            listaColores.add(k.name)
+        if (listColors != null) {
+            for(k in listColors){
+                listaColores.add(k.name)
+            }
         }
         return listaColores
     }

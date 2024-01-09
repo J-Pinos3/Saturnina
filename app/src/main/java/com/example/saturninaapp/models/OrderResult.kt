@@ -9,7 +9,7 @@ data class OrderResult(
     val id: String = "",
     val id_orden: IdOrden = IdOrden(),
     val id_producto: IdProducto = IdProducto(),
-    val status: String = "",
+    var status: String = "",
     val talla: String = ""
 
 ):Serializable

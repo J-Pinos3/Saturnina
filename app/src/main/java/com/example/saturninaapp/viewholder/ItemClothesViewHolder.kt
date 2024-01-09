@@ -110,10 +110,12 @@ class ItemClothesViewHolder(view: View): RecyclerView.ViewHolder(view) {
         spinner.setAdapter(adapter)
     }
 
-    private fun getNameofSizes(listSizes: List<Talla>): ArrayList<String>{
+    private fun getNameofSizes(listSizes: List<Talla>?): ArrayList<String>{
         val listaNombres = arrayListOf<String>()
-        for(k in listSizes){
-            listaNombres.add(k.name)
+        if (listSizes != null) {
+            for(k in listSizes){
+                listaNombres.add(k.name)
+            }
         }
         return listaNombres
     }
@@ -139,10 +141,12 @@ class ItemClothesViewHolder(view: View): RecyclerView.ViewHolder(view) {
     }
 
 
-    private fun getNameofColores(listColors: List<Colore>): ArrayList<String>{
+    private fun getNameofColores(listColors: List<Colore>?): ArrayList<String>{
         val listaNombres = arrayListOf<String>()
-        for(k in listColors){
-            listaNombres.add(k.name)
+        if (listColors != null) {
+            for(k in listColors){
+                listaNombres.add(k.name)
+            }
         }
         return listaNombres
     }

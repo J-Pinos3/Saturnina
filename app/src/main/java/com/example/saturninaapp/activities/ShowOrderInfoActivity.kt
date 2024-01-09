@@ -1,17 +1,46 @@
 package com.example.saturninaapp.activities
 
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.database.Cursor
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.app.ActivityCompat
+import androidx.lifecycle.SAVED_STATE_REGISTRY_OWNER_KEY
+import android.Manifest
+import android.os.Build
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import com.example.saturninaapp.R
 import com.example.saturninaapp.models.OrderResult
+import com.example.saturninaapp.models.OrderStatusData
+import com.example.saturninaapp.models.itemProduct
+import com.example.saturninaapp.util.RetrofitHelper
+import com.google.gson.JsonObject
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import org.json.JSONArray
+import org.json.JSONObject
+import java.io.File
+import java.lang.Exception
 
 class ShowOrderInfoActivity : AppCompatActivity() {
 
@@ -35,6 +64,10 @@ class ShowOrderInfoActivity : AppCompatActivity() {
     private lateinit var tvOrderInfoQuantity: TextView
     private lateinit var tvOrderInfoUnitPrice: TextView
 
+    private lateinit var etStatusDescription: TextView
+
+    private lateinit var spOrderStatusChoice: AutoCompleteTextView
+
     private var OrderTextWatcher = object: TextWatcher{
         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
@@ -57,18 +90,66 @@ class ShowOrderInfoActivity : AppCompatActivity() {
 
     }
 
+    private val ROL_USER: String = "rol:vuqn7k4vw0m1a3wt7fkb"
+    private val ROL_ADMIN: String = "rol:74rvq7jatzo6ac19mc79"
+
+    private val MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE: Int = 123
+    private var bearerToken: String = ""
+    private var user_id: String = ""
+    private var user_rol: String = ""
+
+    private val pickImage = registerForActivityResult( ActivityResultContracts.StartActivityForResult() ){
+        if(it.resultCode == RESULT_OK){
+            val data = it.data
+            val imgUri = data?.data
+
+
+            CoroutineScope(Dispatchers.IO).launch {
+                if(imgUri != null){
+                    val file = uriToFile(imgUri)
+                    if( file != null && file.exists() ){
+                        println("TOKEN IS LIKE? $bearerToken")
+                        updateUserOrder(bearerToken, tvOrderInfoFirstName.text.toString(), tvOrderInfoLastName.text.toString(),
+                            tvOrderInfoAddress.text.toString(), tvOrderInfoEmail.text.toString(), tvOrderInfoCellPhone.text.toString(),
+                            user_id, file)
+                    }
+                }
+            }
+
+        }
+
+    }
+
+    private lateinit var statusList: List<String>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_order_info)
         initUI()
-        disableClicOnUpdateOrder()
+
 
         val user_token = intent.extras?.getString("USER_TOKEN")
-        val user_id = intent.extras?.getString("USER_ID")
-        val user_rol = intent.extras?.getString("USER_ROL")
-
+        user_id = intent.extras?.getString("USER_ID").toString()
+        user_rol = intent.extras?.getString("USER_ROL").toString()
+        bearerToken = "Bearer $user_token"
         val orderSelectedInfo = intent.getSerializableExtra("ORDER_SELECTED") as OrderResult
         fillViewsWithOrderInfo(orderSelectedInfo)
+        when(user_rol){
+            ROL_USER ->{
+                spOrderStatusChoice.isEnabled = false
+            }
+
+            ROL_ADMIN ->{
+                spOrderStatusChoice.isEnabled = true
+                tvOrderInfoFirstName.isEnabled = false
+                tvOrderInfoLastName.isEnabled = false
+                tvOrderInfoEmail.isEnabled = false
+                tvOrderInfoAddress.isEnabled = false
+                tvOrderInfoCellPhone.isEnabled = false
+                tvOrderInfoDescription.isEnabled = false
+            }
+        }
+        disableClicOnUpdateOrder()
 
         tvOrderInfoFirstName.addTextChangedListener(OrderTextWatcher)
         tvOrderInfoLastName.addTextChangedListener(OrderTextWatcher)
@@ -76,6 +157,21 @@ class ShowOrderInfoActivity : AppCompatActivity() {
         tvOrderInfoAddress.addTextChangedListener(OrderTextWatcher)
         tvOrderInfoCellPhone.addTextChangedListener(OrderTextWatcher)
         tvOrderInfoDescription.addTextChangedListener(OrderTextWatcher)
+
+
+        spOrderStatusChoice.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
+            if(statusList.isNotEmpty()){
+                spOrderStatusChoice.isEnabled = true
+                orderSelectedInfo.status = adapterView.getItemAtPosition(i).toString()
+
+                spOrderStatusChoice.text = Editable.Factory.getInstance().newEditable(orderSelectedInfo.status)
+                spOrderStatusChoice.setText(orderSelectedInfo.status, false)
+            }else{
+                spOrderStatusChoice.setText("N/A", false)
+                spOrderStatusChoice.isEnabled = false
+            }
+
+        }
 
 
 
@@ -86,10 +182,53 @@ class ShowOrderInfoActivity : AppCompatActivity() {
         }
 
         btnUpdateUserOrderData.setOnClickListener {
+            if(user_rol == ROL_USER){
+                ActivityCompat.requestPermissions(this@ShowOrderInfoActivity,
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+                        arrayOf(Manifest.permission.READ_MEDIA_IMAGES)
+                    }else{ arrayOf( Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE)
+                    },
+                    MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
+                )
+            }
+
+            if(user_rol == ROL_ADMIN){
+
+                val orderStatus = getOrderStatusFromUI()
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    updateOrderStatus(bearerToken, orderStatus, orderSelectedInfo.id)
+                }
+            }
+
 
         }
 
     }//ON CREATE
+
+
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if(requestCode == MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE){
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                if(user_rol == ROL_USER){
+                    val selectBillImage = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+                    pickImage.launch(selectBillImage)
+                }
+
+                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "NO Permission Granted", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
 
     private fun disableClicOnUpdateOrder(){
@@ -116,6 +255,104 @@ class ShowOrderInfoActivity : AppCompatActivity() {
         }
 
     }
+
+
+    suspend fun updateOrderStatus( bearerToken: String, orderStatusData: OrderStatusData, order_id: String ){
+
+        try {
+            val retrofitUpdateUserStatus = RetrofitHelper.consumeAPI.uptdateOrderStatus(bearerToken, orderStatusData, order_id)
+            if(retrofitUpdateUserStatus.isSuccessful){
+
+                val jsonResponse = retrofitUpdateUserStatus.body()?.toString()
+                val jsonObject = jsonResponse?.let { JSONObject(it) }
+                val detailObject = jsonObject?.getJSONObject("detail")
+                val msg = detailObject?.getString("msg")
+
+                withContext(Dispatchers.IO){
+                    Log.i("UPDATE ORDER", "ORDER STATUS UPDATED SUCCESSFULLY $msg")
+                }
+
+            }else{
+                runOnUiThread {
+                    val error = retrofitUpdateUserStatus.errorBody()?.string()
+                    Log.e("ERROR UPDATING ORDER", "${retrofitUpdateUserStatus.code()}  -- ${error.toString()}")
+                }
+            }
+
+        }catch (e: Exception){
+            Log.e("ERROR CONSUMING COMMENTS API: ", e.printStackTrace().toString())
+        }
+    }
+
+    private fun getOrderStatusFromUI(): OrderStatusData{
+        var status = ""
+        spOrderStatusChoice.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
+            if(statusList.isNotEmpty()){
+
+                status = adapterView.getItemAtPosition(i).toString()
+            }else{
+                status = "N/A"
+            }
+
+        }
+
+        return OrderStatusData( status, etStatusDescription.text.toString() )
+    }
+
+
+    suspend fun updateUserOrder(bearerToken: String, nombre:String, apellido: String,
+                                direccion: String, email: String, telefono: String, user_id: String, image: File){
+
+        try {
+
+            val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), image)
+            val filepart = MultipartBody.Part.createFormData(
+                "transfer_image",
+                image.name,
+                requestFile
+            )
+            Log.i("iimage loaded:","${image.absoluteFile}")
+
+            val dataJson = JsonObject()
+
+            dataJson.addProperty("nombre", nombre)
+            dataJson.addProperty("apellido", apellido)
+            dataJson.addProperty("direccion", direccion)
+            dataJson.addProperty("email", email)
+            dataJson.addProperty("telefono", telefono)
+
+            val dataBody = RequestBody.create(MediaType.parse("application/json"), dataJson.toString())
+
+
+            val retrofitUpdateUserComment = RetrofitHelper.consumeAPI.updateUserOrder(
+                bearerToken, dataBody, filepart, user_id)
+
+
+            if(retrofitUpdateUserComment.isSuccessful){
+
+                val jsonResponse = retrofitUpdateUserComment.body()?.toString()
+                val jsonObject = jsonResponse?.let { JSONObject(it) }
+                val detailObject = jsonObject?.getJSONObject("detail")
+                val msg = detailObject?.getString("msg")
+
+                withContext(Dispatchers.Main){
+                    Log.i("UPDATE ORDER", "ORDER UPDATED SUCCESSFULLY $msg")
+                }
+
+            }else{
+                runOnUiThread {
+                    val error = retrofitUpdateUserComment.errorBody()?.string()
+                    Log.e("ERROR UPDATING ORDER", "${retrofitUpdateUserComment.code()}  -- ${error.toString()}")
+                }
+            }
+
+
+        }catch (e: Exception){
+            Log.e("ERROR CONSUMING COMMENTS API: ", e.printStackTrace().toString())
+        }
+
+    }
+
 
 
     private fun fillViewsWithOrderInfo (orderSelectedInfo: OrderResult){
@@ -177,11 +414,30 @@ class ShowOrderInfoActivity : AppCompatActivity() {
         tvOrderInfoSelectedColor = findViewById(R.id.tvOrderInfoSelectedColor)
         tvOrderInfoQuantity = findViewById(R.id.tvOrderInfoQuantity)
         tvOrderInfoUnitPrice = findViewById(R.id.tvOrderInfoUnitPrice)
+
+        etStatusDescription = findViewById(R.id.etStatusDescription)
+
+        spOrderStatusChoice = findViewById(R.id.spOrderStatusChoice)
+        loadStatusSpinner(spOrderStatusChoice)
+    }
+
+    private fun loadStatusSpinner(spinner: AutoCompleteTextView){
+        statusList = arrayListOf("Pendiente","Rechazado","En Entrega","Finalizado")
+        val adapter = ArrayAdapter(this, R.layout.list_size, statusList)
+        spinner.setAdapter(adapter)
     }
 
 
 
-
+    private fun uriToFile(uri: Uri): File? {
+        val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor: Cursor? = contentResolver.query(uri, filePathColumn, null, null, null)
+        cursor?.moveToFirst()
+        val columnIndex: Int? = cursor?.getColumnIndex(filePathColumn[0])
+        val filePath: String? = columnIndex?.let { cursor.getString(it) }
+        cursor?.close()
+        return filePath?.let { File(it) }
+    }
 
 }
 
