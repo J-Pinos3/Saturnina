@@ -9,6 +9,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import com.example.saturninaapp.R
 import com.example.saturninaapp.models.UpdateUserProfilePut
@@ -30,6 +31,15 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var btnSaveProfile: AppCompatButton
     private lateinit var btnRegresarDash: AppCompatButton
 
+    //SYMBOLIC CONSTANTS
+    private val MIN_LENGTH_PROFILENAME = 3
+    private val MAX_LENGTH_PROFILENAME = 10
+
+    private val MIN_LENGTH_PROFILECELLPHONE = 10
+    private val MAX_LENGTH_PROFILECELLPHONE = 10
+
+
+
     //WATCHER
     var profileTextWatcher = object:TextWatcher{
         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -37,16 +47,18 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+        }
+
+        override fun afterTextChanged(p0: Editable?) {
             val name: String = etNameProfile.text.toString()
             val lastName: String = etLastProfile.text.toString()
             val email: String = etEmailProfile.text.toString()
             val number: String = etNumberProfile.text.toString()
 
             disableClickSave(name, lastName, email, number)
-        }
 
-        override fun afterTextChanged(p0: Editable?) {
-
+            validateUserProfileInputs()
         }
 
     }
@@ -177,6 +189,35 @@ class ProfileActivity : AppCompatActivity() {
     }
 
 
+    private fun validateUserProfileInputs(){
+        val name: String = etNameProfile.text.toString()
+        val lastName: String = etLastProfile.text.toString()
+        val number: String = etNumberProfile.text.toString()
+
+
+        if(name.length < MIN_LENGTH_PROFILENAME){  showToast("El nombre debe tener al menos $MIN_LENGTH_PROFILENAME caracteres")  }
+
+
+        if(name.length > MAX_LENGTH_PROFILENAME){ showToast("El nombre debe tener máximo $MAX_LENGTH_PROFILENAME caracteres") }
+
+
+        if(lastName.length < MIN_LENGTH_PROFILENAME){  showToast("El apellido debe tener al menos $MIN_LENGTH_PROFILENAME caracteres")  }
+
+
+        if(lastName.length > MAX_LENGTH_PROFILENAME){ showToast("El apellido debe tener máximo $MAX_LENGTH_PROFILENAME caracteres") }
+
+
+        if( number.length < MIN_LENGTH_PROFILECELLPHONE ){  showToast("El teléfono debe tener $MIN_LENGTH_PROFILECELLPHONE dígitos")  }
+
+
+        if( number.length > MAX_LENGTH_PROFILECELLPHONE ) {  showToast("El teléfono debe tener $MAX_LENGTH_PROFILECELLPHONE dígitos")  }
+
+        btnSaveProfile.isEnabled = false
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
 
     private fun paintUserNewData(updatedUser: UpdateUserProfilePut){
         etNameProfile.text =  Editable.Factory.getInstance().newEditable(updatedUser.nombre)

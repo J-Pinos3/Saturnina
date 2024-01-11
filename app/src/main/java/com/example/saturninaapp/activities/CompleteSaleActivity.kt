@@ -9,10 +9,13 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.AppCompatButton
@@ -56,6 +59,28 @@ class CompleteSaleActivity : AppCompatActivity() {
     private val MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE: Int = 123
     private var cartKey :String = ""
 
+    private val MIN_LENGTH_DESCRIPTION = 10
+    private val MAX_LENGTH_DESCRIPTION = 100
+
+    var completSaleTextWatcher = object: TextWatcher{
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+        }
+
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+        }
+
+        override fun afterTextChanged(p0: Editable?) {
+            val description = etOrderDescription.text.toString()
+            val address = etOrderAddress.text.toString()
+
+            disableClickAcceptSale(description, address)
+
+            validateUserDescriptionInput()
+        }
+
+    }
 
 
     private val pickImage = registerForActivityResult( ActivityResultContracts.StartActivityForResult() ){
@@ -111,6 +136,9 @@ class CompleteSaleActivity : AppCompatActivity() {
 
         }
 
+
+        etOrderAddress.addTextChangedListener(completSaleTextWatcher)
+        etOrderDescription.addTextChangedListener(completSaleTextWatcher)
 
 
         //navigation
@@ -377,6 +405,37 @@ class CompleteSaleActivity : AppCompatActivity() {
         val filePath: String? = columnIndex?.let { cursor.getString(it) }
         cursor?.close()
         return filePath?.let { File(it) }
+    }
+
+
+    private fun disableClickAcceptSale(description: String, address: String){
+        btnAcceptSale.isEnabled = !description.isNullOrEmpty() && !address.isNullOrEmpty()
+
+        when(btnAcceptSale.isEnabled){
+            true->{
+                btnAcceptSale.setBackgroundColor( resources.getColor(R.color.blue_button) )
+            }
+
+            false->{
+                btnAcceptSale.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+            }
+        }
+
+
+    }
+
+    private fun validateUserDescriptionInput(){
+        val description = etOrderDescription.text.toString()
+
+        if(description.length < MIN_LENGTH_DESCRIPTION){  showToast("La descripción debe tener al menos $MIN_LENGTH_DESCRIPTION caracteres")  }
+
+        if(description.length > MAX_LENGTH_DESCRIPTION){  showToast("La descripción debe tener máximo $MAX_LENGTH_DESCRIPTION caracteres") }
+
+        btnAcceptSale.isEnabled = false
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     private fun clearCart(key: String) {

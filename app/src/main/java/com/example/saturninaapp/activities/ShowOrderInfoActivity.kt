@@ -68,12 +68,22 @@ class ShowOrderInfoActivity : AppCompatActivity() {
 
     private lateinit var spOrderStatusChoice: AutoCompleteTextView
 
+    private val MIN_LENGTH_NAME = 3
+    private val MAX_LENGTH_NAME = 10
+
+    private val MIN_LENGTH_CELLPHONE = 10
+    private val MAX_LENGTH_CELLPHONE = 10
+
     private var OrderTextWatcher = object: TextWatcher{
         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
         }
 
         override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+        }
+
+        override fun afterTextChanged(p0: Editable?) {
             val firstName: String = tvOrderInfoFirstName.text.toString()
             val lastName: String = tvOrderInfoLastName.text.toString()
             val email: String = tvOrderInfoEmail.text.toString()
@@ -81,11 +91,11 @@ class ShowOrderInfoActivity : AppCompatActivity() {
             val phone: String = tvOrderInfoCellPhone.text.toString()
             val description: String = tvOrderInfoDescription.text.toString()
 
+            //validate if is empty
             disableClicOnUpdateOrder(firstName, lastName, email, address, phone, description)
-        }
 
-        override fun afterTextChanged(p0: Editable?) {
-
+            //validate lenght
+            validateInputLength()
         }
 
     }
@@ -255,6 +265,47 @@ class ShowOrderInfoActivity : AppCompatActivity() {
         }
 
     }
+
+    private fun validateInputLength() {
+        val firstName: String = tvOrderInfoFirstName.text.toString()
+        val lastName: String = tvOrderInfoLastName.text.toString()
+        val cellphone: String = tvOrderInfoCellPhone.text.toString()
+        // ... (similar para otros campos)
+
+        if (firstName.length < MIN_LENGTH_NAME ) {
+            showToast("El nombre debe tener al menos $MIN_LENGTH_NAME caracteres")
+        }
+
+        if(firstName.length > MAX_LENGTH_NAME){
+            showToast("El nombre debe tener máximo $MAX_LENGTH_NAME caracteres")
+        }
+
+
+        if (lastName.length < MIN_LENGTH_NAME) {
+            showToast("El apellido debe tener al menos $MIN_LENGTH_NAME caracteres")
+        }
+
+        if(lastName.length > MAX_LENGTH_NAME){
+            showToast("El apellido debe tener máximo $MAX_LENGTH_NAME caracteres")
+        }
+
+        if(cellphone.length < MIN_LENGTH_CELLPHONE){
+            showToast("El teléfono debe tener  $MIN_LENGTH_CELLPHONE dígitos")
+        }
+
+        if(cellphone.length > MAX_LENGTH_CELLPHONE){
+            showToast("El teléfono debe tener  $MAX_LENGTH_CELLPHONE dígitos")
+        }
+
+        btnUpdateUserOrderData.isEnabled = false
+    }
+
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+
 
 
     suspend fun updateOrderStatus( bearerToken: String, orderStatusData: OrderStatusData, order_id: String ){
