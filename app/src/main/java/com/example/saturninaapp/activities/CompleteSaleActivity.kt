@@ -130,8 +130,6 @@ class CompleteSaleActivity : AppCompatActivity() {
         setTotalValueView()
         btnAcceptSale.setOnClickListener {
 
-            validateUserDescriptionInput()
-
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE  )
             val selectBillImage = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
             pickImage.launch(selectBillImage)
@@ -141,6 +139,12 @@ class CompleteSaleActivity : AppCompatActivity() {
 
         etOrderAddress.addTextChangedListener(completSaleTextWatcher)
         etOrderDescription.addTextChangedListener(completSaleTextWatcher)
+
+        etOrderDescription.setOnFocusChangeListener { _, hasFocus ->
+            if(!hasFocus){
+                validateUserDescriptionInput()
+            }
+        }
 
 
         //navigation

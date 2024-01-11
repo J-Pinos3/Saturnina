@@ -74,6 +74,9 @@ class ShowOrderInfoActivity : AppCompatActivity() {
     private val MIN_LENGTH_CELLPHONE = 10
     private val MAX_LENGTH_CELLPHONE = 10
 
+    private val MIN_LENGTH_DESCRIPTION = 10
+    private val MAX_LENGTH_DESCRIPTION = 100
+
     private var OrderTextWatcher = object: TextWatcher{
         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
@@ -167,6 +170,30 @@ class ShowOrderInfoActivity : AppCompatActivity() {
         tvOrderInfoCellPhone.addTextChangedListener(OrderTextWatcher)
         tvOrderInfoDescription.addTextChangedListener(OrderTextWatcher)
 
+        //dont validate email and anddress validateInputLength
+        tvOrderInfoFirstName.setOnFocusChangeListener { _, hasFocus ->
+            if(!hasFocus){
+                validateInputLength()
+            }
+        }
+
+        tvOrderInfoLastName.setOnFocusChangeListener { _, hasFocus ->
+            if(!hasFocus){
+                validateInputLength()
+            }
+        }
+
+        tvOrderInfoCellPhone.setOnFocusChangeListener { _, hasFocus ->
+            if(!hasFocus){
+                validateInputLength()
+            }
+        }
+
+        tvOrderInfoDescription.setOnFocusChangeListener { _, hasFocus ->
+            if(!hasFocus){
+                validateInputLength()
+            }
+        }
 
         spOrderStatusChoice.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
             if(statusList.isNotEmpty()){
@@ -191,7 +218,7 @@ class ShowOrderInfoActivity : AppCompatActivity() {
         }
 
         btnUpdateUserOrderData.setOnClickListener {
-            if(user_rol == ROL_USER && !validateInputLength()){
+            if(user_rol == ROL_USER ){
 
 
                 ActivityCompat.requestPermissions(this@ShowOrderInfoActivity,
@@ -267,10 +294,11 @@ class ShowOrderInfoActivity : AppCompatActivity() {
 
     }
 
-    private fun validateInputLength(): Boolean {
+    private fun validateInputLength() {
         val firstName: String = tvOrderInfoFirstName.text.toString()
         val lastName: String = tvOrderInfoLastName.text.toString()
         val cellphone: String = tvOrderInfoCellPhone.text.toString()
+        val description: String = tvOrderInfoDescription.text.toString()
 
         var disable = false
 
@@ -286,19 +314,18 @@ class ShowOrderInfoActivity : AppCompatActivity() {
             disable = true
         }
 
-        if(cellphone.length < MIN_LENGTH_CELLPHONE){
-            showToast("El teléfono debe tener  $MIN_LENGTH_CELLPHONE dígitos")
-            disable = true
-        }
 
-        if( cellphone.length != MIN_LENGTH_CELLPHONE){
+        if(cellphone.length != MIN_LENGTH_CELLPHONE){
             showToast("El teléfono debe tener una longitud entre $MIN_LENGTH_CELLPHONE  caracteres")
             disable = true
         }
 
+        if(description.length !in MIN_LENGTH_DESCRIPTION .. MAX_LENGTH_DESCRIPTION){
+            showToast("El descripción debe tener una longitud entre $MIN_LENGTH_DESCRIPTION y $MAX_LENGTH_DESCRIPTION  caracteres")
+            disable = true
+        }
 
         btnUpdateUserOrderData.isEnabled = disable
-        return disable
     }
 
 

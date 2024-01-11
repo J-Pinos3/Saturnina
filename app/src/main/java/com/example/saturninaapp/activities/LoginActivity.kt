@@ -4,10 +4,13 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import com.example.saturninaapp.R
 import com.example.saturninaapp.models.LoginCredentials
@@ -28,11 +31,46 @@ class LoginActivity : AppCompatActivity() {
 
     private var fileKey: String = "user_data"
 
+    private val MIN_LENGTH_PASSWORD = 9
+
+    private var LoginTextWatcher = object : TextWatcher{
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+        }
+
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+        }
+
+        override fun afterTextChanged(p0: Editable?) {
+            val email: String = etEmailLogin.text.toString()
+            val password: String = etPasswordLogin.text.toString()
+
+            disableCLicOnLogin(email,password)
+        }
+
+    }
+
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         initUI()
         //clearCart(fileKey)
+
+        etEmailLogin.addTextChangedListener(LoginTextWatcher)
+        etPasswordLogin.addTextChangedListener(LoginTextWatcher)
+
+
+        etPasswordLogin.setOnFocusChangeListener { _, hasFocus ->
+            if(!hasFocus){
+                validatePasswordLength()
+            }
+        }
+
+
         tvRegistrate.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
@@ -97,6 +135,41 @@ class LoginActivity : AppCompatActivity() {
         editor.putString("USER-ROL", userRol)
         editor.apply()
     }
+
+    private fun disableCLicOnLogin(email: String, password: String) {
+        btnIniciarSesionLogin.isEnabled = ( !email.isNullOrEmpty() ) && ( !password.isNullOrEmpty() )
+
+        when(btnIniciarSesionLogin.isEnabled){
+            true->{
+                btnIniciarSesionLogin.setBackgroundColor( resources.getColor(R.color.blue_button) )
+            }
+
+            false->{
+                btnIniciarSesionLogin.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+            }
+        }
+
+    }
+
+
+    private fun validatePasswordLength(){
+        val password: String = etPasswordLogin.text.toString()
+
+        var disable = false
+
+        if(password.length < MIN_LENGTH_PASSWORD){
+            showToast("El nombre debe tener una longitud mayor a $MIN_LENGTH_PASSWORD caracteres")
+            disable = true
+        }
+
+        btnIniciarSesionLogin.isEnabled = disable
+    }
+
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
 
     private fun clearCart(key: String){
         val sharedPreferences: SharedPreferences = getSharedPreferences(key, MODE_PRIVATE)

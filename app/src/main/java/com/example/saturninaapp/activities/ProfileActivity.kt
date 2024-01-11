@@ -119,11 +119,30 @@ class ProfileActivity : AppCompatActivity() {
         etEmailProfile.addTextChangedListener(profileTextWatcher)
         etNumberProfile.addTextChangedListener(profileTextWatcher)
 
+        etNameProfile.setOnFocusChangeListener { _, hasFocus ->
+            if(!hasFocus){
+                validateUserProfileInputs()
+            }
+
+        }
+
+        etLastProfile.setOnFocusChangeListener {_, hasFocus ->
+            if(!hasFocus){
+                validateUserProfileInputs()
+            }
+
+        }
+
+        etNumberProfile.setOnFocusChangeListener { _, hasFocus ->
+            if(!hasFocus){
+                validateUserProfileInputs()
+            }
+
+        }
 
 
         btnSaveProfile.setOnClickListener {
             userProfile = getUserProfileFromUI()
-            validateUserProfileInputs()//VALIDATE INPUTS BEFORE SENDING DATA
             CoroutineScope(Dispatchers.IO).launch {
 
                 val retrofitUpdateProfile = RetrofitHelper.consumeAPI.updateUserProfile(bearer_token, user_id!!, userProfile)
