@@ -77,7 +77,6 @@ class CompleteSaleActivity : AppCompatActivity() {
 
             disableClickAcceptSale(description, address)
 
-            validateUserDescriptionInput()
         }
 
     }
@@ -130,6 +129,9 @@ class CompleteSaleActivity : AppCompatActivity() {
 
         setTotalValueView()
         btnAcceptSale.setOnClickListener {
+
+            validateUserDescriptionInput()
+
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE  )
             val selectBillImage = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
             pickImage.launch(selectBillImage)
@@ -228,9 +230,11 @@ class CompleteSaleActivity : AppCompatActivity() {
         btnAcceptSale = findViewById(R.id.btnAcceptSale)
     }
 
+
     private fun showTotalCartItems(numberOfitems: String){
         cartSalesItemsCount.text = numberOfitems
     }
+
 
     private fun loadItemsFromFiles(key: String){
         var sharedPreferences: SharedPreferences = getSharedPreferences(key, MODE_PRIVATE)
@@ -426,12 +430,19 @@ class CompleteSaleActivity : AppCompatActivity() {
 
     private fun validateUserDescriptionInput(){
         val description = etOrderDescription.text.toString()
+        var disable = false
 
-        if(description.length < MIN_LENGTH_DESCRIPTION){  showToast("La descripción debe tener al menos $MIN_LENGTH_DESCRIPTION caracteres")  }
+        if(description.length < MIN_LENGTH_DESCRIPTION){
+            showToast("La descripción debe tener al menos $MIN_LENGTH_DESCRIPTION caracteres")
+            disable = true
+        }
 
-        if(description.length > MAX_LENGTH_DESCRIPTION){  showToast("La descripción debe tener máximo $MAX_LENGTH_DESCRIPTION caracteres") }
+        if(description.length > MAX_LENGTH_DESCRIPTION){
+            showToast("La descripción debe tener máximo $MAX_LENGTH_DESCRIPTION caracteres")
+            disable = true
+        }
 
-        btnAcceptSale.isEnabled = false
+        btnAcceptSale.isEnabled = disable
     }
 
     private fun showToast(message: String) {

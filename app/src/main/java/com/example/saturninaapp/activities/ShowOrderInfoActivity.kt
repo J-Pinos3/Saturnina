@@ -94,8 +94,7 @@ class ShowOrderInfoActivity : AppCompatActivity() {
             //validate if is empty
             disableClicOnUpdateOrder(firstName, lastName, email, address, phone, description)
 
-            //validate lenght
-            validateInputLength()
+
         }
 
     }
@@ -192,7 +191,9 @@ class ShowOrderInfoActivity : AppCompatActivity() {
         }
 
         btnUpdateUserOrderData.setOnClickListener {
-            if(user_rol == ROL_USER){
+            if(user_rol == ROL_USER && !validateInputLength()){
+
+
                 ActivityCompat.requestPermissions(this@ShowOrderInfoActivity,
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
                         arrayOf(Manifest.permission.READ_MEDIA_IMAGES)
@@ -266,38 +267,38 @@ class ShowOrderInfoActivity : AppCompatActivity() {
 
     }
 
-    private fun validateInputLength() {
+    private fun validateInputLength(): Boolean {
         val firstName: String = tvOrderInfoFirstName.text.toString()
         val lastName: String = tvOrderInfoLastName.text.toString()
         val cellphone: String = tvOrderInfoCellPhone.text.toString()
-        // ... (similar para otros campos)
 
-        if (firstName.length < MIN_LENGTH_NAME ) {
-            showToast("El nombre debe tener al menos $MIN_LENGTH_NAME caracteres")
+        var disable = false
+
+
+        if( firstName.length  !in MIN_LENGTH_NAME .. MAX_LENGTH_NAME){
+            showToast("El nombre debe tener una longitud entre $MAX_LENGTH_NAME y $MAX_LENGTH_NAME caracteres")
+            disable = true
         }
 
-        if(firstName.length > MAX_LENGTH_NAME){
-            showToast("El nombre debe tener máximo $MAX_LENGTH_NAME caracteres")
-        }
 
-
-        if (lastName.length < MIN_LENGTH_NAME) {
-            showToast("El apellido debe tener al menos $MIN_LENGTH_NAME caracteres")
-        }
-
-        if(lastName.length > MAX_LENGTH_NAME){
-            showToast("El apellido debe tener máximo $MAX_LENGTH_NAME caracteres")
+        if( lastName.length !in MIN_LENGTH_NAME ..  MAX_LENGTH_NAME){
+            showToast("El apellido debe tener una longitud entre $MIN_LENGTH_NAME y $MAX_LENGTH_NAME caracteres")
+            disable = true
         }
 
         if(cellphone.length < MIN_LENGTH_CELLPHONE){
             showToast("El teléfono debe tener  $MIN_LENGTH_CELLPHONE dígitos")
+            disable = true
         }
 
-        if(cellphone.length > MAX_LENGTH_CELLPHONE){
-            showToast("El teléfono debe tener  $MAX_LENGTH_CELLPHONE dígitos")
+        if( cellphone.length != MIN_LENGTH_CELLPHONE){
+            showToast("El teléfono debe tener una longitud entre $MIN_LENGTH_CELLPHONE  caracteres")
+            disable = true
         }
 
-        btnUpdateUserOrderData.isEnabled = false
+
+        btnUpdateUserOrderData.isEnabled = disable
+        return disable
     }
 
 

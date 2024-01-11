@@ -57,8 +57,6 @@ class ProfileActivity : AppCompatActivity() {
             val number: String = etNumberProfile.text.toString()
 
             disableClickSave(name, lastName, email, number)
-
-            validateUserProfileInputs()
         }
 
     }
@@ -125,6 +123,7 @@ class ProfileActivity : AppCompatActivity() {
 
         btnSaveProfile.setOnClickListener {
             userProfile = getUserProfileFromUI()
+            validateUserProfileInputs()//VALIDATE INPUTS BEFORE SENDING DATA
             CoroutineScope(Dispatchers.IO).launch {
 
                 val retrofitUpdateProfile = RetrofitHelper.consumeAPI.updateUserProfile(bearer_token, user_id!!, userProfile)
@@ -194,25 +193,27 @@ class ProfileActivity : AppCompatActivity() {
         val lastName: String = etLastProfile.text.toString()
         val number: String = etNumberProfile.text.toString()
 
-
-        if(name.length < MIN_LENGTH_PROFILENAME){  showToast("El nombre debe tener al menos $MIN_LENGTH_PROFILENAME caracteres")  }
-
-
-        if(name.length > MAX_LENGTH_PROFILENAME){ showToast("El nombre debe tener máximo $MAX_LENGTH_PROFILENAME caracteres") }
+        var disable = false
 
 
-        if(lastName.length < MIN_LENGTH_PROFILENAME){  showToast("El apellido debe tener al menos $MIN_LENGTH_PROFILENAME caracteres")  }
+        if(name.length  !in MIN_LENGTH_PROFILENAME .. MAX_LENGTH_PROFILENAME ){
+            showToast("El nombre debe tener una longitud entre $MIN_LENGTH_PROFILENAME y $MAX_LENGTH_PROFILENAME caracteres")
+            disable = true
+        }
 
 
-        if(lastName.length > MAX_LENGTH_PROFILENAME){ showToast("El apellido debe tener máximo $MAX_LENGTH_PROFILENAME caracteres") }
+        if( lastName.length !in MIN_LENGTH_PROFILENAME ..  MAX_LENGTH_PROFILENAME){
+            showToast("El apellido debe tener una longitud entre $MIN_LENGTH_PROFILENAME y $MAX_LENGTH_PROFILENAME caracteres")
+            disable = true
+        }
 
 
-        if( number.length < MIN_LENGTH_PROFILECELLPHONE ){  showToast("El teléfono debe tener $MIN_LENGTH_PROFILECELLPHONE dígitos")  }
+        if( number.length !in MIN_LENGTH_PROFILECELLPHONE ..  MAX_LENGTH_PROFILECELLPHONE){
+            showToast("El teléfono debe tener una longitud entre $MIN_LENGTH_PROFILECELLPHONE  caracteres")
+            disable = true
+        }
 
-
-        if( number.length > MAX_LENGTH_PROFILECELLPHONE ) {  showToast("El teléfono debe tener $MAX_LENGTH_PROFILECELLPHONE dígitos")  }
-
-        btnSaveProfile.isEnabled = false
+        btnSaveProfile.isEnabled = disable
     }
 
     private fun showToast(message: String) {
