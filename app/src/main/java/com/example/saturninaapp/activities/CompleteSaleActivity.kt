@@ -77,6 +77,8 @@ class CompleteSaleActivity : AppCompatActivity() {
 
             disableClickAcceptSale(description, address)
 
+
+            validateUserDescriptionInput(description)
         }
 
     }
@@ -140,11 +142,6 @@ class CompleteSaleActivity : AppCompatActivity() {
         etOrderAddress.addTextChangedListener(completSaleTextWatcher)
         etOrderDescription.addTextChangedListener(completSaleTextWatcher)
 
-        etOrderDescription.setOnFocusChangeListener { _, hasFocus ->
-            if(!hasFocus){
-                validateUserDescriptionInput()
-            }
-        }
 
 
         //navigation
@@ -432,26 +429,27 @@ class CompleteSaleActivity : AppCompatActivity() {
 
     }
 
-    private fun validateUserDescriptionInput(){
-        val description = etOrderDescription.text.toString()
-        var disable = false
+    private fun validateUserDescriptionInput(description: String){
+        var clickable = true
 
-        if(description.length < MIN_LENGTH_DESCRIPTION){
-            showToast("La descripción debe tener al menos $MIN_LENGTH_DESCRIPTION caracteres")
-            disable = true
+        if(description.length !in MIN_LENGTH_DESCRIPTION .. MAX_LENGTH_DESCRIPTION){
+            etOrderDescription.error = "La descripción debe tener entre $MIN_LENGTH_DESCRIPTION y " +
+                    "$MAX_LENGTH_DESCRIPTION caracteres"
+            clickable = false
+
+            btnAcceptSale.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+        }else{
+            btnAcceptSale.setBackgroundColor( resources.getColor(R.color.blue_button) )
         }
 
-        if(description.length > MAX_LENGTH_DESCRIPTION){
-            showToast("La descripción debe tener máximo $MAX_LENGTH_DESCRIPTION caracteres")
-            disable = true
-        }
 
-        btnAcceptSale.isEnabled = disable
+
+        btnAcceptSale.isClickable = clickable
     }
 
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
+//    private fun showToast(message: String) {
+//        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+//    }
 
     private fun clearCart(key: String) {
         val sharedPreferences: SharedPreferences = getSharedPreferences(key, MODE_PRIVATE)

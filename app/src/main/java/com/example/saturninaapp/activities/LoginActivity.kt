@@ -32,6 +32,7 @@ class LoginActivity : AppCompatActivity() {
     private var fileKey: String = "user_data"
 
     private val MIN_LENGTH_PASSWORD = 9
+    private val MAX_LENGTH_PASSWORD = 18
 
     private var LoginTextWatcher = object : TextWatcher{
         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -47,6 +48,10 @@ class LoginActivity : AppCompatActivity() {
             val password: String = etPasswordLogin.text.toString()
 
             disableCLicOnLogin(email,password)
+
+
+
+            validatePasswordLength(password)
         }
 
     }
@@ -63,12 +68,6 @@ class LoginActivity : AppCompatActivity() {
         etEmailLogin.addTextChangedListener(LoginTextWatcher)
         etPasswordLogin.addTextChangedListener(LoginTextWatcher)
 
-
-        etPasswordLogin.setOnFocusChangeListener { _, hasFocus ->
-            if(!hasFocus){
-                validatePasswordLength()
-            }
-        }
 
 
         tvRegistrate.setOnClickListener {
@@ -152,23 +151,29 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
-    private fun validatePasswordLength(){
-        val password: String = etPasswordLogin.text.toString()
+    private fun validatePasswordLength( password: String ){
 
-        var disable = false
 
-        if(password.length < MIN_LENGTH_PASSWORD){
-            showToast("El nombre debe tener una longitud mayor a $MIN_LENGTH_PASSWORD caracteres")
-            disable = true
+        var disable = true
+
+        if(password.length < MIN_LENGTH_PASSWORD || password.length > MAX_LENGTH_PASSWORD){
+            etPasswordLogin.error = "La contraseña debe tener una longitud entre $MIN_LENGTH_PASSWORD y $MAX_LENGTH_PASSWORD caracteres"
+            //showToast("El nombre debe tener una longitud mayor a $MIN_LENGTH_PASSWORD caracteres")
+            disable = false
+            btnIniciarSesionLogin.isClickable = disable
+            btnIniciarSesionLogin.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+        }else{
+            btnIniciarSesionLogin.isClickable = disable
+            btnIniciarSesionLogin.setBackgroundColor( resources.getColor(R.color.blue_button) )
         }
 
-        btnIniciarSesionLogin.isEnabled = disable
+
     }
 
 
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
+//    private fun showToast(message: String) {
+//        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+//    }
 
 
     private fun clearCart(key: String){

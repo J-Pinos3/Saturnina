@@ -57,6 +57,8 @@ class ProfileActivity : AppCompatActivity() {
             val number: String = etNumberProfile.text.toString()
 
             disableClickSave(name, lastName, email, number)
+
+            validateUserProfileInputs(name, lastName, number)
         }
 
     }
@@ -119,26 +121,6 @@ class ProfileActivity : AppCompatActivity() {
         etEmailProfile.addTextChangedListener(profileTextWatcher)
         etNumberProfile.addTextChangedListener(profileTextWatcher)
 
-        etNameProfile.setOnFocusChangeListener { _, hasFocus ->
-            if(!hasFocus){
-                validateUserProfileInputs()
-            }
-
-        }
-
-        etLastProfile.setOnFocusChangeListener {_, hasFocus ->
-            if(!hasFocus){
-                validateUserProfileInputs()
-            }
-
-        }
-
-        etNumberProfile.setOnFocusChangeListener { _, hasFocus ->
-            if(!hasFocus){
-                validateUserProfileInputs()
-            }
-
-        }
 
 
         btnSaveProfile.setOnClickListener {
@@ -207,37 +189,43 @@ class ProfileActivity : AppCompatActivity() {
     }
 
 
-    private fun validateUserProfileInputs(){
-        val name: String = etNameProfile.text.toString()
-        val lastName: String = etLastProfile.text.toString()
-        val number: String = etNumberProfile.text.toString()
+    private fun validateUserProfileInputs(name: String, lastName: String, number: String){
 
-        var disable = false
+
+        var clickable = true
 
 
         if(name.length  !in MIN_LENGTH_PROFILENAME .. MAX_LENGTH_PROFILENAME ){
-            showToast("El nombre debe tener una longitud entre $MIN_LENGTH_PROFILENAME y $MAX_LENGTH_PROFILENAME caracteres")
-            disable = true
+            etNameProfile.error = "El nombre debe tener una longitud entre $MIN_LENGTH_PROFILENAME y $MAX_LENGTH_PROFILENAME caracteres"
+            clickable = false
         }
 
 
         if( lastName.length !in MIN_LENGTH_PROFILENAME ..  MAX_LENGTH_PROFILENAME){
-            showToast("El apellido debe tener una longitud entre $MIN_LENGTH_PROFILENAME y $MAX_LENGTH_PROFILENAME caracteres")
-            disable = true
+            etLastProfile.error = "El apellido debe tener una longitud entre $MIN_LENGTH_PROFILENAME y $MAX_LENGTH_PROFILENAME caracteres"
+            clickable = false
         }
 
 
         if( number.length !in MIN_LENGTH_PROFILECELLPHONE ..  MAX_LENGTH_PROFILECELLPHONE){
-            showToast("El teléfono debe tener una longitud entre $MIN_LENGTH_PROFILECELLPHONE  caracteres")
-            disable = true
+            etNumberProfile.error = "El teléfono debe tener una longitud entre $MIN_LENGTH_PROFILECELLPHONE  caracteres"
+            clickable = false
         }
 
-        btnSaveProfile.isEnabled = disable
+        if(clickable){
+            btnSaveProfile.setBackgroundColor( resources.getColor(R.color.blue_button) )
+        }else{
+            btnSaveProfile.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+        }
+
+        btnSaveProfile.isClickable = clickable
     }
 
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
+
+//    private fun showToast(message: String) {
+//        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+//    }
+
 
     private fun paintUserNewData(updatedUser: UpdateUserProfilePut){
         etNameProfile.text =  Editable.Factory.getInstance().newEditable(updatedUser.nombre)

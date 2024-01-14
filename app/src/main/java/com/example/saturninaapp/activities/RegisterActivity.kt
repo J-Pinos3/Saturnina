@@ -3,6 +3,8 @@ package com.example.saturninaapp.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.EditText
 import androidx.appcompat.widget.AppCompatButton
 import com.example.saturninaapp.R
@@ -17,10 +19,45 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var btnContinuarRegister: AppCompatButton
     private lateinit var btnRegresarRegister: AppCompatButton
 
+    private val MIN_LENGTH_NAME = 3
+    private val MAX_LENGTH_NAME = 10
+
+    private val MIN_LENGTH_CELLPHONE = 10
+    private val MAX_LENGTH_CELLPHONE = 10
+
+    private var RegisterTextWatcher = object: TextWatcher{
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+        }
+
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+        }
+
+        override fun afterTextChanged(p0: Editable?) {
+            val name: String = etNameRegister.text.toString()
+            val lastName: String = etLastNameRegister.text.toString()
+            val number: String = etNumberRegister.text.toString()
+
+            disableClicOnContinue(name, lastName, number,)
+
+            validateInputsLenght(name, lastName, number,)
+        }
+
+    }
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
         initUI()
+
+        etNameRegister.addTextChangedListener(RegisterTextWatcher)
+        etLastNameRegister.addTextChangedListener(RegisterTextWatcher)
+        etNumberRegister.addTextChangedListener(RegisterTextWatcher)
+
+
 
         btnContinuarRegister.setOnClickListener {
             val intent = Intent(this, PasswordsActivity::class.java)
@@ -39,6 +76,7 @@ class RegisterActivity : AppCompatActivity() {
 
     }//ON CREATE
 
+
     private fun initUI() {
         etNameRegister = findViewById(R.id.etNameRegister)
         etLastNameRegister = findViewById(R.id.etLastNameRegister)
@@ -53,6 +91,53 @@ class RegisterActivity : AppCompatActivity() {
             etNumberRegister.text.toString()
             )
     }
+
+
+    private fun disableClicOnContinue(name: String, lastName: String, number: String) {
+        btnContinuarRegister.isClickable = ( name.isNotEmpty() ) && ( lastName.isNotEmpty() ) && ( number.isNotEmpty() )
+
+        when(btnContinuarRegister.isEnabled){
+            true -> {
+                btnContinuarRegister.setBackgroundColor( resources.getColor(R.color.blue_button) )
+            }
+
+            false -> {
+                btnContinuarRegister.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+            }
+        }
+
+    }
+
+
+    private fun validateInputsLenght(name: String, lastName: String, number: String) {
+        var clickable = true
+
+        if( name.length !in MIN_LENGTH_NAME .. MAX_LENGTH_NAME ){
+            etNameRegister.error = "El nombre debe tener una longitud entre $MAX_LENGTH_NAME y $MAX_LENGTH_NAME caracteres"
+            clickable = false
+        }
+
+
+        if( lastName.length !in MIN_LENGTH_NAME .. MAX_LENGTH_NAME ){
+            etLastNameRegister.error = "El apellido debe tener una longitud entre $MAX_LENGTH_NAME y $MAX_LENGTH_NAME caracteres"
+            clickable = false
+        }
+
+
+        if( number.length != MIN_LENGTH_CELLPHONE ){
+            etNumberRegister.error = "El teléfono debe tener $MIN_LENGTH_CELLPHONE dígitos"
+            clickable = false
+        }
+
+        if(clickable){
+            btnContinuarRegister.setBackgroundColor( resources.getColor(R.color.blue_button) )
+        }else{
+            btnContinuarRegister.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+        }
+        btnContinuarRegister.isClickable = clickable
+
+    }
+
 
 
 }

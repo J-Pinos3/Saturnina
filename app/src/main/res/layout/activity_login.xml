@@ -42,7 +42,7 @@
         app:layout_constraintTop_toBottomOf="@id/guidelineTop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="54dp">
+        android:layout_marginTop="35dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -70,7 +70,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/llAccountRegistrate"
-        android:layout_marginTop="55dp"
+        android:layout_marginTop="40dp"
         style="@style/editText"
         android:hint="Correo"
         android:inputType="textEmailAddress"/>
@@ -97,7 +97,7 @@
         app:layout_constraintTop_toBottomOf="@id/etPasswordLogin"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="40dp"
         android:textSize="30sp" />
 
 
@@ -129,7 +129,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.27" />
+        app:layout_constraintGuide_percent="0.20" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineBottom"
