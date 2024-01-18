@@ -4,8 +4,11 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
@@ -26,6 +29,7 @@ import com.example.saturninaapp.models.ResultComment
 import com.example.saturninaapp.models.Talla
 import com.example.saturninaapp.models.UserId
 import com.example.saturninaapp.util.RetrofitHelper
+import com.example.saturninaapp.util.UtilClasses
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -36,7 +40,7 @@ import org.imaginativeworld.whynotimagecarousel.CarouselItem
 import org.imaginativeworld.whynotimagecarousel.ImageCarousel
 import org.json.JSONObject
 
-class ShowProductInfo : AppCompatActivity() {
+class ShowProductInfo : AppCompatActivity(), UtilClasses {
 
     lateinit var drawer: DrawerLayout
     lateinit var toggle: ActionBarDrawerToggle
@@ -63,6 +67,11 @@ class ShowProductInfo : AppCompatActivity() {
     private lateinit var spProductInfoSizesChoice: AutoCompleteTextView
     private lateinit var spProductInfoColorsChoice: AutoCompleteTextView
 
+    private lateinit var cartSalesItemsCount: TextView
+
+    private lateinit var btnAddProductInfoToCart: View
+    private var cartItems = mutableListOf<DetailProduct>()
+
     private var fileKey: String = "user_data"
     private var user_token: String = ""
     private var user_id: String = ""
@@ -81,6 +90,8 @@ class ShowProductInfo : AppCompatActivity() {
             bringAllComments(bearerToken, { itemsCommentaries, productData ->  filterCommentsOfProduct(itemsCommentaries, productData) }, productData )
         }
 
+        onColorSelected(spProductInfoColorsChoice, productData)
+        onSizeSelected(spProductInfoSizesChoice, productData)
 
         loadScreenItemsWithProductData(productData, spProductInfoColorsChoice, spProductInfoSizesChoice)
 
@@ -102,9 +113,30 @@ class ShowProductInfo : AppCompatActivity() {
 
                 }
             }
+            //todo(no puede comentar toast) no se callan aquí
+            //algunos de los errores que me salían eran funcionales porque la app crasheaba si el usuario intentaba
+            //ciertas acciones de nuevo, los errores que salen ahorita ya no son tan complejos de corregir, david ya me explicó lo de los nulos
         }//listener
 
 
+        spProductInfoSizesChoice.onItemClickListener =
+                AdapterView.OnItemClickListener {
+                        adapterView, view, position, id ->
+                    productData.tallaSeleccionada = adapterView.getItemAtPosition(position).toString()
+                    spProductInfoSizesChoice.post{
+                        spProductInfoSizesChoice.text = Editable.Factory.getInstance().newEditable(productData.tallaSeleccionada)
+                    }
+                }
+
+
+        spProductInfoColorsChoice.onItemClickListener =
+                AdapterView.OnItemClickListener {
+                        adapterView, view, position, id ->
+                    productData.colorSeleccionado = adapterView.getItemAtPosition(position).toString()
+                    spProductInfoColorsChoice.post{
+                        spProductInfoColorsChoice.text = Editable.Factory.getInstance().newEditable(productData.colorSeleccionado)
+                    }
+                }
 /*
         imagesList.add(
             CarouselItem(
@@ -121,6 +153,11 @@ class ShowProductInfo : AppCompatActivity() {
         icCarousel.addData(imagesList)
 */
         //IMPROVE SPINNERS https://stackoverflow.com/questions/2927012/how-can-i-change-decrease-the-android-spinner-size
+
+
+        btnAddProductInfoToCart.setOnClickListener {
+            onItemClothSelected(productData)
+        }
 
 
         //navigation
@@ -191,6 +228,7 @@ class ShowProductInfo : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+
     private fun loadScreenItemsWithProductData(product: DetailProduct, spColors: AutoCompleteTextView, spSizes:AutoCompleteTextView){
         loadArrayOfImages(product)
         tvProductInfoName.text = product.name
@@ -200,6 +238,7 @@ class ShowProductInfo : AppCompatActivity() {
         loadSizesToSpinner(spSizes, product)
         loadColorsToSpinner(spColors, product)
     }
+
 
     private fun loadArrayOfImages(product: DetailProduct ){
         for(k in product.imagen){
@@ -211,6 +250,7 @@ class ShowProductInfo : AppCompatActivity() {
         }
         icCarousel.addData(imagesList)
     }
+
 
     private fun initUI() {
         drawer = findViewById(R.id.drawerLayoutProductInfo)
@@ -229,6 +269,68 @@ class ShowProductInfo : AppCompatActivity() {
         rvComments = findViewById(R.id.rvComments)
         spProductInfoSizesChoice = findViewById(R.id.spProductInfoSizesChoice)
         spProductInfoColorsChoice = findViewById(R.id.spProductInfoColorsChoice)
+
+        btnAddProductInfoToCart = findViewById(R.id.btnAddProductInfoToCart)
+
+        cartSalesItemsCount = findViewById(R.id.action_cart_count)
+    }
+
+
+    override fun onItemClothSelected(product: DetailProduct) {
+        val existingProduct = cartItems.find { it.id == product.id }
+
+        if(existingProduct == null){
+            product.contador++
+            cartItems.add(product)
+
+            increaseCartItemsInfoCount()//AUMENTAMOS EL CONTADOR PARA EL NUEVO PRODUCTO
+        }else{
+            existingProduct.contador++
+            increaseCartItemsInfoCount()
+        }
+    }
+
+    private fun increaseCartItemsInfoCount(){
+        cartSalesItemsCount.text = ( cartSalesItemsCount.text.toString().toInt() + 1  ).toString()
+    }
+
+
+    override fun onItemDeleteSelected(product: DetailProduct) { //NOTHING TO DELETE UNLESS ITS CART SALES ACTIVITY
+    }
+
+    override fun onColorSelected(spinner: AutoCompleteTextView, product: DetailProduct) {
+        val listofColors = getListNameOfColores(product.colores)
+
+        if(listofColors.isNotEmpty()){
+            spinner.isEnabled = true
+            if(product.colorSeleccionado.isNotEmpty()){
+                var indiceColor = listofColors.find { it == product.colorSeleccionado }
+                spinner.setText(indiceColor, false)
+            }else{
+                spinner.setText( listofColors.elementAt(0), false )
+            }
+        }else{
+            spinner.setText( "N/A", false )
+            spinner.isEnabled = false
+        }
+    }
+
+    override fun onSizeSelected(spinner: AutoCompleteTextView, product: DetailProduct) {
+        val listofSizes = getListNameofSizes(product.tallas)
+
+        if(listofSizes.isNotEmpty()){
+            spinner.isEnabled = true
+            if(product.tallaSeleccionada.isNotEmpty()){
+                var indiceTalla = listofSizes.find { it == product.tallaSeleccionada }
+                spinner.setText(indiceTalla, false)
+            }else{
+                spinner.setText( listofSizes.elementAt(0), false )
+            }
+
+        }else{
+            spinner.setText( "N/A", false )
+            spinner.isEnabled = false
+        }
     }
 
 
@@ -237,6 +339,7 @@ class ShowProductInfo : AppCompatActivity() {
         val adapter = ArrayAdapter(this, R.layout.list_size, sizesList )
         spinner.setAdapter(adapter)
     }
+
 
     private fun getListNameofSizes(listSizes: List<Talla>?): ArrayList<String>{
         val listaNombres = arrayListOf<String>()
@@ -254,6 +357,7 @@ class ShowProductInfo : AppCompatActivity() {
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, colorsList )
         spinner.setAdapter(adapter)
     }
+
 
     private fun getListNameOfColores(listColors: List<Colore>?): ArrayList<String>{
         val listaNombres = arrayListOf<String>()
@@ -373,6 +477,7 @@ class ShowProductInfo : AppCompatActivity() {
         user_rol =  sharedPreferences.getString("USER-ROL","").toString()
         println(user_token + " -- " + user_id + " -- " + user_rol + "III")
     }
+
 
     private fun insertNewCommentIntoList(commentaryData: ResultComment){
         filteredCommentaries.add(commentaryData)

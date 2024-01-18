@@ -102,7 +102,7 @@ class MySalesActivity : AppCompatActivity() {
                     if(listResponse != null){
                         for(k in listResponse){
                             for(order in k.result){
-                                itemSalesOrders.add(OrderResult(order.cantidad, order.color, order.fecha, order.id, order.id_orden, order.id_producto, order.status, order.talla))
+                                itemSalesOrders.add(OrderResult(order.cantidad, order.color, order.descripcion, order.fecha, order.id, order.id_orden, order.id_producto, order.status, order.talla))
                             }
                         }
                         salesOrdersAdapter.notifyDataSetChanged()
@@ -142,7 +142,7 @@ class MySalesActivity : AppCompatActivity() {
                     if(listResponse != null){
                         for(k in listResponse){
                             for(order in k.result){
-                                itemSalesOrders.add(OrderResult(order.cantidad, order.color, order.fecha, order.id, order.id_orden, order.id_producto, order.status, order.talla))
+                                itemSalesOrders.add(OrderResult(order.cantidad, order.color, order.descripcion, order.fecha, order.id, order.id_orden, order.id_producto, order.status, order.talla))
                             }
                         }
                         salesOrdersAdapter.notifyDataSetChanged()

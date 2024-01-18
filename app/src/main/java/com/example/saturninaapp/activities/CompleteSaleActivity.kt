@@ -321,8 +321,13 @@ class CompleteSaleActivity : AppCompatActivity() {
                 val productObject = JsonObject()
                 productObject.addProperty("id_producto", product.id)
                 productObject.addProperty("cantidad", product.contador)
-                productObject.addProperty("talla", product.talla)
-                productObject.addProperty("color", product.color)
+                if( !product.talla.isNullOrEmpty() ){
+                    productObject.addProperty("talla", product.talla)
+                }
+
+                if( !product.color.isNullOrEmpty() ){
+                    productObject.addProperty("color", product.color)
+                }
                 productsArray.add(productObject)
             }
 

@@ -35,6 +35,9 @@ class ProfileActivity : AppCompatActivity() {
     private val MIN_LENGTH_PROFILENAME = 3
     private val MAX_LENGTH_PROFILENAME = 10
 
+    private val MIN_LENGTH_PROFILELASTNAME = 3
+    private val MAX_LENGTH_PROFILELASTNAME = 10
+
     private val MIN_LENGTH_PROFILECELLPHONE = 10
     private val MAX_LENGTH_PROFILECELLPHONE = 10
 
@@ -201,13 +204,13 @@ class ProfileActivity : AppCompatActivity() {
         }
 
 
-        if( lastName.length !in MIN_LENGTH_PROFILENAME ..  MAX_LENGTH_PROFILENAME){
-            etLastProfile.error = "El apellido debe tener una longitud entre $MIN_LENGTH_PROFILENAME y $MAX_LENGTH_PROFILENAME caracteres"
+        if( lastName.length !in MIN_LENGTH_PROFILELASTNAME ..  MAX_LENGTH_PROFILELASTNAME){
+            etLastProfile.error = "El apellido debe tener una longitud entre $MIN_LENGTH_PROFILELASTNAME y $MAX_LENGTH_PROFILELASTNAME caracteres"
             clickable = false
         }
 
 
-        if( number.length !in MIN_LENGTH_PROFILECELLPHONE ..  MAX_LENGTH_PROFILECELLPHONE){
+        if( number.length != MIN_LENGTH_PROFILECELLPHONE){
             etNumberProfile.error = "El teléfono debe tener una longitud entre $MIN_LENGTH_PROFILECELLPHONE  caracteres"
             clickable = false
         }

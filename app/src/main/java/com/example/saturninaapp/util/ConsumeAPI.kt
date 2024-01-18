@@ -78,7 +78,7 @@ interface ConsumeAPI {
     @Headers("Content-type:application/json; charset=UTF-8")
     @PUT("orders/{id_order_detail}")
     suspend fun uptdateOrderStatus(
-        @Header("Authorizarion") authorization: String,
+        @Header("Authorization") authorization: String,
         @Body orderStatusData: OrderStatusData,
         @Path("id_order_detail") id_order_detail: String
     ): Response<JsonObject>
@@ -87,7 +87,7 @@ interface ConsumeAPI {
     @Headers("Content-type:application/json; charset=UTF-8")
     @GET("order/{id_user}")
     suspend fun getOrdersForUser(
-        @Header("Authorizarion") authorization: String,
+        @Header("Authorization") authorization: String,
         @Path("id_user") userId: String
     ): Response<OrdersList>
 
@@ -95,7 +95,7 @@ interface ConsumeAPI {
     @Multipart
     @PUT("order/{id_user}")
     suspend fun updateUserOrder(
-        @Header("Authorizarion") authorization: String,
+        @Header("Authorization") authorization: String,
         @Part("data") data: RequestBody,
         @Part transfer_image: MultipartBody.Part,
         @Path("id_user") userId: String

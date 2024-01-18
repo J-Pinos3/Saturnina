@@ -20,9 +20,11 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.SAVED_STATE_REGISTRY_OWNER_KEY
 import android.Manifest
 import android.os.Build
+import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import androidx.core.view.isVisible
 import com.example.saturninaapp.R
 import com.example.saturninaapp.models.OrderResult
 import com.example.saturninaapp.models.OrderStatusData
@@ -65,7 +67,6 @@ class ShowOrderInfoActivity : AppCompatActivity() {
     private lateinit var tvOrderInfoUnitPrice: TextView
 
     private lateinit var etStatusDescription: TextView
-
     private lateinit var spOrderStatusChoice: AutoCompleteTextView
 
     private val MIN_LENGTH_NAME = 3
@@ -97,7 +98,7 @@ class ShowOrderInfoActivity : AppCompatActivity() {
             //validate if is empty
             disableClicOnUpdateOrder(firstName, lastName, email, address, phone, description)
 
-
+            validateInputLength(firstName, lastName, phone, description)
         }
 
     }
@@ -144,11 +145,13 @@ class ShowOrderInfoActivity : AppCompatActivity() {
         user_id = intent.extras?.getString("USER_ID").toString()
         user_rol = intent.extras?.getString("USER_ROL").toString()
         bearerToken = "Bearer $user_token"
+        println("token del usuario: ${bearerToken}")
         val orderSelectedInfo = intent.getSerializableExtra("ORDER_SELECTED") as OrderResult
         fillViewsWithOrderInfo(orderSelectedInfo)
         when(user_rol){
             ROL_USER ->{
                 spOrderStatusChoice.isEnabled = false
+                etStatusDescription.isEnabled = false
             }
 
             ROL_ADMIN ->{
@@ -170,30 +173,6 @@ class ShowOrderInfoActivity : AppCompatActivity() {
         tvOrderInfoCellPhone.addTextChangedListener(OrderTextWatcher)
         tvOrderInfoDescription.addTextChangedListener(OrderTextWatcher)
 
-        //dont validate email and anddress validateInputLength
-        tvOrderInfoFirstName.setOnFocusChangeListener { _, hasFocus ->
-            if(!hasFocus){
-                validateInputLength()
-            }
-        }
-
-        tvOrderInfoLastName.setOnFocusChangeListener { _, hasFocus ->
-            if(!hasFocus){
-                validateInputLength()
-            }
-        }
-
-        tvOrderInfoCellPhone.setOnFocusChangeListener { _, hasFocus ->
-            if(!hasFocus){
-                validateInputLength()
-            }
-        }
-
-        tvOrderInfoDescription.setOnFocusChangeListener { _, hasFocus ->
-            if(!hasFocus){
-                validateInputLength()
-            }
-        }
 
         spOrderStatusChoice.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
             if(statusList.isNotEmpty()){
@@ -234,7 +213,6 @@ class ShowOrderInfoActivity : AppCompatActivity() {
             if(user_rol == ROL_ADMIN){
 
                 val orderStatus = getOrderStatusFromUI()
-
                 CoroutineScope(Dispatchers.IO).launch {
                     updateOrderStatus(bearerToken, orderStatus, orderSelectedInfo.id)
                 }
@@ -294,51 +272,49 @@ class ShowOrderInfoActivity : AppCompatActivity() {
 
     }
 
-    private fun validateInputLength() {
-        val firstName: String = tvOrderInfoFirstName.text.toString()
-        val lastName: String = tvOrderInfoLastName.text.toString()
-        val cellphone: String = tvOrderInfoCellPhone.text.toString()
-        val description: String = tvOrderInfoDescription.text.toString()
+    private fun validateInputLength(firstName: String, lastName: String, phone: String, description: String) {
 
-        var disable = false
+        var clickable = true
 
 
         if( firstName.length  !in MIN_LENGTH_NAME .. MAX_LENGTH_NAME){
-            showToast("El nombre debe tener una longitud entre $MAX_LENGTH_NAME y $MAX_LENGTH_NAME caracteres")
-            disable = true
+            tvOrderInfoFirstName.error = "El nombre debe tener una longitud entre $MAX_LENGTH_NAME y $MAX_LENGTH_NAME caracteres"
+            clickable = false
         }
 
 
         if( lastName.length !in MIN_LENGTH_NAME ..  MAX_LENGTH_NAME){
-            showToast("El apellido debe tener una longitud entre $MIN_LENGTH_NAME y $MAX_LENGTH_NAME caracteres")
-            disable = true
+            tvOrderInfoLastName.error="El apellido debe tener una longitud entre $MIN_LENGTH_NAME y $MAX_LENGTH_NAME caracteres"
+            clickable = false
         }
 
 
-        if(cellphone.length != MIN_LENGTH_CELLPHONE){
-            showToast("El teléfono debe tener una longitud entre $MIN_LENGTH_CELLPHONE  caracteres")
-            disable = true
+        if(phone.length != MIN_LENGTH_CELLPHONE){
+            tvOrderInfoCellPhone.error="El teléfono debe tener una longitud entre $MIN_LENGTH_CELLPHONE  caracteres"
+            clickable = false
         }
 
         if(description.length !in MIN_LENGTH_DESCRIPTION .. MAX_LENGTH_DESCRIPTION){
-            showToast("El descripción debe tener una longitud entre $MIN_LENGTH_DESCRIPTION y $MAX_LENGTH_DESCRIPTION  caracteres")
-            disable = true
+            tvOrderInfoDescription.error ="El descripción debe tener una longitud entre $MIN_LENGTH_DESCRIPTION y $MAX_LENGTH_DESCRIPTION  caracteres"
+            clickable = false
         }
 
-        btnUpdateUserOrderData.isEnabled = disable
+        if(clickable){
+            btnUpdateUserOrderData.setBackgroundColor( resources.getColor(R.color.blue_button) )
+        }else{
+            btnUpdateUserOrderData.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+        }
+
+        btnUpdateUserOrderData.isEnabled = clickable
     }
-
-
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
-
 
 
 
     suspend fun updateOrderStatus( bearerToken: String, orderStatusData: OrderStatusData, order_id: String ){
 
+        println("ORDER ID: $order_id")
         try {
+            println("ORDER ID: $order_id")
             val retrofitUpdateUserStatus = RetrofitHelper.consumeAPI.uptdateOrderStatus(bearerToken, orderStatusData, order_id)
             if(retrofitUpdateUserStatus.isSuccessful){
 
@@ -359,12 +335,13 @@ class ShowOrderInfoActivity : AppCompatActivity() {
             }
 
         }catch (e: Exception){
-            Log.e("ERROR CONSUMING COMMENTS API: ", e.printStackTrace().toString())
+            Log.e("ERROR UPDATE STATUS API: ", e.printStackTrace().toString())
         }
     }
 
     private fun getOrderStatusFromUI(): OrderStatusData{
         var status = ""
+        /*
         spOrderStatusChoice.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
             if(statusList.isNotEmpty()){
 
@@ -374,7 +351,13 @@ class ShowOrderInfoActivity : AppCompatActivity() {
             }
 
         }
+        */
+        if( spOrderStatusChoice.text.toString().isNotEmpty() ){
+            status = spOrderStatusChoice.text.toString()
+        }
 
+
+        Log.i("DATA FOR STATUS"," data -- $status --  ${etStatusDescription.text}")
         return OrderStatusData( status, etStatusDescription.text.toString() )
     }
 
@@ -445,12 +428,26 @@ class ShowOrderInfoActivity : AppCompatActivity() {
         tvOrderInfoCellPhone.post { tvOrderInfoCellPhone.text = Editable.Factory.getInstance().newEditable( orderSelectedInfo.id_orden.telefono ) }
         tvOrderInfoDescription.post { tvOrderInfoDescription.text = Editable.Factory.getInstance().newEditable( orderSelectedInfo.id_orden.descripcion ) }
 
+        etStatusDescription.post { etStatusDescription.text = Editable.Factory.getInstance().newEditable(orderSelectedInfo.descripcion) }
+
         tvOrderInfoTotalPrice.text = orderSelectedInfo.id_orden.price_order.toString()
         tvOrderInfoProductName.text = orderSelectedInfo.id_producto.name
-        tvOrderInfoSelectedSize.text = orderSelectedInfo.talla
-        tvOrderInfoSelectedColor.text = orderSelectedInfo.color
+        if(orderSelectedInfo.talla.isNullOrEmpty()){
+            tvOrderInfoSelectedSize.text = "N/A"
+        }else{
+            tvOrderInfoSelectedSize.text = orderSelectedInfo.talla
+        }
+
+        if(orderSelectedInfo.color.isNullOrEmpty()){
+            tvOrderInfoSelectedColor.text = "N/A"
+        }else{
+            tvOrderInfoSelectedColor.text = orderSelectedInfo.color
+        }
+
         tvOrderInfoQuantity.text = orderSelectedInfo.cantidad.toString()
         tvOrderInfoUnitPrice.text = orderSelectedInfo.id_producto.precio.toString()
+
+        spOrderStatusChoice.text = Editable.Factory.getInstance().newEditable(orderSelectedInfo.status)
 
     }
 
@@ -501,8 +498,8 @@ class ShowOrderInfoActivity : AppCompatActivity() {
     }
 
     private fun loadStatusSpinner(spinner: AutoCompleteTextView){
-        statusList = arrayListOf("Pendiente","Rechazado","En Entrega","Finalizado")
-        val adapter = ArrayAdapter(this, R.layout.list_size, statusList)
+        statusList = arrayListOf("Pendiente","Rechazado","En entrega","Finalizado")
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, statusList)
         spinner.setAdapter(adapter)
     }
 

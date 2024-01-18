@@ -4,12 +4,13 @@ import java.io.Serializable
 
 data class OrderResult(
     val cantidad: Int = 0,
-    val color: String = "",
+    val color: String? = "",
+    val descripcion: String = "",
     val fecha: String = "",
     val id: String = "",
     val id_orden: IdOrden = IdOrden(),
     val id_producto: IdProducto = IdProducto(),
-    var status: String = "",
-    val talla: String = ""
+    var status: String? = "",
+    val talla: String? = ""
 
 ):Serializable
