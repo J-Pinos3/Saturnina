@@ -51,36 +51,40 @@
 
         <EditText
             android:id="@+id/etNameProfile"
-            android:layout_width="311dp"
+            android:layout_width="300dp"
             android:layout_height="60dp"
             android:layout_marginTop="15dp"
             style="@style/editText"
             android:hint="Nombre"
+            android:layout_gravity="center"
             android:inputType="text"/>
 
         <EditText
             android:id="@+id/etLastProfile"
-            android:layout_width="311dp"
+            android:layout_width="300dp"
             android:layout_height="60dp"
             android:layout_marginTop="15dp"
+            android:layout_gravity="center"
             style="@style/editText"
             android:hint="Apellido"
             android:inputType="text"/>
 
         <EditText
             android:id="@+id/etEmailProfile"
-            android:layout_width="311dp"
+            android:layout_width="300dp"
             android:layout_height="60dp"
             android:layout_marginTop="15dp"
+            android:layout_gravity="center"
             style="@style/editText"
             android:hint="Correo"
             android:inputType="textEmailAddress"/>
 
         <EditText
             android:id="@+id/etNumberProfile"
-            android:layout_width="311dp"
+            android:layout_width="300dp"
             android:layout_height="60dp"
             android:layout_marginTop="15dp"
+            android:layout_gravity="center"
             style="@style/editText"
             android:hint="Teléfono"
             android:inputType="phone"/>

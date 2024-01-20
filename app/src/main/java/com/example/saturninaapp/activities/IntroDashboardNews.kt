@@ -49,6 +49,8 @@ class IntroDashboardNews : AppCompatActivity() {
     private var firstCategoryItems = mutableListOf<DetailProduct>()
     private var secondCategoryItems = mutableListOf<DetailProduct>()
 
+    private val TOTAL_ITEMS = 4
+
     private var random1: String = ""
     private var random2: String = ""
     private var sharedKey:String = "car_items"
@@ -189,8 +191,19 @@ class IntroDashboardNews : AppCompatActivity() {
         Log.i("first cat", firstCategoryItems.toString() + "  categoria1 $random1")
         Log.i("second cat", secondCategoryItems.toString()  + "  categoria2 $random2")
 
-        firstCarouselAdapter.productSections = firstCategoryItems
-        secondCarouselAdapter.productSections = secondCategoryItems
+        if( firstCategoryItems.size > TOTAL_ITEMS){
+            firstCarouselAdapter.productSections = firstCategoryItems.take(TOTAL_ITEMS).toMutableList()
+        }else{
+            firstCarouselAdapter.productSections = firstCategoryItems
+        }
+
+
+        if(secondCategoryItems.size > TOTAL_ITEMS){
+            secondCarouselAdapter.productSections = secondCategoryItems.take(TOTAL_ITEMS).toMutableList()
+        }else{
+            secondCarouselAdapter.productSections = secondCategoryItems
+        }
+
 
         firstCarouselAdapter.notifyDataSetChanged()
         secondCarouselAdapter.notifyDataSetChanged()
@@ -261,7 +274,12 @@ class IntroDashboardNews : AppCompatActivity() {
     private fun getProductsofRandomCat(listaProductos: MutableList<DetailProduct>,randomCategoryID: String ): MutableList<DetailProduct> {
 
         var filteredList =  listaProductos.filter { it.category == randomCategoryID }
-        Log.i("FILTERED LIST WITH RANDOM CAT", "HERE $randomCategoryID and $filteredList ")
+        var categoryRandom = ""
+        while( filteredList.isNullOrEmpty() ){
+            categoryRandom = itemsCategories.random().id
+            filteredList = listaProductos.filter { it.category == categoryRandom}
+        }
+        Log.i("FILTERED LIST-RANDOM CAT", "HERE $categoryRandom and $filteredList ")
 
 
         return filteredList.toMutableList()
@@ -357,19 +375,3 @@ class IntroDashboardNews : AppCompatActivity() {
     }
 
 }
-
-//                            if(imagen is Imagen ){
-//                                print("imagen111 ${imagen}")
-//                                firstCategoryItems.add(DetailProduct(k.category,colores, k.descripcion, k.id, listOf(imagen.secure_url), k.name, k.precio, tallas))
-//                                secondCategoryItems.add(DetailProduct(k.category,colores, k.descripcion, k.id, listOf(imagen.secure_url), k.name, k.precio, tallas))
-//
-//                            }else if(imagen is List<*>){
-//                                val images = imagen.filterIsInstance<Imagen>()
-//                                firstCategoryItems.add(DetailProduct(k.category,colores, k.descripcion, k.id, images, k.name, k.precio, tallas))
-//                                secondCategoryItems.add(DetailProduct(k.category,colores, k.descripcion, k.id, images, k.name, k.precio, tallas))
-//                                print("imagenes222 ${images}")
-//                            }else{
-//                                firstCategoryItems.add(DetailProduct(k.category,colores,k.descripcion, k.id, imagen, k.name, k.precio, tallas))
-//                                secondCategoryItems.add(DetailProduct(k.category,colores,k.descripcion, k.id, imagen, k.name, k.precio, tallas))
-//                                print("imagen333 ${imagen}")
-//                            }

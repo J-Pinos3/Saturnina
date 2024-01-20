@@ -14,6 +14,7 @@ import androidx.appcompat.widget.AppCompatButton
 import com.example.saturninaapp.R
 import com.example.saturninaapp.models.UpdateUserProfilePut
 import com.example.saturninaapp.util.RetrofitHelper
+import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -54,14 +55,14 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         override fun afterTextChanged(p0: Editable?) {
-            val name: String = etNameProfile.text.toString()
-            val lastName: String = etLastProfile.text.toString()
-            val email: String = etEmailProfile.text.toString()
-            val number: String = etNumberProfile.text.toString()
+            val name: String = etNameProfile.text.toString().trim()
+            val lastName: String = etLastProfile.text.toString().trim()
+            val email: String = etEmailProfile.text.toString().trim()
+            val number: String = etNumberProfile.text.toString().trim()
 
             disableClickSave(name, lastName, email, number)
 
-            validateUserProfileInputs(name, lastName, number)
+            //validateUserProfileInputs(name, lastName, number,email)
         }
 
     }
@@ -87,19 +88,19 @@ class ProfileActivity : AppCompatActivity() {
                     println("user_id = ${user_id}")
 
                     etNameProfile.post {
-                        etNameProfile.text = Editable.Factory.getInstance().newEditable(userResponseProfile?.detail?.nombre)
+                        etNameProfile.text = Editable.Factory.getInstance().newEditable(userResponseProfile?.detail?.nombre?.trim())
                     }
 
                     etLastProfile.post {
-                        etLastProfile.text = Editable.Factory.getInstance().newEditable(userResponseProfile?.detail?.apellido)
+                        etLastProfile.text = Editable.Factory.getInstance().newEditable(userResponseProfile?.detail?.apellido?.trim())
                     }
 
                     etEmailProfile.post {
-                        etEmailProfile.text = Editable.Factory.getInstance().newEditable(userResponseProfile?.detail?.email)
+                        etEmailProfile.text = Editable.Factory.getInstance().newEditable(userResponseProfile?.detail?.email?.trim())
                     }
 
                     etNumberProfile.post {
-                        etNumberProfile.text = Editable.Factory.getInstance().newEditable(userResponseProfile?.detail?.telefono)
+                        etNumberProfile.text = Editable.Factory.getInstance().newEditable(userResponseProfile?.detail?.telefono?.trim())
                     }
                 }
             }else{
@@ -124,6 +125,22 @@ class ProfileActivity : AppCompatActivity() {
         etEmailProfile.addTextChangedListener(profileTextWatcher)
         etNumberProfile.addTextChangedListener(profileTextWatcher)
 
+        etNameProfile.setOnFocusChangeListener { view, b ->
+            if (b)
+                validateUserProfileInputs(etNameProfile.text.toString(), etLastProfile.text.toString(), etNumberProfile.text.toString(), etEmailProfile.text.toString())
+        }
+        etLastProfile.setOnFocusChangeListener { view, b ->
+            if (b)
+                validateUserProfileInputs(etNameProfile.text.toString(), etLastProfile.text.toString(), etNumberProfile.text.toString(), etEmailProfile.text.toString())
+        }
+        etEmailProfile.setOnFocusChangeListener { view, b ->
+            if (b)
+                validateUserProfileInputs(etNameProfile.text.toString(), etLastProfile.text.toString(), etNumberProfile.text.toString(), etEmailProfile.text.toString())
+        }
+        etNumberProfile.setOnFocusChangeListener { view, b ->
+            if (b)
+                validateUserProfileInputs(etNameProfile.text.toString(), etLastProfile.text.toString(), etNumberProfile.text.toString(), etEmailProfile.text.toString())
+        }
 
 
         btnSaveProfile.setOnClickListener {
@@ -192,26 +209,33 @@ class ProfileActivity : AppCompatActivity() {
     }
 
 
-    private fun validateUserProfileInputs(name: String, lastName: String, number: String){
+    private fun validateUserProfileInputs(name: String, lastName: String, number: String, email: String){
 
 
         var clickable = true
 
 
         if(name.length  !in MIN_LENGTH_PROFILENAME .. MAX_LENGTH_PROFILENAME ){
+            Log.e("NAME LENGTH", " --**-- ${name}, ${name.length}")
             etNameProfile.error = "El nombre debe tener una longitud entre $MIN_LENGTH_PROFILENAME y $MAX_LENGTH_PROFILENAME caracteres"
             clickable = false
         }
 
 
-        if( lastName.length !in MIN_LENGTH_PROFILELASTNAME ..  MAX_LENGTH_PROFILELASTNAME){
-            etLastProfile.error = "El apellido debe tener una longitud entre $MIN_LENGTH_PROFILELASTNAME y $MAX_LENGTH_PROFILELASTNAME caracteres"
+        if( lastName.length !in MIN_LENGTH_PROFILENAME ..  MAX_LENGTH_PROFILENAME){
+            Log.e("LAST LENGTH", " --**-- ${lastName}, ${lastName.length}")
+            etLastProfile.error = "El apellido debe tener una longitud entre $MIN_LENGTH_PROFILENAME y $MAX_LENGTH_PROFILENAME caracteres"
             clickable = false
         }
 
+        if(!email.contains("@") ||  !email.contains(".")){
+            etEmailProfile.error = "El correo debe tener @ y al menos un ."
+            clickable = false
+        }
 
         if( number.length != MIN_LENGTH_PROFILECELLPHONE){
-            etNumberProfile.error = "El teléfono debe tener una longitud entre $MIN_LENGTH_PROFILECELLPHONE  caracteres"
+            Log.e("NUMBER LENGTH", " --**-- ${number}, ${number.length}")
+            etNumberProfile.error = "El teléfono debe tener una longitud de $MIN_LENGTH_PROFILECELLPHONE  caracteres"
             clickable = false
         }
 

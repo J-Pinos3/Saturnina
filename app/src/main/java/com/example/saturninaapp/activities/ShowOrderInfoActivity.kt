@@ -94,11 +94,12 @@ class ShowOrderInfoActivity : AppCompatActivity() {
             val address: String = tvOrderInfoAddress.text.toString()
             val phone: String = tvOrderInfoCellPhone.text.toString()
             val description: String = tvOrderInfoDescription.text.toString()
+            val orderStatus: String = etStatusDescription.text.toString()
 
             //validate if is empty
             disableClicOnUpdateOrder(firstName, lastName, email, address, phone, description)
 
-            validateInputLength(firstName, lastName, phone, description)
+            //validateInputLength(firstName, lastName, email, address, phone, description)
         }
 
     }
@@ -172,6 +173,50 @@ class ShowOrderInfoActivity : AppCompatActivity() {
         tvOrderInfoAddress.addTextChangedListener(OrderTextWatcher)
         tvOrderInfoCellPhone.addTextChangedListener(OrderTextWatcher)
         tvOrderInfoDescription.addTextChangedListener(OrderTextWatcher)
+
+
+        tvOrderInfoFirstName.setOnFocusChangeListener { view, b ->
+            if(b)
+                validateInputLength(tvOrderInfoFirstName.text.toString(), tvOrderInfoLastName.text.toString(), tvOrderInfoEmail.text.toString(),
+                    tvOrderInfoAddress.text.toString(), tvOrderInfoCellPhone.text.toString(), tvOrderInfoDescription.text.toString(), etStatusDescription.text.toString())
+        }
+
+        tvOrderInfoLastName.setOnFocusChangeListener { view, b ->
+            if(b)
+                validateInputLength(tvOrderInfoFirstName.text.toString(), tvOrderInfoLastName.text.toString(), tvOrderInfoEmail.text.toString(),
+                    tvOrderInfoAddress.text.toString(), tvOrderInfoCellPhone.text.toString(), tvOrderInfoDescription.text.toString(), etStatusDescription.text.toString())
+        }
+
+        tvOrderInfoEmail.setOnFocusChangeListener { view, b ->
+            if(b)
+                validateInputLength(tvOrderInfoFirstName.text.toString(), tvOrderInfoLastName.text.toString(), tvOrderInfoEmail.text.toString(),
+                    tvOrderInfoAddress.text.toString(), tvOrderInfoCellPhone.text.toString(), tvOrderInfoDescription.text.toString(), etStatusDescription.text.toString())
+        }
+
+        tvOrderInfoAddress.setOnFocusChangeListener { view, b ->
+            if(b)
+                validateInputLength(tvOrderInfoFirstName.text.toString(), tvOrderInfoLastName.text.toString(), tvOrderInfoEmail.text.toString(),
+                    tvOrderInfoAddress.text.toString(), tvOrderInfoCellPhone.text.toString(), tvOrderInfoDescription.text.toString(), etStatusDescription.text.toString())
+        }
+
+        tvOrderInfoCellPhone.setOnFocusChangeListener { view, b ->
+            if(b)
+                validateInputLength(tvOrderInfoFirstName.text.toString(), tvOrderInfoLastName.text.toString(), tvOrderInfoEmail.text.toString(),
+                    tvOrderInfoAddress.text.toString(), tvOrderInfoCellPhone.text.toString(), tvOrderInfoDescription.text.toString(), etStatusDescription.text.toString())
+        }
+
+        tvOrderInfoDescription.setOnFocusChangeListener { view, b ->
+            if(b)
+                validateInputLength(tvOrderInfoFirstName.text.toString(), tvOrderInfoLastName.text.toString(), tvOrderInfoEmail.text.toString(),
+                    tvOrderInfoAddress.text.toString(), tvOrderInfoCellPhone.text.toString(), tvOrderInfoDescription.text.toString(), etStatusDescription.text.toString())
+        }
+
+        etStatusDescription.setOnFocusChangeListener { view, b ->
+            if(b)
+                validateInputLength(tvOrderInfoFirstName.text.toString(), tvOrderInfoLastName.text.toString(), tvOrderInfoEmail.text.toString(),
+                    tvOrderInfoAddress.text.toString(), tvOrderInfoCellPhone.text.toString(), tvOrderInfoDescription.text.toString(), etStatusDescription.text.toString())
+        }
+
 
 
         spOrderStatusChoice.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
@@ -272,7 +317,7 @@ class ShowOrderInfoActivity : AppCompatActivity() {
 
     }
 
-    private fun validateInputLength(firstName: String, lastName: String, phone: String, description: String) {
+    private fun validateInputLength(firstName: String, lastName: String, email: String, address: String, phone: String, description: String, status: String) {
 
         var clickable = true
 
@@ -289,13 +334,33 @@ class ShowOrderInfoActivity : AppCompatActivity() {
         }
 
 
+        if(email.isEmpty()){
+            tvOrderInfoEmail.error = "Debe ingresar el correo"
+            clickable = false
+        }
+
+        if( !email.contains("@") || !email.contains(".") ){
+            tvOrderInfoEmail.error = "El correo debe tener @ y al menos un ."
+            clickable = false
+        }
+
+        if( address.isEmpty() ){
+            tvOrderInfoAddress.error = "Debe ingresar un dirección de domicilio"
+            clickable = false
+        }
+
         if(phone.length != MIN_LENGTH_CELLPHONE){
-            tvOrderInfoCellPhone.error="El teléfono debe tener una longitud entre $MIN_LENGTH_CELLPHONE  caracteres"
+            tvOrderInfoCellPhone.error="El teléfono debe tener una longitud de $MIN_LENGTH_CELLPHONE  caracteres"
             clickable = false
         }
 
         if(description.length !in MIN_LENGTH_DESCRIPTION .. MAX_LENGTH_DESCRIPTION){
             tvOrderInfoDescription.error ="El descripción debe tener una longitud entre $MIN_LENGTH_DESCRIPTION y $MAX_LENGTH_DESCRIPTION  caracteres"
+            clickable = false
+        }
+
+        if(status.isEmpty()){
+            etStatusDescription.error = "Debe ingresar el estado de la orden"
             clickable = false
         }
 

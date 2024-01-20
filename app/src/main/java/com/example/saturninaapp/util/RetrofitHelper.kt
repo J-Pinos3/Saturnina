@@ -14,8 +14,9 @@ object RetrofitHelper {
         .connectTimeout(70, TimeUnit.SECONDS)
         .build()
 
+    //.baseUrl("https://test-back-dev-nprj.3.us-1.fl0.io/api/v1/")
     private val retrofit = Retrofit.Builder()
-            .baseUrl("https://test-back-dev-nprj.3.us-1.fl0.io/api/v1/")
+            .baseUrl("https://api-saturnina.1.us-1.fl0.io/api/v1/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(OClient)
             .build()

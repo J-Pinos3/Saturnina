@@ -4,8 +4,10 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -78,7 +80,7 @@ class CompleteSaleActivity : AppCompatActivity() {
             disableClickAcceptSale(description, address)
 
 
-            validateUserDescriptionInput(description)
+            validateUserDescriptionInput(description, address)
         }
 
     }
@@ -132,9 +134,16 @@ class CompleteSaleActivity : AppCompatActivity() {
         setTotalValueView()
         btnAcceptSale.setOnClickListener {
 
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE  )
-            val selectBillImage = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-            pickImage.launch(selectBillImage)
+            ActivityCompat.requestPermissions(this@CompleteSaleActivity,
+                if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ){
+                    arrayOf(Manifest.permission.READ_MEDIA_IMAGES)
+                }else{
+                     arrayOf( Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                     Manifest.permission.READ_EXTERNAL_STORAGE)
+                },
+                MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE  )
+//            val selectBillImage = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+//            pickImage.launch(selectBillImage)
 
         }
 
@@ -202,6 +211,25 @@ class CompleteSaleActivity : AppCompatActivity() {
         }
 
     }//ON CREATE
+
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if(requestCode == MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE){
+            if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                val selectBillImage = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+                pickImage.launch(selectBillImage)
+                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(this, "NO Permission Granted", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if( toggle.onOptionsItemSelected(item) ){
@@ -364,8 +392,11 @@ class CompleteSaleActivity : AppCompatActivity() {
                 Log.i("SEND ORDER", "AQUIII")
                 val jsonResponse = retrofitSendOrder.body()
                 withContext(Dispatchers.Main){
-                    Log.i("SEND ORDER", "ORDER SENT SUCCESSFULLY: $jsonResponse")
                     clearCart(key)
+                    val intent = Intent(applicationContext, IntroDashboardNews::class.java)
+                    startActivity(intent)
+                    Log.i("SEND ORDER", "ORDER SENT SUCCESSFULLY: $jsonResponse")
+
                 }
 
             }else{
@@ -419,9 +450,9 @@ class CompleteSaleActivity : AppCompatActivity() {
 
 
     private fun disableClickAcceptSale(description: String, address: String){
-        btnAcceptSale.isEnabled = !description.isNullOrEmpty() && !address.isNullOrEmpty()
+        btnAcceptSale.isClickable = !description.isNullOrEmpty() && !address.isNullOrEmpty()
 
-        when(btnAcceptSale.isEnabled){
+        when(btnAcceptSale.isClickable){
             true->{
                 btnAcceptSale.setBackgroundColor( resources.getColor(R.color.blue_button) )
             }
@@ -434,7 +465,7 @@ class CompleteSaleActivity : AppCompatActivity() {
 
     }
 
-    private fun validateUserDescriptionInput(description: String){
+    private fun validateUserDescriptionInput(description: String, address: String){
         var clickable = true
 
         if(description.length !in MIN_LENGTH_DESCRIPTION .. MAX_LENGTH_DESCRIPTION){
@@ -442,12 +473,18 @@ class CompleteSaleActivity : AppCompatActivity() {
                     "$MAX_LENGTH_DESCRIPTION caracteres"
             clickable = false
 
-            btnAcceptSale.setBackgroundColor( resources.getColor(R.color.g_gray500) )
-        }else{
-            btnAcceptSale.setBackgroundColor( resources.getColor(R.color.blue_button) )
         }
 
+        if( address.isEmpty() ){
+            etOrderAddress.error = "Debe ingresar la dirección"
+            clickable = false
+        }
 
+        if(clickable){
+            btnAcceptSale.setBackgroundColor( resources.getColor(R.color.blue_button) )
+        }else{
+            btnAcceptSale.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+        }
 
         btnAcceptSale.isClickable = clickable
     }

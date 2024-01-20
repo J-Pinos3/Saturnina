@@ -50,12 +50,11 @@ class LoginActivity : AppCompatActivity() {
             disableCLicOnLogin(email,password)
 
 
-
+            validEmailText(email)
             validatePasswordLength(password)
         }
 
     }
-
 
 
 
@@ -148,6 +147,22 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+
+    private fun validEmailText(email: String) {
+        var disable = true
+
+        if(!email.contains("@") ||  !email.contains(".")){
+            etEmailLogin.error = "El correo debe contener almenos un (.) y debe contener (@)"
+            disable = false
+
+            btnIniciarSesionLogin.isClickable = disable
+            btnIniciarSesionLogin.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+        }else{
+            btnIniciarSesionLogin.isClickable = disable
+            btnIniciarSesionLogin.setBackgroundColor( resources.getColor(R.color.blue_button) )
+        }
     }
 
 
