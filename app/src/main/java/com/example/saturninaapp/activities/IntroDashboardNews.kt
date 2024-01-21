@@ -4,30 +4,39 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
+import android.widget.EditText
 import android.widget.FrameLayout
+import android.widget.RatingBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.saturninaapp.R
 import com.example.saturninaapp.adapters.ClothesCarouselAdapter
+import com.example.saturninaapp.adapters.CommentsAdapter
 import com.example.saturninaapp.models.ClothCategoryData
+import com.example.saturninaapp.models.CommentaryData
 import com.example.saturninaapp.models.DetailProduct
-import com.example.saturninaapp.models.Imagen
+import com.example.saturninaapp.models.ResultComment
+import com.example.saturninaapp.models.UserId
 import com.example.saturninaapp.util.RetrofitHelper
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.random.Random
+import org.json.JSONObject
 
 class IntroDashboardNews : AppCompatActivity() {
 
@@ -48,6 +57,35 @@ class IntroDashboardNews : AppCompatActivity() {
     private lateinit var secondCarouselAdapter: ClothesCarouselAdapter
     private var firstCategoryItems = mutableListOf<DetailProduct>()
     private var secondCategoryItems = mutableListOf<DetailProduct>()
+
+    private var itemsGeneralCommentaries = mutableListOf<ResultComment>()
+    private lateinit var rvGeneralComments: RecyclerView
+    private lateinit var generalCommentsAdapter: CommentsAdapter
+
+    private lateinit var etGeneralInfoCommentary: EditText
+    private lateinit var rbGeneralInfoRating: RatingBar
+    private lateinit var btnSendGeneralComment: AppCompatButton
+
+    private var CommentTextWatcher = object: TextWatcher{
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+        }
+
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+        }
+
+        override fun afterTextChanged(p0: Editable?) {
+            val comment = etGeneralInfoCommentary.text.toString()
+
+            disableClicCreateComment(comment)
+        }
+
+    }
+
+
+    private val MIN_DESCRIPTION_LENGTH = 10
+    private val MAX_DESCRIPTION_LENGTH = 100
 
     private val TOTAL_ITEMS = 4
 
@@ -98,6 +136,18 @@ class IntroDashboardNews : AppCompatActivity() {
         rvSecondCategoryClothes.adapter = secondCarouselAdapter
 
 
+        CoroutineScope(Dispatchers.IO).launch {
+            BringGeneralComments()
+        }
+
+        rvGeneralComments = findViewById(R.id.rvGeneralComments)
+        generalCommentsAdapter = CommentsAdapter(itemsGeneralCommentaries)
+        rvGeneralComments.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        rvGeneralComments.adapter = generalCommentsAdapter
+
+
+
+
         tvGotoFirstFilter.setOnClickListener {
             if (user_token != null && user_id != null && user_rol != null) {
 
@@ -109,6 +159,21 @@ class IntroDashboardNews : AppCompatActivity() {
             if (user_token != null && user_id != null && user_rol != null) {
 
                     navigateToDashboard(user_token, random2, user_id, user_rol)
+            }
+        }
+
+
+        etGeneralInfoCommentary.setOnFocusChangeListener { view, b ->
+            if(b)
+                validateDescriptionLength(etGeneralInfoCommentary.text.toString())
+        }
+
+        btnSendGeneralComment.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch{
+                if (user_id != null) {
+                    creareGeneralComment(bearerToken, etGeneralInfoCommentary.text.toString(),
+                        user_id, rbGeneralInfoRating.rating.toInt())
+                }
             }
         }
 
@@ -230,7 +295,46 @@ class IntroDashboardNews : AppCompatActivity() {
 
         firstCarouselAdapter = ClothesCarouselAdapter(mutableListOf<DetailProduct>())
         secondCarouselAdapter = ClothesCarouselAdapter(mutableListOf<DetailProduct>())
+
+        generalCommentsAdapter = CommentsAdapter(mutableListOf<ResultComment>())
+
+        etGeneralInfoCommentary = findViewById(R.id.etGeneralInfoCommentary)
+        rbGeneralInfoRating = findViewById(R.id.rbGeneralInfoRating)
+        btnSendGeneralComment = findViewById(R.id.btnSendGeneralComment)
     }
+
+
+    private fun disableClicCreateComment(comment: String) {
+        btnSendGeneralComment.isClickable = comment.isNotEmpty()
+
+        when(btnSendGeneralComment.isClickable){
+            true->{
+                btnSendGeneralComment.setBackgroundColor( resources.getColor(R.color.blue_button) )
+            }
+            false->{
+                btnSendGeneralComment.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+            }
+        }
+    }
+
+
+    private fun validateDescriptionLength(comment: String){
+        var clickable = true
+        if(comment.length !in MIN_DESCRIPTION_LENGTH .. MAX_DESCRIPTION_LENGTH){
+            etGeneralInfoCommentary.error = "El comentario debe tener una" +
+                    " logitud entre $MIN_DESCRIPTION_LENGTH y $MAX_DESCRIPTION_LENGTH  caracteres"
+            clickable = false
+        }
+
+        if(clickable){
+            btnSendGeneralComment.setBackgroundColor( resources.getColor(R.color.blue_button) )
+        }else{
+            btnSendGeneralComment.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+        }
+
+        btnSendGeneralComment.isEnabled = clickable
+    }
+
 
     private fun loadCartItemsCount(){
         var suma: Int = 0
@@ -356,6 +460,76 @@ class IntroDashboardNews : AppCompatActivity() {
             e.printStackTrace()
         }
     }//FIN DEL MÉTODO FETCH INTRO ITEM PRODUCTS
+
+
+
+    suspend fun creareGeneralComment(bearerToken: String, description: String, user_id: String, calificacion: Int){
+        try{
+            val commentaryData = CommentaryData(description, user_id,"",calificacion)
+            val resultComment = ResultComment(calificacion,description,"","", UserId())
+
+            val retrofitCreateGComment = RetrofitHelper.consumeAPI.createGenneralComment(bearerToken, commentaryData)
+
+            if(retrofitCreateGComment.isSuccessful){
+                val jsonResponse = retrofitCreateGComment.body()?.toString()
+                val jsonObject = jsonResponse?.let { JSONObject(it) }
+                val detailObject = jsonObject?.getJSONObject("detail")
+                val msg = detailObject?.getString("msg")
+
+                withContext(Dispatchers.Main){
+                    insertCommentIntoList(resultComment)
+                    Log.i("CREATE COMMENT: ", "COMMENT CREATED SUCCESSFULLY: $msg")
+                }
+            }else{
+                runOnUiThread {
+                    val error = retrofitCreateGComment.errorBody()?.string()
+                    val errorBody = error?.let { JSONObject(it) }
+                    val detail = errorBody?.getJSONObject("detail")
+                    val msg = detail?.getString("msg")
+                    Log.e("ERROR CREATING COMMENT: ", "COULDN'T CREATE NEW COMMENT: ${retrofitCreateGComment.code()} \n\t--**-- $msg  --**--\n" +
+                            "\t $error -*-*-*- ${retrofitCreateGComment.errorBody().toString()}")
+                }
+            }
+
+        }catch (e: Exception){
+            Log.e("ERROR CONSUMING CREATE COMMENTS: ", e.message.toString())
+        }
+    }
+
+
+    suspend fun BringGeneralComments(){
+        try {
+            val retrofitGetAllComments = RetrofitHelper.consumeAPI.getAllApplicationComments()
+            if(retrofitGetAllComments.isSuccessful){
+                val listResponse = retrofitGetAllComments.body()?.detail
+                withContext(Dispatchers.Main){
+                    if(listResponse != null){
+                        for(k in listResponse){
+                            for(comment in k.result){
+                                itemsGeneralCommentaries.add(ResultComment(comment.calificacion, comment.descripcion,
+                                        comment.id,"", comment.user_id))
+                            }
+                        }
+                        generalCommentsAdapter.notifyDataSetChanged()
+                    }
+
+                }
+
+            }else{
+                Log.e("ERROR GETTING COMMENTS: ", "COULDN'T GET COMMENTS: ${retrofitGetAllComments.code()} --**-- ${retrofitGetAllComments.errorBody()?.string()}")
+            }
+
+        }catch (e: Exception){
+            Log.e("ERROR CONSUMING BRING COMMENTS: ", e.message.toString())
+        }
+    }
+
+
+    private fun insertCommentIntoList(commentaryData: ResultComment){
+        //itemsGeneralCommentaries.add(commentaryData)
+        generalCommentsAdapter.commentsList.add(commentaryData)
+        generalCommentsAdapter.notifyDataSetChanged()
+    }
 
 
     private fun clearCart(key: String){

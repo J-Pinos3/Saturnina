@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -15,11 +14,13 @@ import androidx.appcompat.widget.AppCompatButton
 import com.example.saturninaapp.R
 import com.example.saturninaapp.models.LoginCredentials
 import com.example.saturninaapp.util.RetrofitHelper
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.json.JSONArray
+import org.json.JSONObject
 
 
 class LoginActivity : AppCompatActivity() {
@@ -97,9 +98,28 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }else{
                     runOnUiThread{
-                        Log.e("Error al Logearse: ","${retrofitPost.code()} -- ${retrofitPost.errorBody()?.string()}")
-                        var msg = retrofitPost.errorBody()?.string()
-                        println("MENSAJE JSON: " + msg)
+                        val error = retrofitPost.errorBody()?.string()
+                        val errorBody = error?.let { JSONObject(it) }
+                        val detail = errorBody?.opt("detail")
+                        var msg = ""
+
+                        when(detail){
+                            is JSONObject->{
+                                msg = detail.getString("msg")
+                            }
+
+                            is JSONArray ->{
+                                val firstError = detail.getJSONObject(0)
+                                msg = "El correo ingresado no es válido"
+                            }
+                        }
+                        Toast.makeText (this@LoginActivity, msg, Toast.LENGTH_LONG).show()
+//                        val detail = errorBody?.getJSONObject("detail")
+//                        val msg = detail?.getString("msg")
+//                        Toast.makeText (this@LoginActivity, msg, Toast.LENGTH_LONG).show()
+//                        Log.e("Error al Logearse: ","${retrofitPost.code()} -- ${retrofitPost.errorBody()?.string()}")
+//                        var msg = retrofitPost.errorBody()?.string()
+//                        println("MENSAJE JSON: " + msg)
                     }
 
                 }

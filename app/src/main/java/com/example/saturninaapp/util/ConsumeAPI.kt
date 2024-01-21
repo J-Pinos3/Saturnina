@@ -3,6 +3,7 @@ package com.example.saturninaapp.util
 import com.example.saturninaapp.models.ClothCategoryList
 import com.example.saturninaapp.models.CommentaryData
 import com.example.saturninaapp.models.CommentsRawList
+import com.example.saturninaapp.models.GeneralCommentsRawList
 import com.example.saturninaapp.models.LoginCredentials
 import com.example.saturninaapp.models.OrderStatusData
 import com.example.saturninaapp.models.OrdersList
@@ -114,6 +115,21 @@ interface ConsumeAPI {
         @Header("Authorization") authorization: String,
         @Body commentaryData: CommentaryData
     ): Response<JsonObject>
+
+
+
+    @Headers("Content-type:application/json; charset=UTF-8")
+    @GET("comments-general")
+    suspend fun getAllApplicationComments(): Response<GeneralCommentsRawList>
+
+
+    @Headers("Content-type:application/json; charset=UTF-8")
+    @POST("comments-general")
+    suspend fun createGenneralComment(
+        @Header("Authorization") authorization: String,
+        @Body commentaryData: CommentaryData
+    ): Response<JsonObject>
+
 }
 
 /*

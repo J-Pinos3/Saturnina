@@ -14,6 +14,7 @@ import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.RatingBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.Toolbar
@@ -112,10 +113,12 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
                     }
 
                 }
+
+            }else{
+                Toast.makeText(this, "Ya haz hecho un comentario", Toast.LENGTH_LONG).show()
             }
-            //todo(no puede comentar toast) no se callan aquí
-            //algunos de los errores que me salían eran funcionales porque la app crasheaba si el usuario intentaba
-            //ciertas acciones de nuevo, los errores que salen ahorita ya no son tan complejos de corregir, david ya me explicó lo de los nulos
+
+
         }//listener
 
 
