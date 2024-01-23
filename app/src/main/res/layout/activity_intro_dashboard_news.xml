@@ -103,6 +103,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
                 android:paddingHorizontal="5dp"
                 style="@style/blueButtonStyle"
                 android:text="Enviar Comentario"
@@ -160,8 +161,7 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer"
-        android:visibility="gone"/>
+        app:menu="@menu/activity_main_drawer" />
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

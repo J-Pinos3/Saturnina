@@ -33,7 +33,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
@@ -163,6 +162,7 @@ class IntroDashboardNews : AppCompatActivity() {
         }
 
 
+        etGeneralInfoCommentary.addTextChangedListener(CommentTextWatcher)
         etGeneralInfoCommentary.setOnFocusChangeListener { view, b ->
             if(b)
                 validateDescriptionLength(etGeneralInfoCommentary.text.toString())
@@ -305,7 +305,7 @@ class IntroDashboardNews : AppCompatActivity() {
 
 
     private fun disableClicCreateComment(comment: String) {
-        btnSendGeneralComment.isClickable = comment.isNotEmpty()
+        btnSendGeneralComment.isClickable = !comment.isNullOrEmpty()
 
         when(btnSendGeneralComment.isClickable){
             true->{
@@ -332,7 +332,7 @@ class IntroDashboardNews : AppCompatActivity() {
             btnSendGeneralComment.setBackgroundColor( resources.getColor(R.color.g_gray500) )
         }
 
-        btnSendGeneralComment.isEnabled = clickable
+        btnSendGeneralComment.isClickable = clickable
     }
 
 
@@ -478,7 +478,7 @@ class IntroDashboardNews : AppCompatActivity() {
 
                 withContext(Dispatchers.Main){
                     insertCommentIntoList(resultComment)
-                    Log.i("CREATE COMMENT: ", "COMMENT CREATED SUCCESSFULLY: $msg")
+                    Log.i("CREATE GEN COMMENT: ", "COMMENT CREATED SUCCESSFULLY: $msg")
                 }
             }else{
                 runOnUiThread {
@@ -486,8 +486,9 @@ class IntroDashboardNews : AppCompatActivity() {
                     val errorBody = error?.let { JSONObject(it) }
                     val detail = errorBody?.getJSONObject("detail")
                     val msg = detail?.getString("msg")
-                    Log.e("ERROR CREATING COMMENT: ", "COULDN'T CREATE NEW COMMENT: ${retrofitCreateGComment.code()} \n\t--**-- $msg  --**--\n" +
-                            "\t $error -*-*-*- ${retrofitCreateGComment.errorBody().toString()}")
+                    Toast.makeText (this@IntroDashboardNews, msg, Toast.LENGTH_LONG).show()
+//                    Log.e("ERROR CREATING GEN COMMENT: ", "COULDN'T CREATE NEW COMMENT: ${retrofitCreateGComment.code()} \n\t--**-- $msg  --**--\n" +
+//                            "\t $error -*-*-*- ${retrofitCreateGComment.errorBody().toString()}")
                 }
             }
 
@@ -510,6 +511,7 @@ class IntroDashboardNews : AppCompatActivity() {
                                         comment.id,"", comment.user_id))
                             }
                         }
+                        Log.d("ALL COMMENTS", itemsGeneralCommentaries.toString())
                         generalCommentsAdapter.notifyDataSetChanged()
                     }
 
@@ -526,8 +528,8 @@ class IntroDashboardNews : AppCompatActivity() {
 
 
     private fun insertCommentIntoList(commentaryData: ResultComment){
-        //itemsGeneralCommentaries.add(commentaryData)
-        generalCommentsAdapter.commentsList.add(commentaryData)
+        itemsGeneralCommentaries.add(commentaryData)
+        generalCommentsAdapter.commentsList = itemsGeneralCommentaries
         generalCommentsAdapter.notifyDataSetChanged()
     }
 

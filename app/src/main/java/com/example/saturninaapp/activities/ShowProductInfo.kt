@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -12,6 +13,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.RatingBar
 import android.widget.TextView
 import android.widget.Toast
@@ -32,6 +34,8 @@ import com.example.saturninaapp.models.UserId
 import com.example.saturninaapp.util.RetrofitHelper
 import com.example.saturninaapp.util.UtilClasses
 import com.google.android.material.navigation.NavigationView
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
@@ -77,6 +81,28 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
     private var user_token: String = ""
     private var user_id: String = ""
     private var user_rol: String = ""
+    private val cartKey = "car_items"
+
+
+    private val MIN_LENGTH_DESCRIPTION = 10
+    private val MAX_LENGTH_DESCRIPTION = 100
+
+    private var CommentTextWatcher = object: TextWatcher{
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+        }
+
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+        }
+
+        override fun afterTextChanged(p0: Editable?) {
+            val comment = etProductInfoCommentary.text.toString()
+
+            disableButtonCreateComment(comment)
+        }
+
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,6 +110,8 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
         setContentView(R.layout.activity_show_product_info)
         initUI()
 
+        loadItemsFromFile(cartKey)
+        loadItemsCount()
         loadIdTokenRoleFromFile(fileKey)
         val bearerToken = "Bearer $user_token"
         val productData = intent.getSerializableExtra("PRODUCT_DATA") as DetailProduct
@@ -121,6 +149,12 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
 
         }//listener
 
+
+        etProductInfoCommentary.addTextChangedListener(CommentTextWatcher)
+        etProductInfoCommentary.setOnFocusChangeListener { view, b ->
+            if(b)
+                validateDescriptionLength(etProductInfoCommentary.text.toString())
+        }
 
         spProductInfoSizesChoice.onItemClickListener =
                 AdapterView.OnItemClickListener {
@@ -164,7 +198,7 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
 
 
         //navigation
-        val toolbar: Toolbar = findViewById(R.id.toolbar_main)
+        val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_main)
         setSupportActionBar(toolbar)
         toggle = ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open,R.string.navigation_drawer_close)
         drawer.addDrawerListener(toggle)
@@ -174,6 +208,7 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
         nav_view_produt_info.setNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.nav_item_one->{
+                    saveItemsToFile(cartKey)
                     val intent = Intent(this, IntroDashboardNews::class.java)
                     intent.putExtra("USER_TOKEN", user_token)
                     intent.putExtra("USER_ID", user_id)
@@ -182,7 +217,7 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
                 }
 
                 R.id.nav_item_two->{
-                    //saveItemsToFile(cartKey)
+                    saveItemsToFile(cartKey)
                     val intent = Intent(this, DashboardActivity::class.java)
                     intent.putExtra("USER_TOKEN", user_token)
                     intent.putExtra("USER_ID", user_id)
@@ -191,6 +226,7 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
                 }
 
                 R.id.nav_item_three->{
+                    saveItemsToFile(cartKey)
                     val intent = Intent(this, ProfileActivity::class.java)
                     intent.putExtra("USER_TOKEN_PROFILE", user_token)
                     intent.putExtra("USER_ID", user_id)
@@ -203,6 +239,7 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
                 }
 
                 R.id.nav_item_five ->{
+                    saveItemsToFile(cartKey)
                     val intent = Intent(this, ManagementOptionsActivity::class.java)
                     intent.putExtra("USER_TOKEN", user_token)
                     intent.putExtra("USER_ID", user_id)
@@ -211,6 +248,7 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
                 }
 
                 R.id.nav_item_six ->{
+                    saveItemsToFile(cartKey)
                     val intent = Intent(applicationContext, LoginActivity::class.java)
                     startActivity(intent)
                     finish()
@@ -220,7 +258,18 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
         }
 
 
+        val flCarritoCOmpras: FrameLayout = findViewById(R.id.flCarritoCompras)
+        flCarritoCOmpras.setOnClickListener {
+            saveItemsToFile(cartKey)
+
+            val intent = Intent(applicationContext, CarSalesActivity::class.java)
+            intent.putExtra("USER_TOKENTO_PROFILE", user_token)
+            intent.putExtra("USER_ID", user_id)
+            intent.putExtra("USER_ROL", user_rol)
+            startActivity(intent)
+        }
     }//ON CREATE
+
 
 
 
@@ -276,6 +325,40 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
         btnAddProductInfoToCart = findViewById(R.id.btnAddProductInfoToCart)
 
         cartSalesItemsCount = findViewById(R.id.action_cart_count)
+    }
+
+
+    private fun disableButtonCreateComment(comment: String) {
+        btnSendCommentary.isClickable = !comment.isNullOrEmpty()
+
+        when(btnSendCommentary.isClickable){
+            true->{
+                btnSendCommentary.setBackgroundColor( resources.getColor(R.color.blue_button) )
+            }
+
+            false->{
+                btnSendCommentary.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+            }
+        }
+    }
+
+
+    private fun validateDescriptionLength(comment: String) {
+        var clickable = true
+
+        if(comment.length !in MIN_LENGTH_DESCRIPTION .. MAX_LENGTH_DESCRIPTION){
+            etProductInfoCommentary.error = "El comentario debe tener una" +
+                    " logitud entre $MIN_LENGTH_DESCRIPTION y $MAX_LENGTH_DESCRIPTION  caracteres"
+            clickable = false
+        }
+
+        if(clickable){
+            btnSendCommentary.setBackgroundColor( resources.getColor(R.color.blue_button) )
+        }else{
+            btnSendCommentary.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+        }
+
+        btnSendCommentary.isClickable = clickable
     }
 
 
@@ -401,7 +484,8 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
                     val errorBody = error?.let { JSONObject(it) }
                     val detail = errorBody?.getJSONObject("detail")
                     val msg = detail?.getString("msg")
-                    Log.e("ERROR CREATING COMMENT: ", "COULDN'T CREATE NEW COMMENT: ${retrofitCreateNewComment.code()} --**-- $msg  --**-- $error -*-*-*- ${retrofitCreateNewComment.errorBody().toString()}")
+                    Toast.makeText (this@ShowProductInfo, msg, Toast.LENGTH_LONG).show()
+                    //Log.e("ERROR CREATING COMMENT: ", "COULDN'T CREATE NEW COMMENT: ${retrofitCreateNewComment.code()} --**-- $msg  --**-- $error -*-*-*- ${retrofitCreateNewComment.errorBody().toString()}")
                 }
             }
 
@@ -479,6 +563,34 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
         user_id =  sharedPreferences.getString("USER-ID","").toString()
         user_rol =  sharedPreferences.getString("USER-ROL","").toString()
         println(user_token + " -- " + user_id + " -- " + user_rol + "III")
+    }
+
+
+    private fun loadItemsFromFile(Key: String){
+        var sharedPreferences: SharedPreferences = getSharedPreferences(Key, MODE_PRIVATE)
+        val gson = Gson()
+
+        val jsonString = sharedPreferences.getString(Key,"")
+        val type = object : TypeToken< MutableList<DetailProduct> >(){}.type
+        cartItems = (gson.fromJson(jsonString, type)) ?: mutableListOf<DetailProduct>()
+    }
+
+    private fun saveItemsToFile(Key: String){
+        var sharedPreferences: SharedPreferences = getSharedPreferences(Key, MODE_PRIVATE)
+        val gson = Gson()
+        val editor = sharedPreferences.edit()
+
+        val jsonString = gson.toJson(cartItems)
+        editor.putString(Key, jsonString)
+        editor.apply()
+    }
+
+    private fun loadItemsCount(){
+        var suma = 0
+        for(k in cartItems){
+            suma += k.contador
+        }
+        cartSalesItemsCount.text = (cartSalesItemsCount.text.toString().toInt() + 1).toString()
     }
 
 

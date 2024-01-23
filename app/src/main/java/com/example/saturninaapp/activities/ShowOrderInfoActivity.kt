@@ -111,6 +111,7 @@ class ShowOrderInfoActivity : AppCompatActivity() {
     private var bearerToken: String = ""
     private var user_id: String = ""
     private var user_rol: String = ""
+    private lateinit var orderSelectedInfo: OrderResult
 
     private val pickImage = registerForActivityResult( ActivityResultContracts.StartActivityForResult() ){
         if(it.resultCode == RESULT_OK){
@@ -125,7 +126,7 @@ class ShowOrderInfoActivity : AppCompatActivity() {
                         println("TOKEN IS LIKE? $bearerToken")
                         updateUserOrder(bearerToken, tvOrderInfoFirstName.text.toString(), tvOrderInfoLastName.text.toString(),
                             tvOrderInfoAddress.text.toString(), tvOrderInfoEmail.text.toString(), tvOrderInfoCellPhone.text.toString(),
-                            user_id, file)
+                            orderSelectedInfo.id_orden.id, file)
                     }
                 }
             }
@@ -147,7 +148,7 @@ class ShowOrderInfoActivity : AppCompatActivity() {
         user_rol = intent.extras?.getString("USER_ROL").toString()
         bearerToken = "Bearer $user_token"
         println("token del usuario: ${bearerToken}")
-        val orderSelectedInfo = intent.getSerializableExtra("ORDER_SELECTED") as OrderResult
+        orderSelectedInfo = intent.getSerializableExtra("ORDER_SELECTED") as OrderResult
         fillViewsWithOrderInfo(orderSelectedInfo)
         when(user_rol){
             ROL_USER ->{
@@ -428,7 +429,7 @@ class ShowOrderInfoActivity : AppCompatActivity() {
 
 
     suspend fun updateUserOrder(bearerToken: String, nombre:String, apellido: String,
-                                direccion: String, email: String, telefono: String, user_id: String, image: File){
+                                direccion: String, email: String, telefono: String, order_id: String, image: File){
 
         try {
 
@@ -452,7 +453,7 @@ class ShowOrderInfoActivity : AppCompatActivity() {
 
 
             val retrofitUpdateUserComment = RetrofitHelper.consumeAPI.updateUserOrder(
-                bearerToken, dataBody, filepart, user_id)
+                bearerToken, dataBody, filepart, order_id)
 
 
             if(retrofitUpdateUserComment.isSuccessful){

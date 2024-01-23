@@ -30,7 +30,7 @@ interface ConsumeAPI {
 
     @Headers("Content-type:application/json; charset=UTF-8")
     @POST("register")
-    suspend fun createUser( @Body p:User ): Response<String>
+    suspend fun createUser( @Body p:User ): Response<JsonObject>
 
     @Headers("Content-type:application/json; charset=UTF-8")
     @POST("login")
@@ -99,7 +99,7 @@ interface ConsumeAPI {
         @Header("Authorization") authorization: String,
         @Part("data") data: RequestBody,
         @Part transfer_image: MultipartBody.Part,
-        @Path("id_user") userId: String
+        @Path("id_order") orderId: String
     ): Response<JsonObject>
 
 

@@ -14,7 +14,7 @@ class CommentsViewHolder(view: View): RecyclerView.ViewHolder(view) {
     private val rbUserCommentaryRating: RatingBar = view.findViewById(R.id.rbUserCommentaryRating)
 
     fun render(comment: ResultComment){
-        tvUserNameCommentary.text = comment.user_id.nombre + comment.user_id.apellido
+        tvUserNameCommentary.text = comment.user_id.nombre + " " + comment.user_id.apellido
         tvUserCommentaryData.text = comment.descripcion
         setRatingBarValue(rbUserCommentaryRating, comment)
 

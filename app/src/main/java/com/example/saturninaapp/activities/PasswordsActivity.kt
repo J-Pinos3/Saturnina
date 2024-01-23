@@ -15,6 +15,7 @@ import com.example.saturninaapp.util.RetrofitHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 class PasswordsActivity : AppCompatActivity() {
 
@@ -78,7 +79,12 @@ class PasswordsActivity : AppCompatActivity() {
                 val retrofitPost = RetrofitHelper.consumeAPI.createUser(user)
                 if( retrofitPost.isSuccessful ){
                     runOnUiThread {
-                        Log.d("Llamada exitosa", retrofitPost.body()?:"mensaje" )
+                        val jsonResponse = retrofitPost.body().toString()
+                        val jsonObject = JSONObject(jsonResponse)
+                        val detailObject = jsonObject.getJSONObject("detail")
+                        val msg = detailObject.getString("msg")
+                        Toast.makeText(this@PasswordsActivity, msg, Toast.LENGTH_LONG).show()
+
                         val intent = Intent(applicationContext, LoginActivity::class.java)
                         startActivity(intent)
                     }
