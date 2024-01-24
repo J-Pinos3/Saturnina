@@ -5,7 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.util.Log
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
@@ -24,6 +27,9 @@ class PasswordsActivity : AppCompatActivity() {
     private lateinit var etConfirmPasswordPass:EditText
     private lateinit var btnGuardarPass: AppCompatButton
     private lateinit var btnRegresarPass: AppCompatButton
+
+    private lateinit var cbFirstPassword: CheckBox
+    private lateinit var cbSecondPassword: CheckBox
 
     private val MIN_LENGTH_PASSWORD = 9
     private val MAX_LENGTH_PASSWORD = 18
@@ -44,7 +50,7 @@ class PasswordsActivity : AppCompatActivity() {
 
             disableClicOnRegister(email, pass1, pass2)
 
-            validateInputsEmailPassword(pass1, pass2)
+            validateInputsEmailPassword(email, pass1, pass2)
         }
 
     }
@@ -65,6 +71,19 @@ class PasswordsActivity : AppCompatActivity() {
         etConfirmPasswordPass.addTextChangedListener(PasswordsTextWatcher)
 
 
+        cbFirstPassword.setOnCheckedChangeListener { _, b ->
+            if(b)
+                showFirstPassword()
+            else
+                hideFirstPassword()
+        }
+
+        cbSecondPassword.setOnCheckedChangeListener { _, b ->
+            if(b)
+                showSecondPassword()
+            else
+                hideSecondPassword()
+        }
 
         btnGuardarPass.setOnClickListener {
             user.apply {
@@ -125,7 +144,7 @@ class PasswordsActivity : AppCompatActivity() {
     }
 
 
-    private fun validateInputsEmailPassword(pass1: String, pass2: String) {
+    private fun validateInputsEmailPassword(email:String, pass1: String, pass2: String) {
         var clickable = true
 
         if(pass1.length !in MIN_LENGTH_PASSWORD .. MAX_LENGTH_PASSWORD){
@@ -135,6 +154,11 @@ class PasswordsActivity : AppCompatActivity() {
 
         if(pass2.length !in MIN_LENGTH_PASSWORD .. MAX_LENGTH_PASSWORD){
             etConfirmPasswordPass.error = "La contraseña debe tener una longitud de $MIN_LENGTH_PASSWORD a $MAX_LENGTH_PASSWORD caracteres "
+            clickable = false
+        }
+
+        if( !email.contains("@") || !email.contains(".") ){
+            etEmailPass.error = "El correo debe contener almenos un (.) y debe contener (@)"
             clickable = false
         }
 
@@ -168,6 +192,25 @@ class PasswordsActivity : AppCompatActivity() {
         etConfirmPasswordPass = findViewById(R.id.etConfirmPasswordPass)
         btnGuardarPass = findViewById(R.id.btnGuardarPass)
         btnRegresarPass = findViewById(R.id.btnRegresarPass)
+
+        cbFirstPassword = findViewById(R.id.cbFirstPassword)
+        cbSecondPassword = findViewById(R.id.cbSecondPassword)
+    }
+
+    private fun hideFirstPassword(){
+        etPasswordPass.transformationMethod = PasswordTransformationMethod.getInstance()
+    }
+
+    private fun showFirstPassword(){
+        etConfirmPasswordPass.transformationMethod = HideReturnsTransformationMethod.getInstance()
+    }
+
+    private fun hideSecondPassword(){
+        etConfirmPasswordPass.transformationMethod = PasswordTransformationMethod.getInstance()
+    }
+
+    private fun showSecondPassword(){
+        etConfirmPasswordPass.transformationMethod = HideReturnsTransformationMethod.getInstance()
     }
 
     private fun showUserCompleted(user: User, pass:String){

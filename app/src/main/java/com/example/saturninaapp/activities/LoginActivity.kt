@@ -5,8 +5,13 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
+import android.text.InputType
 import android.text.TextWatcher
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
+import android.text.method.TransformationMethod
 import android.util.Log
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -29,6 +34,8 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var etPasswordLogin: EditText
     private lateinit var btnIniciarSesionLogin: AppCompatButton
     private lateinit var tvRegistrate: TextView
+
+    private lateinit var cbShowHidePassword: CheckBox
 
     private var fileKey: String = "user_data"
 
@@ -73,6 +80,14 @@ class LoginActivity : AppCompatActivity() {
         tvRegistrate.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
+        }
+
+
+        cbShowHidePassword.setOnCheckedChangeListener { _, b ->
+            if(b)
+                showPassword()
+            else
+                hidePassword()
         }
 
         btnIniciarSesionLogin.setOnClickListener {
@@ -136,6 +151,8 @@ class LoginActivity : AppCompatActivity() {
         etPasswordLogin = findViewById(R.id.etPasswordLogin)
         btnIniciarSesionLogin = findViewById(R.id.btnIniciarSesionLogin)
         tvRegistrate = findViewById(R.id.tvRegistrate)
+
+        cbShowHidePassword =findViewById(R.id.cbShowHidePassword)
     }
 
     private fun getUsersCredentials(): LoginCredentials{
@@ -205,6 +222,15 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
+
+    private fun hidePassword(){
+        etPasswordLogin.transformationMethod = PasswordTransformationMethod.getInstance()
+
+    }
+
+    private fun showPassword(){
+        etPasswordLogin.transformationMethod = HideReturnsTransformationMethod.getInstance()
+    }
 
 //    private fun showToast(message: String) {
 //        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()

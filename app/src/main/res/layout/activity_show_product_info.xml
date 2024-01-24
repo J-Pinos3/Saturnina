@@ -124,6 +124,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="COMENTARIOS"
+                android:textColor="@color/black"
                 android:textStyle="bold"
                 android:textSize="25sp"/>
 
@@ -143,8 +144,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:progressTint="@color/g_red"
-                android:rating="2"/>
+                android:progressTint="@color/g_orange_yellow"
+                android:progressBackgroundTint="@color/flat_grey_light_1"
+                android:rating="2"
+                android:stepSize="1"/>
 
 
             <androidx.appcompat.widget.AppCompatButton

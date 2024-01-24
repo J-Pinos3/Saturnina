@@ -76,6 +76,7 @@
                 android:layout_marginTop="20dp"
                 android:textSize="25sp"
                 android:textStyle="bold"
+                android:textColor="@color/black"
                 android:text="COMENTARIOS"/>
 
 
@@ -93,7 +94,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:progressTint="@color/g_red"
+                android:progressTint="@color/g_orange_yellow"
+                android:progressBackgroundTint="@color/flat_grey_light_1"
                 android:rating="2"
                 android:stepSize="1"/>
 
