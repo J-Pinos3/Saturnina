@@ -16,11 +16,24 @@
         app:layout_constraintEnd_toEndOf="@id/guidelineRight"
         app:layout_constraintTop_toTopOf="parent"/>
 
+
+    <EditText
+        android:id="@+id/etFilterOrders"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/rvSalesManagement"
+        app:layout_constraintEnd_toEndOf="@id/guidelineRight"
+        app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
+        app:layout_constraintTop_toBottomOf="@id/btnBack"
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="5dp"/>
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvSalesManagement"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/btnBack"
+        app:layout_constraintTop_toBottomOf="@id/etFilterOrders"
         app:layout_constraintStart_toStartOf="@id/guidelineLeft"
         app:layout_constraintEnd_toEndOf="@id/guidelineRight"
         android:layout_marginTop="15dp"/>

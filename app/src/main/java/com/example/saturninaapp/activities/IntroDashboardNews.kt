@@ -35,6 +35,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONArray
 import org.json.JSONObject
 
 class IntroDashboardNews : AppCompatActivity() {
@@ -78,6 +79,7 @@ class IntroDashboardNews : AppCompatActivity() {
             val comment = etGeneralInfoCommentary.text.toString()
 
             disableClicCreateComment(comment)
+            validateDescriptionLength(comment)
         }
 
     }
@@ -478,14 +480,24 @@ class IntroDashboardNews : AppCompatActivity() {
 
                 withContext(Dispatchers.Main){
                     insertCommentIntoList(resultComment)
-                    Log.i("CREATE GEN COMMENT: ", "COMMENT CREATED SUCCESSFULLY: $msg")
+                    Toast.makeText (this@IntroDashboardNews, msg, Toast.LENGTH_LONG).show()
                 }
             }else{
                 runOnUiThread {
                     val error = retrofitCreateGComment.errorBody()?.string()
                     val errorBody = error?.let { JSONObject(it) }
-                    val detail = errorBody?.getJSONObject("detail")
-                    val msg = detail?.getString("msg")
+                    val detail = errorBody?.opt("detail")
+                    var msg = ""
+                    when(detail){
+                        is JSONObject->{
+                            msg = detail.getString("msg")
+                        }
+
+                        is JSONArray->{
+                            val firstError = detail.getJSONObject(0)
+                            msg = firstError.getString("msg")
+                        }
+                    }
                     Toast.makeText (this@IntroDashboardNews, msg, Toast.LENGTH_LONG).show()
 //                    Log.e("ERROR CREATING GEN COMMENT: ", "COULDN'T CREATE NEW COMMENT: ${retrofitCreateGComment.code()} \n\t--**-- $msg  --**--\n" +
 //                            "\t $error -*-*-*- ${retrofitCreateGComment.errorBody().toString()}")
@@ -534,10 +546,10 @@ class IntroDashboardNews : AppCompatActivity() {
     }
 
 
-    private fun clearCart(key: String){
-        val sharedPreferences: SharedPreferences = getSharedPreferences(key, MODE_PRIVATE)
-        sharedPreferences.edit().clear().apply()
-    }
+//    private fun clearCart(key: String){
+//        val sharedPreferences: SharedPreferences = getSharedPreferences(key, MODE_PRIVATE)
+//        sharedPreferences.edit().clear().apply()
+//    }
 
     private fun loadItemsFromFile(Key: String){
         var sharedPreferences: SharedPreferences = getSharedPreferences(Key, MODE_PRIVATE)

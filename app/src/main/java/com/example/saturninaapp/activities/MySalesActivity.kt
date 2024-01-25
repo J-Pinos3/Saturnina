@@ -4,7 +4,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.EditText
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.saturninaapp.R
@@ -24,6 +26,8 @@ class MySalesActivity : AppCompatActivity() {
     private lateinit var rvSalesManagement: RecyclerView
     private lateinit var salesOrdersAdapter: OrdersAdapter
 
+    private lateinit var etFilterOrders: EditText
+
     private val itemSalesOrders = mutableListOf<OrderResult>()
 
     private val ROL_USER: String = "rol:vuqn7k4vw0m1a3wt7fkb"
@@ -42,6 +46,11 @@ class MySalesActivity : AppCompatActivity() {
         user_rol = intent.extras?.getString("USER_ROL").toString()
         val bearerToken = "Bearer $user_token"
 
+
+        etFilterOrders.addTextChangedListener {userFilter ->
+            val filteredOrders = itemSalesOrders.filter { order -> order.id_orden.nombre.lowercase().contains( userFilter.toString().lowercase() )  }
+            salesOrdersAdapter.updateOrdersWithFilter(filteredOrders)
+        }
 
 
         println("USER ROL: ${user_rol}")
@@ -76,6 +85,7 @@ class MySalesActivity : AppCompatActivity() {
     private fun initUI(){
         rvSalesManagement = findViewById(R.id.rvSalesManagement)
 
+        etFilterOrders = findViewById(R.id.etFilterOrders)
         //back to management options
         btnBack = findViewById(R.id.btnBack)
     }

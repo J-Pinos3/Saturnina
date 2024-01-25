@@ -19,7 +19,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="?attr/actionBarSize"
         android:padding="10dp"
-        android:fillViewport="false">
+        android:fillViewport="false"
+        android:background="@color/white">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,8 +32,11 @@
                 android:id="@+id/tvGotoFirstFilter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                style="@style/MyTextViewStyle"
+                android:layout_marginTop="15dp"
+                android:layout_gravity="center"
+                android:paddingVertical="5dp"
+                android:paddingHorizontal="10dp"
+                style="@style/btnShowMoreItems"
                 android:text="@string/show_every_cloth"
                 />
 
@@ -49,8 +53,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-
-                style="@style/MyTextViewStyle"
+                android:layout_gravity="center"
+                android:paddingVertical="5dp"
+                android:paddingHorizontal="10dp"
+                style="@style/btnShowMoreItems"
                 android:text="@string/show_every_cloth"
                 />
 
@@ -87,6 +93,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:inputType="textMultiLine"
+                android:textSize="20sp"
                 android:hint="Comentario"/>
 
             <RatingBar

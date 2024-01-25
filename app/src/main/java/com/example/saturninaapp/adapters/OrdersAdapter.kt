@@ -7,7 +7,7 @@ import com.example.saturninaapp.R
 import com.example.saturninaapp.models.OrderResult
 import com.example.saturninaapp.viewholder.OrdersViewHolder
 
-class OrdersAdapter(private val ordersList: MutableList<OrderResult>,
+class OrdersAdapter(private var ordersList: MutableList<OrderResult>,
     val OnShowOrderInfo: (OrderResult)-> Unit )
     : RecyclerView.Adapter<OrdersViewHolder>() {
 
@@ -23,4 +23,9 @@ class OrdersAdapter(private val ordersList: MutableList<OrderResult>,
 
     override fun getItemCount(): Int = ordersList.size
 
+
+    fun updateOrdersWithFilter(ordersList: List<OrderResult>){
+        this.ordersList = ordersList.toMutableList()
+        notifyDataSetChanged()
+    }
 }

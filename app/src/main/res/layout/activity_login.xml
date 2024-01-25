@@ -106,11 +106,11 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnIniciarSesionLogin"
-        style="@style/blueButtonStyle"
+        style="@style/btnsLoginRegister"
         android:layout_width="291dp"
         android:layout_height="55dp"
         android:text="Iniciar Sesión"
-        android:textColor="@color/black"
+        android:textAllCaps="false"
         app:layout_constraintTop_toBottomOf="@id/etPasswordLogin"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

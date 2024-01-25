@@ -16,9 +16,17 @@
             android:id="@+id/toolbar_main"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#5A8DA4CF"
+            android:background="@color/white"
             app:layout_scrollFlags="scroll|enterAlways"
             app:navigationIcon="@drawable/ic_menu">
+
+
+            <View
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/logosaturninanegro"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"/>
 
             <FrameLayout
                 android:layout_width="wrap_content"
@@ -50,6 +58,10 @@
 
         </androidx.appcompat.widget.Toolbar>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/border_gray1" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

@@ -115,22 +115,22 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnContinuarRegister"
-            style="@style/blueButtonStyle"
+            style="@style/btnsLoginRegister"
             android:layout_width="190dp"
             android:layout_height="55dp"
             android:paddingHorizontal="20dp"
             android:text="Continuar"
-            android:textColor="@color/black"
+            android:textAllCaps="false"
             android:textSize="30sp" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnRegresarRegister"
-            style="@style/blueButtonStyle"
+            style="@style/btnsLoginRegister"
             android:layout_width="190dp"
             android:layout_height="55dp"
             android:paddingHorizontal="20dp"
             android:text="Atras"
-            android:textColor="@color/black"
+            android:textAllCaps="false"
             android:layout_marginTop="15dp"
             android:textSize="30sp" />
 
