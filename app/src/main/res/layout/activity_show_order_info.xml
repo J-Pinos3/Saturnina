@@ -17,9 +17,11 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnBacktoSalesActivity"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
+            style="@style/btnsLoginRegister"
             android:text="Mis Ventas"
+            android:textAllCaps="false"
             android:textSize="20sp"/>
 <!--            app:layout_constraintTop_toTopOf="parent"-->
 <!--            app:layout_constraintStart_toEndOf="@id/guidelineLeft"-->
@@ -166,9 +168,11 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnUpdateUserOrderData"
-            android:layout_width="wrap_content"
+            android:layout_width="210dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            style="@style/btnsLoginRegister"
+            android:textAllCaps="false"
             android:text="Guardar Cambios"
             android:textSize="20sp"/>
 

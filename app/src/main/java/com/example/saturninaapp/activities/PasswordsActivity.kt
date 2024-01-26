@@ -133,11 +133,11 @@ class PasswordsActivity : AppCompatActivity() {
 
         when( btnGuardarPass.isEnabled ){
             true->{
-                btnGuardarPass.setBackgroundColor( resources.getColor(R.color.blue_button) )
+                btnGuardarPass.background = resources.getDrawable(R.drawable.login_register_options_style)
             }
 
             false->{
-                btnGuardarPass.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+                btnGuardarPass.background = resources.getDrawable(R.drawable.disabled_buttons_style)
             }
         }
 
@@ -178,9 +178,9 @@ class PasswordsActivity : AppCompatActivity() {
         }
 
         if(clickable){
-            btnGuardarPass.setBackgroundColor( resources.getColor(R.color.blue_button) )
+            btnGuardarPass.background = resources.getDrawable(R.drawable.login_register_options_style)
         }else{
-            btnGuardarPass.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+            btnGuardarPass.background = resources.getDrawable(R.drawable.disabled_buttons_style)
         }
         btnGuardarPass.isClickable = clickable
     }

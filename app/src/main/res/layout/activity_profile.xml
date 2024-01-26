@@ -113,22 +113,22 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnSaveProfile"
-            style="@style/blueButtonStyle"
+            style="@style/btnsLoginRegister"
             android:layout_width="190dp"
             android:layout_height="50dp"
             android:paddingHorizontal="20dp"
             android:text="Guardar"
-            android:textColor="@color/black"
+            android:textAllCaps="false"
             android:textSize="30sp" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnRegresarLogin"
-            style="@style/blueButtonStyle"
+            style="@style/btnsLoginRegister"
             android:layout_width="190dp"
             android:layout_height="50dp"
             android:paddingHorizontal="20dp"
             android:text="Atrás"
-            android:textColor="@color/black"
+            android:textAllCaps="false"
             android:layout_marginTop="12dp"
             android:textSize="30sp" />
 

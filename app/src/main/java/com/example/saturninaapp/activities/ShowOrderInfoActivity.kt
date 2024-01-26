@@ -308,11 +308,11 @@ class ShowOrderInfoActivity : AppCompatActivity() {
 
         when(btnUpdateUserOrderData.isClickable){
             true -> {
-                btnUpdateUserOrderData.setBackgroundColor( resources.getColor(R.color.blue_button) )
+                btnUpdateUserOrderData.background =  resources.getDrawable(R.drawable.login_register_options_style)
             }
 
             false -> {
-                btnUpdateUserOrderData.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+                btnUpdateUserOrderData.background = resources.getDrawable(R.drawable.disabled_buttons_style)
             }
         }
 
@@ -366,9 +366,9 @@ class ShowOrderInfoActivity : AppCompatActivity() {
         }
 
         if(clickable){
-            btnUpdateUserOrderData.setBackgroundColor( resources.getColor(R.color.blue_button) )
+            btnUpdateUserOrderData.background =  resources.getDrawable(R.drawable.login_register_options_style)
         }else{
-            btnUpdateUserOrderData.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+            btnUpdateUserOrderData.background = resources.getDrawable(R.drawable.disabled_buttons_style)
         }
 
         btnUpdateUserOrderData.isEnabled = clickable

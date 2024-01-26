@@ -200,13 +200,14 @@ class ProfileActivity : AppCompatActivity() {
 
         when(btnSaveProfile.isClickable){
             true->{
-                btnSaveProfile.setBackgroundColor( resources.getColor(R.color.blue_button) )
+                btnSaveProfile.background = resources.getDrawable(R.drawable.login_register_options_style)
             }
             false->{
-                btnSaveProfile.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+                btnSaveProfile.background = resources.getDrawable(R.drawable.disabled_buttons_style)
             }
         }
     }
+
 
 
     private fun validateUserProfileInputs(name: String, lastName: String, number: String, email: String){
@@ -240,9 +241,9 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         if(clickable){
-            btnSaveProfile.setBackgroundColor( resources.getColor(R.color.blue_button) )
+            btnSaveProfile.background = resources.getDrawable(R.drawable.login_register_options_style)
         }else{
-            btnSaveProfile.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+            btnSaveProfile.background = resources.getDrawable(R.drawable.disabled_buttons_style)
         }
 
         btnSaveProfile.isClickable = clickable

@@ -75,6 +75,15 @@ class MySalesActivity : AppCompatActivity() {
         }
 
 
+        btnBack.setOnClickListener {
+            val intent = Intent(this, ManagementOptionsActivity::class.java)
+            intent.putExtra("USER_TOKEN", user_token)
+            intent.putExtra("USER_ID", user_id)
+            intent.putExtra("USER_ROL", user_rol)
+            startActivity(intent)
+        }
+
+
         salesOrdersAdapter = OrdersAdapter(itemSalesOrders) { order -> showOrderInformation(order) }
         rvSalesManagement.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         rvSalesManagement.adapter = salesOrdersAdapter

@@ -66,13 +66,13 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnMakeSale"
-            style="@style/blueButtonStyle"
+            style="@style/btnsLoginRegister"
             android:layout_width="190dp"
             android:layout_height="50dp"
             android:paddingHorizontal="20dp"
             android:layout_marginVertical="10dp"
             android:text="Continuar"
-            android:textColor="@color/black"
+            android:textAllCaps="false"
             android:textSize="30sp"
             app:layout_constraintEnd_toStartOf="@id/guidelineRight"
             app:layout_constraintStart_toStartOf="@id/guidelineLeft"
@@ -123,7 +123,7 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer"/>
+        app:menu="@menu/activity_main_drawer" />
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

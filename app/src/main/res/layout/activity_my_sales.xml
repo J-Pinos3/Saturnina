@@ -11,7 +11,9 @@
         android:layout_width="291dp"
         android:layout_height="55dp"
         android:layout_marginTop="12dp"
+        style="@style/btnsLoginRegister"
         android:text="Volver a Gestión"
+        android:textAllCaps="false"
         app:layout_constraintStart_toStartOf="@id/guidelineLeft"
         app:layout_constraintEnd_toEndOf="@id/guidelineRight"
         app:layout_constraintTop_toTopOf="parent"/>
@@ -20,7 +22,8 @@
     <EditText
         android:id="@+id/etFilterOrders"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
+        android:hint="Filtrar por Nombre"
         app:layout_constraintBottom_toTopOf="@id/rvSalesManagement"
         app:layout_constraintEnd_toEndOf="@id/guidelineRight"
         app:layout_constraintStart_toStartOf="@+id/guidelineLeft"

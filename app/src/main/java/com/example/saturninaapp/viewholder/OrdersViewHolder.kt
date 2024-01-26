@@ -14,6 +14,8 @@ class OrdersViewHolder(view: View): RecyclerView.ViewHolder(view) {
     private val tvSalesUserName: TextView = view.findViewById(R.id.tvSalesUserName)
     private val tvSalesProductName: TextView = view.findViewById(R.id.tvSalesProductName)
     private val tvSalesProductPrice: TextView = view.findViewById(R.id.tvSalesProductPrice)
+    private val tvSalesDate: TextView = view.findViewById(R.id.tvSalesDate)
+    private val tvSalesStatus: TextView = view.findViewById(R.id.tvSalesStatus)
 
 
     @SuppressLint("SetTextI18n")
@@ -27,5 +29,7 @@ class OrdersViewHolder(view: View): RecyclerView.ViewHolder(view) {
         tvSalesUserName.text = orderResult.id_orden.nombre + " " + orderResult.id_orden.apellido
         tvSalesProductName.text = orderResult.id_producto.name
         tvSalesProductPrice.text = orderResult.id_producto.precio.toString()
+        tvSalesDate.text = orderResult.fecha
+        tvSalesStatus.text = orderResult.status
     }
 }

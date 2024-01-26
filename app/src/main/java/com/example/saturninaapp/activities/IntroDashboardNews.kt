@@ -311,10 +311,10 @@ class IntroDashboardNews : AppCompatActivity() {
 
         when(btnSendGeneralComment.isClickable){
             true->{
-                btnSendGeneralComment.setBackgroundColor( resources.getColor(R.color.blue_button) )
+                btnSendGeneralComment.background = resources.getDrawable(R.drawable.login_register_options_style)
             }
             false->{
-                btnSendGeneralComment.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+                btnSendGeneralComment.background =  resources.getDrawable(R.drawable.disabled_buttons_style)
             }
         }
     }
@@ -329,9 +329,9 @@ class IntroDashboardNews : AppCompatActivity() {
         }
 
         if(clickable){
-            btnSendGeneralComment.setBackgroundColor( resources.getColor(R.color.blue_button) )
+            btnSendGeneralComment.background = resources.getDrawable(R.drawable.login_register_options_style)
         }else{
-            btnSendGeneralComment.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+            btnSendGeneralComment.background =  resources.getDrawable(R.drawable.disabled_buttons_style)
         }
 
         btnSendGeneralComment.isClickable = clickable

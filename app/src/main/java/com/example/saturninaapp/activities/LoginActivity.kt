@@ -176,11 +176,13 @@ class LoginActivity : AppCompatActivity() {
 
         when(btnIniciarSesionLogin.isEnabled){
             true->{
-                btnIniciarSesionLogin.setBackgroundColor( resources.getColor(R.color.blue_button) )
+                //btnIniciarSesionLogin.setBackgroundColor( resources.getColor(R.color.black) )
+                btnIniciarSesionLogin.background = resources.getDrawable(R.drawable.login_register_options_style)
             }
 
             false->{
-                btnIniciarSesionLogin.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+                //btnIniciarSesionLogin.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+                btnIniciarSesionLogin.background = resources.getDrawable(R.drawable.disabled_buttons_style)
             }
         }
 
@@ -195,10 +197,12 @@ class LoginActivity : AppCompatActivity() {
             disable = false
 
             btnIniciarSesionLogin.isClickable = disable
-            btnIniciarSesionLogin.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+            //btnIniciarSesionLogin.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+            btnIniciarSesionLogin.background = resources.getDrawable(R.drawable.disabled_buttons_style)
         }else{
             btnIniciarSesionLogin.isClickable = disable
-            btnIniciarSesionLogin.setBackgroundColor( resources.getColor(R.color.blue_button) )
+            //btnIniciarSesionLogin.setBackgroundColor( resources.getColor(R.color.black) )
+            btnIniciarSesionLogin.background = resources.getDrawable(R.drawable.login_register_options_style)
         }
     }
 
@@ -213,10 +217,13 @@ class LoginActivity : AppCompatActivity() {
             //showToast("El nombre debe tener una longitud mayor a $MIN_LENGTH_PASSWORD caracteres")
             disable = false
             btnIniciarSesionLogin.isClickable = disable
-            btnIniciarSesionLogin.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+            //btnIniciarSesionLogin.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+            btnIniciarSesionLogin.background = resources.getDrawable(R.drawable.disabled_buttons_style)
         }else{
             btnIniciarSesionLogin.isClickable = disable
-            btnIniciarSesionLogin.setBackgroundColor( resources.getColor(R.color.blue_button) )
+            //btnIniciarSesionLogin.setBackgroundColor( resources.getColor(R.color.black) )
+            btnIniciarSesionLogin.background = resources.getDrawable(R.drawable.login_register_options_style)
+
         }
 
 
@@ -243,3 +250,13 @@ class LoginActivity : AppCompatActivity() {
     }
 
 }
+
+
+
+/*
+
+
+
+ */
+
+
