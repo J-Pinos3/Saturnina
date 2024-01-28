@@ -14,3 +14,12 @@
 .cxx
 local.properties
 /app/src/main/java/com/example/saturninaapp/Routes
+/app/src/main/java/com/example/saturninaapp/repositories/apiHelper.kt
+/app/src/main/java/com/example/saturninaapp/repositories/apiHelperCreate.kt
+/app/src/main/java/com/example/saturninaapp/repositories/ApiResponse.kt
+/app/src/main/java/com/example/saturninaapp/repositories/ProductsCommentsProfileRepository.kt
+/app/src/main/java/com/example/saturninaapp/repositories/ProductsRepositoryImpl.kt
+/app/src/main/java/com/example/saturninaapp/repositories/RegisterProfileOrdersRepoImpl.kt
+/app/src/main/java/com/example/saturninaapp/repositories/RegisterUpdateProfileOrdersRepository.kt
+/app/src/main/java/com/example/saturninaapp/repositories/TestApis.kt
+/app/src/main/java/com/example/saturninaapp/repositories/TestApisCreate.kt
