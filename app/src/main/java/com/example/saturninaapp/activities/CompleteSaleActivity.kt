@@ -28,6 +28,7 @@ import com.example.saturninaapp.models.DetailProduct
 import com.example.saturninaapp.models.DetailXUser
 import com.example.saturninaapp.models.ProductOrderInfo
 import com.example.saturninaapp.util.RetrofitHelper
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
 import com.google.gson.JsonArray
@@ -49,6 +50,9 @@ class CompleteSaleActivity : AppCompatActivity() {
     lateinit var drawer: DrawerLayout
     lateinit var toggle: ActionBarDrawerToggle
     lateinit var nav_view_complete_sale: NavigationView
+
+    lateinit var bottom_nav_complete_Sale: BottomNavigationView
+
     private lateinit var userOwner: DetailXUser
     private var bearerToken = ""
 
@@ -210,6 +214,38 @@ class CompleteSaleActivity : AppCompatActivity() {
             true
         }
 
+
+        bottom_nav_complete_Sale.setOnNavigationItemSelectedListener{
+
+            when(it.itemId){
+                R.id.bottom_nav_home->{
+                    val intent = Intent(this, IntroDashboardNews::class.java)
+                    intent.putExtra("USER_TOKEN", userToken)
+                    intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
+                    startActivity(intent)
+                }
+
+                R.id.bottom_nav_categories->{
+                    val intent = Intent(this, DashboardActivity::class.java)
+                    intent.putExtra("USER_TOKEN", userToken)
+                    intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
+                    startActivity(intent)
+                }
+
+                R.id.bottom_nav_comments->{
+                    val intent = Intent(this, GenneralComments::class.java)
+                    intent.putExtra("USER_TOKEN", userToken)
+                    intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
+                    startActivity(intent)
+                }
+            }
+
+            true
+        }
+
     }//ON CREATE
 
 
@@ -242,6 +278,9 @@ class CompleteSaleActivity : AppCompatActivity() {
         //navigation
         drawer = findViewById(R.id.drawerLayoutCompleteSale)
         nav_view_complete_sale = findViewById(R.id.nav_view_complete_sale)
+
+        //bottom navigation
+        bottom_nav_complete_Sale = findViewById(R.id.bottom_nav_complete_Sale)
 
         //cart items count
         cartSalesItemsCount = findViewById(R.id.action_cart_count)

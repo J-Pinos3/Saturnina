@@ -4,11 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.LoginActivity">
+    tools:context=".activities.RecoverActivity">
+
+
 
     <!-- LOGO -->
 
     <LinearLayout
+        android:id="@+id/llLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,111 +37,49 @@
     </LinearLayout>
 
 
-    <LinearLayout
-        android:id="@+id/llAccountRegistrate"
+    <TextView
+        android:id="@+id/tvRecoverInstructions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/guidelineTop"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="35dp">
+        app:layout_constraintStart_toStartOf="@id/etEmailRecover"
+        app:layout_constraintEnd_toEndOf="@id/etEmailRecover"
+        app:layout_constraintTop_toBottomOf="@id/llLogo"
+        android:layout_marginTop="20dp"
+        android:text="Ingresa tu correo para cambiar tu contraseña"
+        android:textSize="18sp"
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="No tienes una cuenta?"
-            android:textSize="25sp"
-            android:layout_marginEnd="15dp"/>
-
-        <TextView
-            android:tag="textViewRegistrate"
-            android:id="@+id/tvRegistrate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Regístrate"
-            android:textSize="25sp"
-            android:textStyle="bold" />
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/llResetPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="25dp"
-        app:layout_constraintTop_toBottomOf="@id/llAccountRegistrate"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-
-
-        <TextView
-            android:tag="textViewRegistrate"
-            android:id="@+id/tvRecoverPassword"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Recuperta tu contraseña"
-            android:textSize="25sp"
-            android:textStyle="bold" />
-    </LinearLayout>
+        android:maxLines="2"
+        />
 
 
     <EditText
-        android:id="@+id/etEmailLogin"
+        android:id="@+id/etEmailRecover"
         android:layout_width="316dp"
         android:layout_height="60dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/llResetPassword"
+        app:layout_constraintTop_toBottomOf="@id/tvRecoverInstructions"
         android:layout_marginTop="30dp"
-        style="@style/editText"
+
         android:hint="Correo"
         android:inputType="textEmailAddress"
         android:textAlignment="textStart"
         android:paddingStart="15dp"/>
 
-    <EditText
-        android:id="@+id/etPasswordLogin"
-        android:layout_width="316dp"
-        android:layout_height="60dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etEmailLogin"
-        android:layout_marginTop="30dp"
-        style="@style/editText"
-        android:hint="Contraseña"
-        android:inputType="textPassword"
-        android:textAlignment="textStart"
-        android:paddingStart="15dp"/>
 
-    <CheckBox
-        android:id="@+id/cbShowHidePassword"
-        android:layout_width="38dp"
-        android:layout_height="38dp"
-        android:layout_marginEnd="18dp"
-        android:checked="false"
-        android:button="@drawable/cb_custom"
-        android:buttonTint="@color/g_red"
-        android:gravity="center_vertical"
-        app:layout_constraintBottom_toBottomOf="@id/etPasswordLogin"
-        app:layout_constraintEnd_toEndOf="@id/etPasswordLogin"
-        app:layout_constraintTop_toTopOf="@id/etPasswordLogin"/>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnIniciarSesionLogin"
+        android:id="@+id/btnContinueRecover"
         style="@style/btnsLoginRegister"
         android:layout_width="291dp"
-        android:layout_height="55dp"
-        android:text="Iniciar Sesión"
+        android:layout_height="wrap_content"
+        android:text="Enviar Correo de verificación"
         android:textAllCaps="false"
-        app:layout_constraintTop_toBottomOf="@id/etPasswordLogin"
+        app:layout_constraintTop_toBottomOf="@id/etEmailRecover"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="40dp"
-        android:textSize="30sp" />
+        android:textSize="22sp" />
 
 
     <!-- CIRCLES -->
@@ -178,4 +119,5 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.88" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

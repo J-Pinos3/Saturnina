@@ -85,13 +85,17 @@
         android:translationY="-60dp"/>
 
 
-    <ImageView
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:src="@drawable/circle_bottom"
-        app:layout_constraintTop_toTopOf="@id/guidelineBottom"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:translationX="-60dp"/>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav_management_options"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:menu="@menu/bottom_maenu_bar"
+        app:itemTextColor="@drawable/bottom_item_selected"
+        app:itemIconTint="@drawable/bottom_item_selected"
+        android:background="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 
     <!-- GUIDELINES -->
@@ -107,5 +111,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.88" />
+        app:layout_constraintGuide_end="?attr/actionBarSize" />
 </androidx.constraintlayout.widget.ConstraintLayout>

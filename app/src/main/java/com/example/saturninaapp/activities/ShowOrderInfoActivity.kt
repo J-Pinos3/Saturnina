@@ -30,6 +30,7 @@ import com.example.saturninaapp.models.OrderResult
 import com.example.saturninaapp.models.OrderStatusData
 import com.example.saturninaapp.models.itemProduct
 import com.example.saturninaapp.util.RetrofitHelper
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.JsonObject
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
@@ -48,6 +49,8 @@ class ShowOrderInfoActivity : AppCompatActivity() {
 
     private lateinit var btnBacktoSalesActivity: AppCompatButton
     private lateinit var btnUpdateUserOrderData: AppCompatButton
+
+    lateinit var bottom_nav_order_info: BottomNavigationView
 
     private lateinit var ivBillOrderImage: ImageView
 
@@ -267,6 +270,37 @@ class ShowOrderInfoActivity : AppCompatActivity() {
 
         }
 
+
+        bottom_nav_order_info.setOnNavigationItemSelectedListener {
+            when(it.itemId){
+                R.id.bottom_nav_home->{
+                    val intent = Intent(this, IntroDashboardNews::class.java)
+                    intent.putExtra("USER_TOKEN", user_token)
+                    intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
+                    startActivity(intent)
+                }
+
+                R.id.bottom_nav_categories->{
+                    val intent = Intent(this, DashboardActivity::class.java)
+                    intent.putExtra("USER_TOKEN", user_token)
+                    intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
+                    startActivity(intent)
+                }
+
+                R.id.bottom_nav_comments->{
+                    val intent = Intent(this, GenneralComments::class.java)
+                    intent.putExtra("USER_TOKEN", user_token)
+                    intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
+                    startActivity(intent)
+                }
+            }
+
+            true
+        }
+
     }//ON CREATE
 
 
@@ -295,7 +329,7 @@ class ShowOrderInfoActivity : AppCompatActivity() {
 
     private fun disableClicOnUpdateOrder(){
         btnUpdateUserOrderData.isClickable = false
-        btnUpdateUserOrderData.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+        btnUpdateUserOrderData.background = resources.getDrawable(R.drawable.disabled_buttons_style)
     }
 
 
@@ -388,7 +422,7 @@ class ShowOrderInfoActivity : AppCompatActivity() {
                 val jsonObject = jsonResponse?.let { JSONObject(it) }
                 val detailObject = jsonObject?.getJSONObject("detail")
                 val msg = detailObject?.getString("msg")
-
+                Toast.makeText(this@ShowOrderInfoActivity, msg, Toast.LENGTH_LONG).show()
                 withContext(Dispatchers.IO){
                     Log.i("UPDATE ORDER", "ORDER STATUS UPDATED SUCCESSFULLY $msg")
                 }
@@ -463,6 +497,7 @@ class ShowOrderInfoActivity : AppCompatActivity() {
                 val detailObject = jsonObject?.getJSONObject("detail")
                 val msg = detailObject?.getString("msg")
 
+                Toast.makeText(this@ShowOrderInfoActivity, msg, Toast.LENGTH_LONG).show()
                 withContext(Dispatchers.Main){
                     Log.i("UPDATE ORDER", "ORDER UPDATED SUCCESSFULLY $msg")
                 }
@@ -540,6 +575,8 @@ class ShowOrderInfoActivity : AppCompatActivity() {
     private fun initUI() {
         btnBacktoSalesActivity = findViewById(R.id.btnBacktoSalesActivity)
         btnUpdateUserOrderData = findViewById(R.id.btnUpdateUserOrderData)
+
+        bottom_nav_order_info = findViewById(R.id.bottom_nav_order_info)
 
         ivBillOrderImage = findViewById(R.id.ivBillOrderImage)
 

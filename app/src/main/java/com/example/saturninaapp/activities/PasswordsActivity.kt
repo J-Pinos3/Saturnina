@@ -202,7 +202,7 @@ class PasswordsActivity : AppCompatActivity() {
     }
 
     private fun showFirstPassword(){
-        etConfirmPasswordPass.transformationMethod = HideReturnsTransformationMethod.getInstance()
+        etPasswordPass.transformationMethod = HideReturnsTransformationMethod.getInstance()
     }
 
     private fun hideSecondPassword(){

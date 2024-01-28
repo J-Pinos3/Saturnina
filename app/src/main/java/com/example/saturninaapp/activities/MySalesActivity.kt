@@ -13,6 +13,7 @@ import com.example.saturninaapp.R
 import com.example.saturninaapp.adapters.OrdersAdapter
 import com.example.saturninaapp.models.OrderResult
 import com.example.saturninaapp.util.RetrofitHelper
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,6 +23,9 @@ import java.lang.Exception
 class MySalesActivity : AppCompatActivity() {
 
     private lateinit var btnBack: AppCompatButton
+
+    lateinit var bottom_nav_my_sales: BottomNavigationView
+
 
     private lateinit var rvSalesManagement: RecyclerView
     private lateinit var salesOrdersAdapter: OrdersAdapter
@@ -88,10 +92,45 @@ class MySalesActivity : AppCompatActivity() {
         rvSalesManagement.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         rvSalesManagement.adapter = salesOrdersAdapter
 
+
+
+        bottom_nav_my_sales.setOnNavigationItemSelectedListener{
+
+            when(it.itemId){
+                R.id.bottom_nav_home->{
+                    val intent = Intent(this, IntroDashboardNews::class.java)
+                    intent.putExtra("USER_TOKEN", user_token)
+                    intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
+                    startActivity(intent)
+                }
+
+                R.id.bottom_nav_categories->{
+                    val intent = Intent(this, DashboardActivity::class.java)
+                    intent.putExtra("USER_TOKEN", user_token)
+                    intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
+                    startActivity(intent)
+                }
+
+                R.id.bottom_nav_comments->{
+                    val intent = Intent(this, GenneralComments::class.java)
+                    intent.putExtra("USER_TOKEN", user_token)
+                    intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
+                    startActivity(intent)
+                }
+            }
+            true
+        }
+
     }//ON CREATE
 
 
     private fun initUI(){
+
+        bottom_nav_my_sales = findViewById(R.id.bottom_nav_my_sales)
+
         rvSalesManagement = findViewById(R.id.rvSalesManagement)
 
         etFilterOrders = findViewById(R.id.etFilterOrders)

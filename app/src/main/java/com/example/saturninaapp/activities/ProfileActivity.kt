@@ -14,6 +14,7 @@ import androidx.appcompat.widget.AppCompatButton
 import com.example.saturninaapp.R
 import com.example.saturninaapp.models.UpdateUserProfilePut
 import com.example.saturninaapp.util.RetrofitHelper
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -22,6 +23,8 @@ import kotlinx.coroutines.withContext
 import java.lang.Exception
 
 class ProfileActivity : AppCompatActivity() {
+
+    lateinit var bottom_nav_profile: BottomNavigationView
 
     private lateinit var etNameProfile: EditText
     private lateinit var etLastProfile: EditText
@@ -176,6 +179,37 @@ class ProfileActivity : AppCompatActivity() {
 
         }
 
+        bottom_nav_profile.setOnNavigationItemSelectedListener {
+
+            when(it.itemId){
+                R.id.bottom_nav_home->{
+                    val intent = Intent(this, IntroDashboardNews::class.java)
+                    intent.putExtra("USER_TOKEN", user_token)
+                    intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
+                    startActivity(intent)
+                }
+
+                R.id.bottom_nav_categories->{
+                    val intent = Intent(this, DashboardActivity::class.java)
+                    intent.putExtra("USER_TOKEN", user_token)
+                    intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
+                    startActivity(intent)
+                }
+
+                R.id.bottom_nav_comments->{
+                    val intent = Intent(this, GenneralComments::class.java)
+                    intent.putExtra("USER_TOKEN", user_token)
+                    intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
+                    startActivity(intent)
+                }
+            }
+
+            true
+        }
+
 
     }//ON CREATE
 
@@ -191,6 +225,7 @@ class ProfileActivity : AppCompatActivity() {
         btnRegresarDash = findViewById(R.id.btnRegresarLogin)
 
 
+        bottom_nav_profile = findViewById(R.id.bottom_nav_profile)
     }
 
 

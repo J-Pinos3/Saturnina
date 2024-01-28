@@ -14,62 +14,44 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <ScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="?attr/actionBarSize"
-        android:padding="10dp"
         android:fillViewport="false"
         android:background="@color/white">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
 
 
-            <TextView
-                android:id="@+id/tvGotoFirstFilter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_gravity="center"
-                android:paddingVertical="5dp"
-                android:paddingHorizontal="10dp"
-                style="@style/btnShowMoreItems"
-                android:text="@string/show_every_cloth"
-                />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvFirstCategoryClothes"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="7dp" />
-
-
-
-            <TextView
-                android:id="@+id/tvGotoSecondFilter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_gravity="center"
-                android:paddingVertical="5dp"
-                android:paddingHorizontal="10dp"
-                style="@style/btnShowMoreItems"
-                android:text="@string/show_every_cloth"
+                android:layout_marginTop="40dp"
+                app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+                app:layout_constraintEnd_toEndOf="@id/guidelineRight"
+                app:layout_constraintTop_toBottomOf="@id/guidelineTop"
                 />
+
+
+
 
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvSecondCategoryClothes"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
-                app:layout_constraintVertical_bias="0" />
+                android:layout_marginTop="40dp"
+                app:layout_constraintVertical_bias="0"
+                app:layout_constraintTop_toBottomOf="@id/rvFirstCategoryClothes"
+                app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+                app:layout_constraintEnd_toEndOf="@id/guidelineRight"
+                app:layout_constraintBottom_toBottomOf="@id/guidelineBottom"/>
 
 
 
+            <!--
             <View
                 android:layout_width="match_parent"
                 android:layout_height="5dp"
@@ -124,40 +106,51 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"/>
+                -->
 
-            <!-- GUIDELINES
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guidelineTop"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_end="667dp" />
+<!--             GUIDELINES-->
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_end="667dp" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guidelineBottom"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_end="60dp"/>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_end="?attr/actionBarSize" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guidelineLeft"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.07" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.02" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guidelineRight"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.93" />
-            -->
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.98" />
 
-        </LinearLayout>
 
-    </ScrollView>
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/bottom_nac_main_news"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:menu="@menu/bottom_maenu_bar"
+                app:itemTextColor="@drawable/bottom_item_selected"
+                app:itemIconTint="@drawable/bottom_item_selected"
+                android:background="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 

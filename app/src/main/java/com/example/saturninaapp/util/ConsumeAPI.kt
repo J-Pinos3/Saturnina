@@ -36,6 +36,12 @@ interface ConsumeAPI {
     @POST("login")
     suspend fun loginUser(@Body credentials: LoginCredentials): Response<UserResponseLogin>
 
+
+    @Headers("Content-type:application/json; charset=UTF-8")
+    @POST("recover-password")
+    suspend fun recoverPassword(@Body email: String): Response<JsonObject>
+
+
     //how to add authorization: bearer
     @Headers("Content-type:application/json; charset=UTF-8")
     @GET("profile")

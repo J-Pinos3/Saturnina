@@ -28,6 +28,8 @@ import com.example.saturninaapp.models.DetailProduct
 import com.example.saturninaapp.models.ResultComment
 import com.example.saturninaapp.models.UserId
 import com.example.saturninaapp.util.RetrofitHelper
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationBarView
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -44,8 +46,8 @@ class IntroDashboardNews : AppCompatActivity() {
     lateinit var toggle: ActionBarDrawerToggle
     lateinit var nav_view_main_news: NavigationView
 
-    private lateinit var tvGotoFirstFilter: TextView
-    private lateinit var tvGotoSecondFilter: TextView
+    lateinit var bottom_nac_main_news: BottomNavigationView
+
 
     //clothes categories
     //private lateinit var clothesCategoryAdapter: ClothesCategoryAdapter
@@ -58,35 +60,8 @@ class IntroDashboardNews : AppCompatActivity() {
     private var firstCategoryItems = mutableListOf<DetailProduct>()
     private var secondCategoryItems = mutableListOf<DetailProduct>()
 
-    private var itemsGeneralCommentaries = mutableListOf<ResultComment>()
-    private lateinit var rvGeneralComments: RecyclerView
-    private lateinit var generalCommentsAdapter: CommentsAdapter
 
-    private lateinit var etGeneralInfoCommentary: EditText
-    private lateinit var rbGeneralInfoRating: RatingBar
-    private lateinit var btnSendGeneralComment: AppCompatButton
-
-    private var CommentTextWatcher = object: TextWatcher{
-        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-        }
-
-        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-        }
-
-        override fun afterTextChanged(p0: Editable?) {
-            val comment = etGeneralInfoCommentary.text.toString()
-
-            disableClicCreateComment(comment)
-            validateDescriptionLength(comment)
-        }
-
-    }
-
-
-    private val MIN_DESCRIPTION_LENGTH = 10
-    private val MAX_DESCRIPTION_LENGTH = 100
+//
 
     private val TOTAL_ITEMS = 4
 
@@ -137,47 +112,6 @@ class IntroDashboardNews : AppCompatActivity() {
         rvSecondCategoryClothes.adapter = secondCarouselAdapter
 
 
-        CoroutineScope(Dispatchers.IO).launch {
-            BringGeneralComments()
-        }
-
-        rvGeneralComments = findViewById(R.id.rvGeneralComments)
-        generalCommentsAdapter = CommentsAdapter(itemsGeneralCommentaries)
-        rvGeneralComments.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        rvGeneralComments.adapter = generalCommentsAdapter
-
-
-
-
-        tvGotoFirstFilter.setOnClickListener {
-            if (user_token != null && user_id != null && user_rol != null) {
-
-                    navigateToDashboard(user_token,random1, user_id, user_rol)
-            }
-        }
-
-        tvGotoSecondFilter.setOnClickListener {
-            if (user_token != null && user_id != null && user_rol != null) {
-
-                    navigateToDashboard(user_token, random2, user_id, user_rol)
-            }
-        }
-
-
-        etGeneralInfoCommentary.addTextChangedListener(CommentTextWatcher)
-        etGeneralInfoCommentary.setOnFocusChangeListener { view, b ->
-            if(b)
-                validateDescriptionLength(etGeneralInfoCommentary.text.toString())
-        }
-
-        btnSendGeneralComment.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch{
-                if (user_id != null) {
-                    creareGeneralComment(bearerToken, etGeneralInfoCommentary.text.toString(),
-                        user_id, rbGeneralInfoRating.rating.toInt())
-                }
-            }
-        }
 
 
         //navigation
@@ -210,8 +144,7 @@ class IntroDashboardNews : AppCompatActivity() {
                     intent.putExtra("USER_ROL", user_rol)
                     startActivity(intent)
                 }
-                R.id.nav_item_four ->{
-                    //NOSOTROS
+                R.id.nav_item_four ->{ //NOSOTROS
                 }
 
                 R.id.nav_item_five ->{
@@ -226,6 +159,34 @@ class IntroDashboardNews : AppCompatActivity() {
                     val intent = Intent(applicationContext, LoginActivity::class.java)
                     startActivity(intent)
                     finish()
+                }
+            }
+
+            true
+        }
+
+
+
+        //bottom navigation
+        bottom_nac_main_news.selectedItemId = R.id.bottom_nav_home
+        bottom_nac_main_news.setOnNavigationItemSelectedListener {
+            when(it.itemId){
+                R.id.bottom_nav_home->{  }
+
+                R.id.bottom_nav_categories->{
+                    val intent = Intent(this, DashboardActivity::class.java)
+                    intent.putExtra("USER_TOKEN", user_token)
+                    intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
+                    startActivity(intent)
+                }
+
+                R.id.bottom_nav_comments->{
+                    val intent = Intent(this, GenneralComments::class.java)
+                    intent.putExtra("USER_TOKEN", user_token)
+                    intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
+                    startActivity(intent)
                 }
             }
 
@@ -289,53 +250,18 @@ class IntroDashboardNews : AppCompatActivity() {
         drawer = findViewById(R.id.drawerLayoutMainNews)
         nav_view_main_news = findViewById(R.id.nav_view_main_news)
 
+        //bottom navigation
+        bottom_nac_main_news= findViewById(R.id.bottom_nac_main_news)
+
         //cart items count
         introDashboardItemsCount = findViewById(R.id.action_cart_count)
 
-        tvGotoFirstFilter = findViewById(R.id.tvGotoFirstFilter)
-        tvGotoSecondFilter = findViewById(R.id.tvGotoSecondFilter)
 
         firstCarouselAdapter = ClothesCarouselAdapter(mutableListOf<DetailProduct>())
         secondCarouselAdapter = ClothesCarouselAdapter(mutableListOf<DetailProduct>())
 
-        generalCommentsAdapter = CommentsAdapter(mutableListOf<ResultComment>())
-
-        etGeneralInfoCommentary = findViewById(R.id.etGeneralInfoCommentary)
-        rbGeneralInfoRating = findViewById(R.id.rbGeneralInfoRating)
-        btnSendGeneralComment = findViewById(R.id.btnSendGeneralComment)
     }
 
-
-    private fun disableClicCreateComment(comment: String) {
-        btnSendGeneralComment.isClickable = !comment.isNullOrEmpty()
-
-        when(btnSendGeneralComment.isClickable){
-            true->{
-                btnSendGeneralComment.background = resources.getDrawable(R.drawable.login_register_options_style)
-            }
-            false->{
-                btnSendGeneralComment.background =  resources.getDrawable(R.drawable.disabled_buttons_style)
-            }
-        }
-    }
-
-
-    private fun validateDescriptionLength(comment: String){
-        var clickable = true
-        if(comment.length !in MIN_DESCRIPTION_LENGTH .. MAX_DESCRIPTION_LENGTH){
-            etGeneralInfoCommentary.error = "El comentario debe tener una" +
-                    " logitud entre $MIN_DESCRIPTION_LENGTH y $MAX_DESCRIPTION_LENGTH  caracteres"
-            clickable = false
-        }
-
-        if(clickable){
-            btnSendGeneralComment.background = resources.getDrawable(R.drawable.login_register_options_style)
-        }else{
-            btnSendGeneralComment.background =  resources.getDrawable(R.drawable.disabled_buttons_style)
-        }
-
-        btnSendGeneralComment.isClickable = clickable
-    }
 
 
     private fun loadCartItemsCount(){
@@ -415,7 +341,22 @@ class IntroDashboardNews : AppCompatActivity() {
 
             }else{
                 runOnUiThread {
-                    Log.e("CANT BRING CATS", "${retrofitGetCategories.code()} --- ${retrofitGetCategories.errorBody()?.toString()}")
+                    val error = retrofitGetCategories.errorBody()?.string()
+                    val errorBody = error?.let { JSONObject(it) }
+                    val detail = errorBody?.opt("detail")
+                    var msg =""
+
+                    when(detail){
+                        is JSONObject->{
+                            msg = detail.getString("msg")
+                        }
+
+                        is JSONArray->{
+                            val firstError = detail.getJSONObject(0)
+                            msg = firstError.getString("msg")
+                        }
+                    }
+                    Toast.makeText (this@IntroDashboardNews, msg, Toast.LENGTH_LONG).show()
                 }
             }
         }catch (e: Exception){
@@ -455,39 +396,11 @@ class IntroDashboardNews : AppCompatActivity() {
 
             }else{
                 runOnUiThread {
-                    Log.e("CANT BRING CATS", "${retrofitGetProducts.code()} --- ${retrofitGetProducts.errorBody()?.toString()}")
-                }
-            }
-        }catch (e: Exception){
-            e.printStackTrace()
-        }
-    }//FIN DEL MÉTODO FETCH INTRO ITEM PRODUCTS
-
-
-
-    suspend fun creareGeneralComment(bearerToken: String, description: String, user_id: String, calificacion: Int){
-        try{
-            val commentaryData = CommentaryData(description, user_id,"",calificacion)
-            val resultComment = ResultComment(calificacion,description,"","", UserId())
-
-            val retrofitCreateGComment = RetrofitHelper.consumeAPI.createGenneralComment(bearerToken, commentaryData)
-
-            if(retrofitCreateGComment.isSuccessful){
-                val jsonResponse = retrofitCreateGComment.body()?.toString()
-                val jsonObject = jsonResponse?.let { JSONObject(it) }
-                val detailObject = jsonObject?.getJSONObject("detail")
-                val msg = detailObject?.getString("msg")
-
-                withContext(Dispatchers.Main){
-                    insertCommentIntoList(resultComment)
-                    Toast.makeText (this@IntroDashboardNews, msg, Toast.LENGTH_LONG).show()
-                }
-            }else{
-                runOnUiThread {
-                    val error = retrofitCreateGComment.errorBody()?.string()
+                    val error = retrofitGetProducts.errorBody()?.string()
                     val errorBody = error?.let { JSONObject(it) }
                     val detail = errorBody?.opt("detail")
-                    var msg = ""
+                    var msg =""
+
                     when(detail){
                         is JSONObject->{
                             msg = detail.getString("msg")
@@ -499,51 +412,12 @@ class IntroDashboardNews : AppCompatActivity() {
                         }
                     }
                     Toast.makeText (this@IntroDashboardNews, msg, Toast.LENGTH_LONG).show()
-//                    Log.e("ERROR CREATING GEN COMMENT: ", "COULDN'T CREATE NEW COMMENT: ${retrofitCreateGComment.code()} \n\t--**-- $msg  --**--\n" +
-//                            "\t $error -*-*-*- ${retrofitCreateGComment.errorBody().toString()}")
                 }
             }
-
         }catch (e: Exception){
-            Log.e("ERROR CONSUMING CREATE COMMENTS: ", e.message.toString())
+            e.printStackTrace()
         }
-    }
-
-
-    suspend fun BringGeneralComments(){
-        try {
-            val retrofitGetAllComments = RetrofitHelper.consumeAPI.getAllApplicationComments()
-            if(retrofitGetAllComments.isSuccessful){
-                val listResponse = retrofitGetAllComments.body()?.detail
-                withContext(Dispatchers.Main){
-                    if(listResponse != null){
-                        for(k in listResponse){
-                            for(comment in k.result){
-                                itemsGeneralCommentaries.add(ResultComment(comment.calificacion, comment.descripcion,
-                                        comment.id,"", comment.user_id))
-                            }
-                        }
-                        Log.d("ALL COMMENTS", itemsGeneralCommentaries.toString())
-                        generalCommentsAdapter.notifyDataSetChanged()
-                    }
-
-                }
-
-            }else{
-                Log.e("ERROR GETTING COMMENTS: ", "COULDN'T GET COMMENTS: ${retrofitGetAllComments.code()} --**-- ${retrofitGetAllComments.errorBody()?.string()}")
-            }
-
-        }catch (e: Exception){
-            Log.e("ERROR CONSUMING BRING COMMENTS: ", e.message.toString())
-        }
-    }
-
-
-    private fun insertCommentIntoList(commentaryData: ResultComment){
-        itemsGeneralCommentaries.add(commentaryData)
-        generalCommentsAdapter.commentsList = itemsGeneralCommentaries
-        generalCommentsAdapter.notifyDataSetChanged()
-    }
+    }//FIN DEL MÉTODO FETCH INTRO ITEM PRODUCTS
 
 
 //    private fun clearCart(key: String){

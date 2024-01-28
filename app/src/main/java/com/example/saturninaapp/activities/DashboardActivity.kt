@@ -25,6 +25,7 @@ import com.example.saturninaapp.models.DetailProduct
 import com.example.saturninaapp.models.Talla
 import com.example.saturninaapp.util.RetrofitHelper
 import com.example.saturninaapp.util.UtilClasses
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -33,6 +34,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONArray
+import org.json.JSONObject
 
 import java.lang.Exception
 
@@ -41,6 +44,8 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
     lateinit var drawer: DrawerLayout
     lateinit var toggle: ActionBarDrawerToggle
     lateinit var nav_view: NavigationView
+
+    lateinit var bottom_nav_dashboard: BottomNavigationView
 
     //for the recycler view that'll show categories in the dashboard
     private lateinit var rvFilterClothes: RecyclerView
@@ -170,6 +175,35 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
 
             true
         }
+
+
+        //bottom navigation
+        bottom_nav_dashboard.selectedItemId = R.id.bottom_nav_categories
+        bottom_nav_dashboard.setOnNavigationItemSelectedListener {
+
+            when(it.itemId){
+                R.id.bottom_nav_home->{
+                    val intent = Intent(this, IntroDashboardNews::class.java)
+                    intent.putExtra("USER_TOKEN", user_token)
+                    intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
+                    startActivity(intent)
+                }
+
+                R.id.bottom_nav_categories->{ }
+
+                R.id.bottom_nav_comments->{
+                    val intent = Intent(this, GenneralComments::class.java)
+                    intent.putExtra("USER_TOKEN", user_token)
+                    intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
+                    startActivity(intent)
+                }
+            }
+
+            true
+        }
+
 
 
         val flCarritoCompras: FrameLayout = findViewById(R.id.flCarritoCompras)
@@ -422,6 +456,10 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
         drawer = findViewById(R.id.drawerLayout)
         nav_view = findViewById(R.id.nav_view)
 
+
+        //bottom navigation
+        bottom_nav_dashboard = findViewById(R.id.bottom_nav_dashboard)
+
         //cart items count
         cartSalesItemsCount = findViewById(R.id.action_cart_count)
     }
@@ -450,7 +488,22 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
 
             }else{
                 runOnUiThread {
-                    Log.e("CANT BRING CATS", "${retrofitGetCategories.code()} --- ${retrofitGetCategories.errorBody()?.toString()}")
+                    val error = retrofitGetCategories.errorBody()?.string()
+                    val errorBody = error?.let { JSONObject(it) }
+                    val detail = errorBody?.opt("detail")
+                    var msg =""
+
+                    when(detail){
+                        is JSONObject->{
+                            msg = detail.getString("msg")
+                        }
+
+                        is JSONArray->{
+                            val firstError = detail.getJSONObject(0)
+                            msg = firstError.getString("msg")
+                        }
+                    }
+                    Toast.makeText (this@DashboardActivity, msg, Toast.LENGTH_LONG).show()
                 }
             }
         }catch (e: Exception){
@@ -485,7 +538,22 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
 
             }else{
                 runOnUiThread {
-                    Log.e("CANT BRING CATS", "${retrofitGetProducts.code()} --- ${retrofitGetProducts.errorBody()?.toString()}")
+                    val error = retrofitGetProducts.errorBody()?.string()
+                    val errorBody = error?.let { JSONObject(it) }
+                    val detail = errorBody?.opt("detail")
+                    var msg =""
+
+                    when(detail){
+                        is JSONObject ->{
+                            msg = detail.getString("msg")
+                        }
+
+                        is JSONArray ->{
+                            val firstError = detail.getJSONObject(0)
+                            msg = firstError.getString("msg")
+                        }
+                    }
+                    Toast.makeText (this@DashboardActivity, msg, Toast.LENGTH_LONG).show()
                 }
             }
         }catch (e: Exception){

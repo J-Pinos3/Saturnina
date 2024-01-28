@@ -34,6 +34,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var etPasswordLogin: EditText
     private lateinit var btnIniciarSesionLogin: AppCompatButton
     private lateinit var tvRegistrate: TextView
+    private lateinit var tvRecoverPassword: TextView
 
     private lateinit var cbShowHidePassword: CheckBox
 
@@ -79,6 +80,11 @@ class LoginActivity : AppCompatActivity() {
 
         tvRegistrate.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+        }
+
+        tvRecoverPassword.setOnClickListener {
+            val intent = Intent(this, RecoverActivity::class.java)
             startActivity(intent)
         }
 
@@ -153,6 +159,7 @@ class LoginActivity : AppCompatActivity() {
         tvRegistrate = findViewById(R.id.tvRegistrate)
 
         cbShowHidePassword =findViewById(R.id.cbShowHidePassword)
+        tvRecoverPassword = findViewById(R.id.tvRecoverPassword)
     }
 
     private fun getUsersCredentials(): LoginCredentials{

@@ -33,6 +33,7 @@ import com.example.saturninaapp.models.Talla
 import com.example.saturninaapp.models.UserId
 import com.example.saturninaapp.util.RetrofitHelper
 import com.example.saturninaapp.util.UtilClasses
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -50,6 +51,8 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
     lateinit var drawer: DrawerLayout
     lateinit var toggle: ActionBarDrawerToggle
     lateinit var nav_view_produt_info: NavigationView
+
+    lateinit var bottom_nav_product_info: BottomNavigationView
 
     private val imagesList = mutableListOf<CarouselItem>()
     private lateinit var icCarousel: ImageCarousel
@@ -127,7 +130,7 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
 
 
         commentsAdapter = CommentsAdapter(itemsCommentaries)
-        rvComments.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        rvComments.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         rvComments.adapter = commentsAdapter
 
 
@@ -257,6 +260,36 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
             true
         }
 
+        bottom_nav_product_info.setOnNavigationItemSelectedListener{
+
+            when(it.itemId){
+                R.id.bottom_nav_home->{
+                    val intent = Intent(this, IntroDashboardNews::class.java)
+                    intent.putExtra("USER_TOKEN", user_token)
+                    intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
+                    startActivity(intent)
+                }
+
+                R.id.bottom_nav_categories->{
+                    val intent = Intent(this, DashboardActivity::class.java)
+                    intent.putExtra("USER_TOKEN", user_token)
+                    intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
+                    startActivity(intent)
+                }
+
+                R.id.bottom_nav_comments->{
+                    val intent = Intent(this, GenneralComments::class.java)
+                    intent.putExtra("USER_TOKEN", user_token)
+                    intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
+                    startActivity(intent)
+                }
+            }
+            true
+        }
+
 
         val flCarritoCOmpras: FrameLayout = findViewById(R.id.flCarritoCompras)
         flCarritoCOmpras.setOnClickListener {
@@ -308,6 +341,8 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
         drawer = findViewById(R.id.drawerLayoutProductInfo)
         nav_view_produt_info = findViewById(R.id.nav_view_produt_info)
 
+        bottom_nav_product_info = findViewById(R.id.bottom_nav_product_info)
+
         //carousel of images
         icCarousel = findViewById(R.id.icCarousel)
 
@@ -333,11 +368,11 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
 
         when(btnSendCommentary.isClickable){
             true->{
-                btnSendCommentary.setBackgroundColor( resources.getColor(R.color.blue_button) )
+                btnSendCommentary.background = resources.getDrawable(R.drawable.login_register_options_style)
             }
 
             false->{
-                btnSendCommentary.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+                btnSendCommentary.background = resources.getDrawable(R.drawable.disabled_buttons_style)
             }
         }
     }
@@ -353,9 +388,9 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
         }
 
         if(clickable){
-            btnSendCommentary.setBackgroundColor( resources.getColor(R.color.blue_button) )
+            btnSendCommentary.background = resources.getDrawable(R.drawable.login_register_options_style)
         }else{
-            btnSendCommentary.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+            btnSendCommentary.background = resources.getDrawable(R.drawable.disabled_buttons_style)
         }
 
         btnSendCommentary.isClickable = clickable

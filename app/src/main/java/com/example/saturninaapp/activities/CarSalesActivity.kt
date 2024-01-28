@@ -23,6 +23,7 @@ import com.example.saturninaapp.models.Colore
 import com.example.saturninaapp.models.DetailProduct
 import com.example.saturninaapp.models.Talla
 import com.example.saturninaapp.util.UtilClasses
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -33,6 +34,8 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
     lateinit var drawer: DrawerLayout
     lateinit var toggle: ActionBarDrawerToggle
     lateinit var nav_view_car: NavigationView
+
+    lateinit var bottom_nav_car_sales: BottomNavigationView
 
     lateinit var btnMakeSale: AppCompatButton
     lateinit var tvTotalPrice: TextView
@@ -155,6 +158,36 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
             true
         }
 
+
+        bottom_nav_car_sales.setOnNavigationItemSelectedListener{
+            when(it.itemId){
+                R.id.bottom_nav_home->{
+                    val intent = Intent(this, IntroDashboardNews::class.java)
+                    intent.putExtra("USER_TOKEN", user_token)
+                    intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
+                    startActivity(intent)
+                }
+
+                R.id.bottom_nav_categories->{
+                    val intent = Intent(this, DashboardActivity::class.java)
+                    intent.putExtra("USER_TOKEN", user_token)
+                    intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
+                    startActivity(intent)
+                }
+
+                R.id.bottom_nav_comments->{
+                    val intent = Intent(this, GenneralComments::class.java)
+                    intent.putExtra("USER_TOKEN", user_token)
+                    intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
+                    startActivity(intent)
+                }
+            }
+            true
+        }
+
     }// ON CREATE
 
     private fun hideButtonDelete(v: View, isVis: Boolean){
@@ -175,6 +208,9 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
     private fun initUI(){
         drawer = findViewById(R.id.drawerLayoutCar)
         nav_view_car = findViewById(R.id.nav_view_car)
+
+        //bottom navigation
+        bottom_nav_car_sales = findViewById(R.id.bottom_nav_car_sales)
 
         //complete sale button
         btnMakeSale = findViewById(R.id.btnMakeSale)
