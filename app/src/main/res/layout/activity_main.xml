@@ -1,84 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     tools:context=".activities.MainActivity">
 
     <!-- LOGO -->
     <ImageView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:id="@+id/ivLogo"
+        android:layout_width="221dp"
+        android:layout_height="221dp"
         android:src="@drawable/logosaturninanegro"
-        app:layout_constraintBottom_toTopOf="@id/guidelineTop"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/guidelineTop" />
 
     <!-- CIRCLES -->
     <ImageView
+        android:id="@+id/ivTopCircle"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:src="@drawable/circle_top"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:translationX="50dp"
-        android:translationY="-50dp"/>
-
+        app:layout_constraintEnd_toEndOf="parent"
+        android:translationX="90dp"
+        android:translationY="-70dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp" />
 
     <ImageView
+        android:id="@+id/ivBottomCircle"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:src="@drawable/circle_bottom"
         app:layout_constraintTop_toTopOf="@id/guidelineBottom"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:translationX="-60dp"/>
-
+        app:layout_constraintStart_toStartOf="parent"
+        android:translationX="-60dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp" />
 
     <!-- INFO -->
+    <ImageView
+        android:id="@+id/ivBottomCircleInfo"
+        android:layout_width="221dp"
+        android:layout_height="221dp"
+        android:src="@drawable/circle_bottom"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/guidelineTop"/>
+
+    <!-- GUIDELINES -->
+
     <TextView
         android:id="@+id/tvPersonalizamosPrendas"
-        android:layout_width="wrap_content"
+        style="@style/h4"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/personalizamos_prendas"
-        app:layout_constraintTop_toBottomOf="@id/guidelineTop"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="76dp"
+        android:text="Personalizamos prendas para que luzcas con estilo único. ¡Descubre la moda que te define en nuestra tienda!"
         android:textAlignment="center"
-        android:textSize="30sp"
-        android:layout_marginTop="48dp"
-        style="@style/h4"/>
-
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guidelineTop" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnCreateAccount"
         style="@style/btnsLoginRegister"
-        android:layout_width="291dp"
-        android:layout_height="55dp"
+        android:layout_width="250dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="72dp"
         android:text="Crear Cuenta"
         android:textAllCaps="false"
-        app:layout_constraintTop_toBottomOf="@id/tvPersonalizamosPrendas"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="60dp"
-        android:textSize="30sp" />
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvPersonalizamosPrendas" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnLogIn"
         style="@style/btnsLoginRegister"
-        android:layout_width="291dp"
-        android:layout_height="55dp"
+        android:layout_width="250dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="56dp"
         android:text="Iniciar Sesión"
         android:textAllCaps="false"
-        app:layout_constraintTop_toBottomOf="@id/btnCreateAccount"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="38dp"
-        android:textSize="30sp" />
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnCreateAccount" />
 
-
-    <!-- GUIDELINES -->
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineTop"
         android:layout_width="wrap_content"
@@ -92,4 +111,105 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.88" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    <!--
+    <?xml version="1.0" encoding="utf-8"?>
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".activities.MainActivity">
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/logosaturninanegro"
+            app:layout_constraintBottom_toTopOf="@id/guidelineTop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/circle_top"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:translationX="50dp"
+            android:translationY="-50dp"/>
+
+
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:src="@drawable/circle_bottom"
+            app:layout_constraintTop_toTopOf="@id/guidelineBottom"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:translationX="-60dp"/>
+
+
+
+        <TextView
+            android:id="@+id/tvPersonalizamosPrendas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/personalizamos_prendas"
+            app:layout_constraintTop_toBottomOf="@id/guidelineTop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textAlignment="center"
+            android:textSize="30sp"
+            android:layout_marginTop="48dp"
+            style="@style/h4"/>
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnCreateAccount"
+            style="@style/btnsLoginRegister"
+            android:layout_width="291dp"
+            android:layout_height="55dp"
+            android:text="Crear Cuenta"
+            android:textAllCaps="false"
+            app:layout_constraintTop_toBottomOf="@id/tvPersonalizamosPrendas"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="60dp"
+            android:textSize="30sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnLogIn"
+            style="@style/btnsLoginRegister"
+            android:layout_width="291dp"
+            android:layout_height="55dp"
+            android:text="Iniciar Sesión"
+            android:textAllCaps="false"
+            app:layout_constraintTop_toBottomOf="@id/btnCreateAccount"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="38dp"
+            android:textSize="30sp" />
+
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.3" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.88" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    -->

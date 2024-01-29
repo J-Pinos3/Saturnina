@@ -21,12 +21,12 @@
             app:navigationIcon="@drawable/ic_menu">
 
 
-            <View
-                android:layout_width="60dp"
-                android:layout_height="match_parent"
-                android:background="@drawable/logosaturninanegro"
-                android:layout_gravity="center"
-                android:layout_margin="5dp"/>
+<!--            <View-->
+<!--                android:layout_width="60dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:background="@drawable/logosaturninanegro"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_margin="5dp"/>-->
 
             <FrameLayout
                 android:layout_width="wrap_content"

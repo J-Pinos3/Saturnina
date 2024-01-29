@@ -1,4 +1,171 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:background="@drawable/bg_label"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="Correo"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/etEmailProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginTop="43dp"
+        android:ems="10"
+        android:hint="Correo"
+        android:inputType="textEmailAddress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView7" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="69dp"
+        android:background="@drawable/bg_label"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="Apellido"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/etNameProfile"
+        tools:ignore="MissingConstraints" />
+
+    <EditText
+        android:id="@+id/etLastProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginTop="48dp"
+        android:ems="10"
+        android:hint="Apellido"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView8" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="69dp"
+        android:background="@drawable/bg_label"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="Nombre"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/etEmailProfile" />
+
+    <EditText
+        android:id="@+id/etNameProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginTop="40dp"
+        android:ems="10"
+        android:hint="Nombre"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView11" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="67dp"
+        android:background="@drawable/bg_label"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="Celular"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/etLastProfile" />
+
+    <EditText
+        android:id="@+id/etNumberProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginTop="50dp"
+        android:ems="10"
+        android:hint="Celular"
+        android:inputType="phone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView9" />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSaveProfile"
+        android:layout_width="216dp"
+        android:layout_height="63dp"
+        android:background="#000000"
+        android:text="Guardar"
+        android:textAllCaps="false"
+        app:backgroundTint="#000000"
+        app:layout_constraintBottom_toTopOf="@id/bottom_nav_profile"
+        app:layout_constraintEnd_toEndOf="@+id/etNumberProfile"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/etNumberProfile"
+        app:layout_constraintTop_toBottomOf="@+id/etNumberProfile"
+        app:layout_constraintVertical_bias="0.269" />
+
+    <ImageButton
+        android:id="@+id/btnRegresarLogin"
+        android:layout_width="39dp"
+        android:layout_height="36dp"
+        android:background="#000000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_back" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav_profile"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:menu="@menu/bottom_maenu_bar"
+        app:itemTextColor="@drawable/bottom_item_selected"
+        app:itemIconTint="@drawable/bottom_item_selected"
+        android:background="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,7 +174,6 @@
     tools:context=".activities.ProfileActivity">
 
 
-    <!-- LOGO -->
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -36,7 +202,7 @@
     </LinearLayout>
 
 
-    <!--PROFILE INFO-->
+
 
     <LinearLayout
         android:id="@+id/llInfoProfile"
@@ -134,7 +300,7 @@
 
     </LinearLayout>
 
-    <!-- GUIDELINES -->
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineTop"
         android:layout_width="wrap_content"
@@ -161,3 +327,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+-->

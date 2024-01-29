@@ -8,6 +8,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
@@ -15,6 +16,7 @@ import com.example.saturninaapp.R
 import com.example.saturninaapp.models.UpdateUserProfilePut
 import com.example.saturninaapp.util.RetrofitHelper
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,10 +32,10 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var etLastProfile: EditText
     private lateinit var etEmailProfile: EditText
     private lateinit var etNumberProfile: EditText
-    private lateinit var tvPasswordProfileOptions: TextView
+
     //Buttons
-    private lateinit var btnSaveProfile: AppCompatButton
-    private lateinit var btnRegresarDash: AppCompatButton
+    private lateinit var btnSaveProfile: MaterialButton
+    private lateinit var btnRegresarDash: ImageButton
 
     //SYMBOLIC CONSTANTS
     private val MIN_LENGTH_PROFILENAME = 3
@@ -219,7 +221,6 @@ class ProfileActivity : AppCompatActivity() {
         etLastProfile = findViewById(R.id.etLastProfile)
         etEmailProfile = findViewById(R.id.etEmailProfile)
         etNumberProfile = findViewById(R.id.etNumberProfile)
-        tvPasswordProfileOptions = findViewById(R.id.tvPasswordProfileOptions)
 
         btnSaveProfile = findViewById(R.id.btnSaveProfile)
         btnRegresarDash = findViewById(R.id.btnRegresarLogin)

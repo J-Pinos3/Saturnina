@@ -11,6 +11,7 @@ import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.text.method.TransformationMethod
 import android.util.Log
+import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
@@ -19,6 +20,7 @@ import androidx.appcompat.widget.AppCompatButton
 import com.example.saturninaapp.R
 import com.example.saturninaapp.models.LoginCredentials
 import com.example.saturninaapp.util.RetrofitHelper
+import com.google.android.material.textfield.TextInputEditText
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import kotlinx.coroutines.CoroutineScope
@@ -30,13 +32,12 @@ import org.json.JSONObject
 
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var etEmailLogin: EditText
-    private lateinit var etPasswordLogin: EditText
-    private lateinit var btnIniciarSesionLogin: AppCompatButton
-    private lateinit var tvRegistrate: TextView
-    private lateinit var tvRecoverPassword: TextView
+    private lateinit var etEmailLogin: TextInputEditText
+    private lateinit var etPasswordLogin: TextInputEditText
+    private lateinit var btnIniciarSesionLogin: Button
+    private lateinit var tvRegistrate: Button
+    private lateinit var tvRecoverPassword: Button
 
-    private lateinit var cbShowHidePassword: CheckBox
 
     private var fileKey: String = "user_data"
 
@@ -88,13 +89,6 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-
-        cbShowHidePassword.setOnCheckedChangeListener { _, b ->
-            if(b)
-                showPassword()
-            else
-                hidePassword()
-        }
 
         btnIniciarSesionLogin.setOnClickListener {
             val userCredentials = getUsersCredentials()
@@ -158,7 +152,6 @@ class LoginActivity : AppCompatActivity() {
         btnIniciarSesionLogin = findViewById(R.id.btnIniciarSesionLogin)
         tvRegistrate = findViewById(R.id.tvRegistrate)
 
-        cbShowHidePassword =findViewById(R.id.cbShowHidePassword)
         tvRecoverPassword = findViewById(R.id.tvRecoverPassword)
     }
 
@@ -236,7 +229,7 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-
+/*
     private fun hidePassword(){
         etPasswordLogin.transformationMethod = PasswordTransformationMethod.getInstance()
 
@@ -246,16 +239,16 @@ class LoginActivity : AppCompatActivity() {
         etPasswordLogin.transformationMethod = HideReturnsTransformationMethod.getInstance()
     }
 
-//    private fun showToast(message: String) {
-//        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-//    }
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
 
 
     private fun clearCart(key: String){
         val sharedPreferences: SharedPreferences = getSharedPreferences(key, MODE_PRIVATE)
         sharedPreferences.edit().clear().apply()
     }
-
+*/
 }
 
 

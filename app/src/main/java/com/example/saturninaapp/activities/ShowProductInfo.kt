@@ -44,6 +44,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.imaginativeworld.whynotimagecarousel.CarouselItem
 import org.imaginativeworld.whynotimagecarousel.ImageCarousel
+import org.json.JSONArray
 import org.json.JSONObject
 
 class ShowProductInfo : AppCompatActivity(), UtilClasses {
@@ -264,6 +265,7 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
 
             when(it.itemId){
                 R.id.bottom_nav_home->{
+                    saveItemsToFile(cartKey)
                     val intent = Intent(this, IntroDashboardNews::class.java)
                     intent.putExtra("USER_TOKEN", user_token)
                     intent.putExtra("USER_ID", user_id)
@@ -272,6 +274,7 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
                 }
 
                 R.id.bottom_nav_categories->{
+                    saveItemsToFile(cartKey)
                     val intent = Intent(this, DashboardActivity::class.java)
                     intent.putExtra("USER_TOKEN", user_token)
                     intent.putExtra("USER_ID", user_id)
@@ -280,6 +283,7 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
                 }
 
                 R.id.bottom_nav_comments->{
+                    saveItemsToFile(cartKey)
                     val intent = Intent(this, GenneralComments::class.java)
                     intent.putExtra("USER_TOKEN", user_token)
                     intent.putExtra("USER_ID", user_id)
@@ -507,25 +511,38 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
                 val detailObject = jsonObject?.getJSONObject("detail")
                 val msg = detailObject?.getString("msg")
 
-
+                print("awuuii verga1")
                 withContext(Dispatchers.Main){
 
                     insertNewCommentIntoList(resultComment)
+                    Toast.makeText (this@ShowProductInfo, msg, Toast.LENGTH_LONG).show()
                     Log.i("CREATE COMMENT: ", "COMMENT CREATED SUCCESSFULLY: $msg")
                 }
             }else{
+                print("awuuii verga3")
                 runOnUiThread {
+                    print("awuuii verga2")
                     val error = retrofitCreateNewComment.errorBody()?.string()
                     val errorBody = error?.let { JSONObject(it) }
-                    val detail = errorBody?.getJSONObject("detail")
-                    val msg = detail?.getString("msg")
+                    val detail = errorBody?.opt("detail")
+                    var msg = ""
+                    when(detail){
+                        is JSONObject->{
+                            msg = detail.getString("msg")
+                        }
+
+                        is JSONArray->{
+                            val firstError = detail.getJSONObject(0)
+                            msg = firstError.getString("msg")
+                        }
+                    }
                     Toast.makeText (this@ShowProductInfo, msg, Toast.LENGTH_LONG).show()
                     //Log.e("ERROR CREATING COMMENT: ", "COULDN'T CREATE NEW COMMENT: ${retrofitCreateNewComment.code()} --**-- $msg  --**-- $error -*-*-*- ${retrofitCreateNewComment.errorBody().toString()}")
                 }
             }
 
         }catch (e: Exception){
-            Log.e("ERROR CONSUMING CREATE COMMENTS API: ", e.message.toString())
+            Log.e("ERROR CREATE COMMENTS: ", e.message.toString())
         }
     }
 

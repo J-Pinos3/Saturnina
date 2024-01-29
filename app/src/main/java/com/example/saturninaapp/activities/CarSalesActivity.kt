@@ -162,6 +162,7 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
         bottom_nav_car_sales.setOnNavigationItemSelectedListener{
             when(it.itemId){
                 R.id.bottom_nav_home->{
+                    saveItemsToFile(cartKey)
                     val intent = Intent(this, IntroDashboardNews::class.java)
                     intent.putExtra("USER_TOKEN", user_token)
                     intent.putExtra("USER_ID", user_id)
@@ -170,6 +171,7 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
                 }
 
                 R.id.bottom_nav_categories->{
+                    saveItemsToFile(cartKey)
                     val intent = Intent(this, DashboardActivity::class.java)
                     intent.putExtra("USER_TOKEN", user_token)
                     intent.putExtra("USER_ID", user_id)
@@ -178,6 +180,7 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
                 }
 
                 R.id.bottom_nav_comments->{
+                    saveItemsToFile(cartKey)
                     val intent = Intent(this, GenneralComments::class.java)
                     intent.putExtra("USER_TOKEN", user_token)
                     intent.putExtra("USER_ID", user_id)

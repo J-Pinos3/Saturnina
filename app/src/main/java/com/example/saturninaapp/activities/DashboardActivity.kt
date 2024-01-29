@@ -135,6 +135,7 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
         nav_view.setNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.nav_item_one ->{
+                    saveItemsToFile(sharedKey)
                     val intent = Intent(this, IntroDashboardNews::class.java)
                     intent.putExtra("USER_TOKEN", user_token)
                     intent.putExtra("USER_ID", user_id)
@@ -147,6 +148,7 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
                     //THIS IS THE DASHBOARD ACTIVITY
                 }
                 R.id.nav_item_three ->{
+                    saveItemsToFile(sharedKey)
                     val intent = Intent(this, ProfileActivity::class.java)
                     intent.putExtra("USER_TOKEN_PROFILE", user_token)
                     intent.putExtra("USER_ID", user_id)
@@ -159,6 +161,7 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
                 }
 
                 R.id.nav_item_five ->{
+                    saveItemsToFile(sharedKey)
                     val intent = Intent(applicationContext, ManagementOptionsActivity::class.java)
                     intent.putExtra("USER_TOKEN", user_token)
                     intent.putExtra("USER_ID", user_id)
@@ -167,6 +170,7 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
                 }
 
                 R.id.nav_item_six ->{
+                    saveItemsToFile(sharedKey)
                     val intent = Intent(applicationContext, LoginActivity::class.java)
                     startActivity(intent)
                     finish()
@@ -183,6 +187,7 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
 
             when(it.itemId){
                 R.id.bottom_nav_home->{
+                    saveItemsToFile(sharedKey)
                     val intent = Intent(this, IntroDashboardNews::class.java)
                     intent.putExtra("USER_TOKEN", user_token)
                     intent.putExtra("USER_ID", user_id)
@@ -193,6 +198,7 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
                 R.id.bottom_nav_categories->{ }
 
                 R.id.bottom_nav_comments->{
+                    saveItemsToFile(sharedKey)
                     val intent = Intent(this, GenneralComments::class.java)
                     intent.putExtra("USER_TOKEN", user_token)
                     intent.putExtra("USER_ID", user_id)

@@ -38,7 +38,7 @@ android:id="@+id/drawerLayoutGenneralComments">
         android:id="@+id/rbGeneralInfoRating"
         android:layout_width="238dp"
         android:layout_height="50dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:progressBackgroundTint="@color/flat_grey_light_1"
         android:progressTint="@color/g_orange_yellow"
         android:rating="2"
@@ -88,27 +88,19 @@ android:id="@+id/drawerLayoutGenneralComments">
         app:layout_constraintTop_toBottomOf="@id/vBlackLine"
         android:text="COMENTARIOS"/>
 
-    <EditText
-        android:id="@+id/etFilterComments"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:hint="Filtrar por Usuario"
-        app:layout_constraintEnd_toEndOf="@id/guidelineRight"
-        app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
-        app:layout_constraintTop_toBottomOf="@id/tvCommentsLabel"
-        android:layout_marginTop="7dp"
-        android:layout_marginBottom="5dp"/>
+
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvGeneralComments"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="4dp"
+        android:paddingBottom="15dp"
         app:layout_constraintStart_toStartOf="@id/guidelineLeft"
         app:layout_constraintEnd_toEndOf="@id/guidelineRight"
-        app:layout_constraintTop_toBottomOf="@id/etFilterComments"
-        app:layout_constraintBottom_toTopOf="@id/guidelineBottom"/>
+        app:layout_constraintTop_toBottomOf="@id/tvCommentsLabel"
+        app:layout_constraintBottom_toTopOf="@id/bottom_nav_genneral_comments"/>
 
 
     <!--             GUIDELINES-->
@@ -125,6 +117,7 @@ android:id="@+id/drawerLayoutGenneralComments">
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_end="?attr/actionBarSize" />
+
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineLeft"

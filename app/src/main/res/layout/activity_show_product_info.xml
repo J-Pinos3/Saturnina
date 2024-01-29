@@ -169,7 +169,6 @@
                 style="@style/btnsLoginRegister"
                 android:text="Enviar Comentario"
                 android:layout_marginHorizontal="10dp"
-                android:textColor="@color/black"
                 android:textSize="20sp"/>
 
             <androidx.recyclerview.widget.RecyclerView

@@ -6,7 +6,159 @@
     android:layout_height="match_parent"
     tools:context=".activities.LoginActivity">
 
-    <!-- LOGO -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/materialCardView"
+        android:layout_width="320dp"
+        android:layout_height="445dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginBottom="180dp"
+        app:cardBackgroundColor="#FFFFFF"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="16dp"
+        app:cardForegroundColor="#00FFFFFF"
+        app:checkedIconTint="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:strokeColor="@color/black"
+        app:strokeWidth="3dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="430dp"
+            android:paddingHorizontal="32dp"
+            android:paddingTop="30dp"
+            android:paddingBottom="30dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_emailLog"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:boxStrokeColor="@color/black"
+                app:hintTextColor="@color/black"
+                app:layout_constraintBottom_toTopOf="@+id/til_passwordLog"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:startIconDrawable="@drawable/ic_email"
+                app:startIconTint="@color/black">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etEmailLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Correo"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_passwordLog"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:boxStrokeColor="@color/black"
+                app:hintTextColor="@color/black"
+                app:layout_constraintBottom_toTopOf="@+id/btnIniciarSesionLogin"
+                app:layout_constraintEnd_toEndOf="@+id/til_emailLog"
+                app:layout_constraintStart_toStartOf="@+id/til_emailLog"
+                app:layout_constraintTop_toBottomOf="@+id/til_emailLog"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/black"
+                app:startIconDrawable="@drawable/ic_password"
+                app:startIconTint="@color/black">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPasswordLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Contraseña"
+                    android:inputType="textPassword"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnIniciarSesionLogin"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Ingresa"
+                android:textAllCaps="false"
+                app:backgroundTint="@color/black"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toTopOf="@+id/tvRegistrate"
+                app:layout_constraintEnd_toEndOf="@+id/til_emailLog"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@+id/til_emailLog"
+                app:layout_constraintTop_toBottomOf="@+id/til_passwordLog" />
+
+            <Button
+                android:id="@+id/tvRegistrate"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Registrate"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/til_emailLog"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@+id/til_emailLog"
+                app:layout_constraintTop_toBottomOf="@+id/btnIniciarSesionLogin"
+                app:strokeColor="@color/black"
+                app:strokeWidth="2dp" />
+
+            <Button
+                android:id="@+id/tvRecoverPassword"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Recuperar Contraseña"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/til_emailLog"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@+id/til_emailLog"
+                app:layout_constraintTop_toBottomOf="@+id/tvRegistrate"
+                app:strokeColor="@color/black"
+                app:strokeWidth="2dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="@drawable/bg_circle_image"
+        android:elevation="16dp"
+        android:padding="8dp"
+        android:src="@drawable/ic_bottomnav_profile"
+        app:layout_constraintBottom_toTopOf="@+id/materialCardView"
+        app:layout_constraintEnd_toEndOf="@+id/materialCardView"
+        app:layout_constraintStart_toStartOf="@+id/materialCardView"
+        app:layout_constraintTop_toTopOf="@+id/materialCardView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+<!--
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.LoginActivity">
+
+
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -141,7 +293,7 @@
         android:textSize="30sp" />
 
 
-    <!-- CIRCLES -->
+
     <ImageView
         android:layout_width="150dp"
         android:layout_height="150dp"
@@ -164,7 +316,7 @@
 
 
 
-    <!-- GUIDELINES -->
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineTop"
         android:layout_width="wrap_content"
@@ -179,3 +331,6 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.88" />
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    -->

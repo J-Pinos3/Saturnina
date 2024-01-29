@@ -10,6 +10,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import com.example.saturninaapp.R
+import com.example.saturninaapp.models.RecoverPassword
 import com.example.saturninaapp.util.RetrofitHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -50,6 +51,13 @@ class RecoverActivity : AppCompatActivity() {
         setContentView(R.layout.activity_recover)
 
         initUI()
+
+        etEmailRecover.addTextChangedListener(RecoverTextWatcher)
+
+        etEmailRecover.setOnFocusChangeListener { view, b ->
+            if(b)
+                validEmailText(etEmailRecover.text.toString())
+        }
 
         btnContinueRecover.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
@@ -102,9 +110,11 @@ class RecoverActivity : AppCompatActivity() {
     }
 
     suspend fun getNewPassword(email: String){
-       try {
 
-           val retrofitNewPassword = RetrofitHelper.consumeAPI.recoverPassword(email)
+        val objectEmailRecover = RecoverPassword(email)
+       try {
+            print("Email to recover: -$email-")
+           val retrofitNewPassword = RetrofitHelper.consumeAPI.recoverPassword(objectEmailRecover)
            if(retrofitNewPassword.isSuccessful){
                 runOnUiThread {
                     val response = retrofitNewPassword.body().toString()
@@ -113,7 +123,6 @@ class RecoverActivity : AppCompatActivity() {
                     val msg = detailObject.getString("msg")
 
                     Toast.makeText(this@RecoverActivity, msg, Toast.LENGTH_LONG).show()
-
                     val intent = Intent(applicationContext, LoginActivity::class.java)
                     startActivity(intent)
                 }
@@ -124,10 +133,9 @@ class RecoverActivity : AppCompatActivity() {
                    val errorBody = error?.let { JSONObject(it) }
                    val detail = errorBody?.opt("detail")
                    var msg = ""
+                   Log.e("ERROR RECOVER PASS", error.toString() +"  "+ retrofitNewPassword.code())
                    when(detail){
-                        is JSONObject->{
-                            msg = detail.getString("msg")
-                        }
+                        is JSONObject->{  msg = detail.getString("msg")  }
 
                        is JSONArray ->{
                            val firstError = detail.getJSONObject(0)

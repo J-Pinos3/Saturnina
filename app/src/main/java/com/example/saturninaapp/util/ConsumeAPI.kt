@@ -7,6 +7,7 @@ import com.example.saturninaapp.models.GeneralCommentsRawList
 import com.example.saturninaapp.models.LoginCredentials
 import com.example.saturninaapp.models.OrderStatusData
 import com.example.saturninaapp.models.OrdersList
+import com.example.saturninaapp.models.RecoverPassword
 import com.example.saturninaapp.models.UpdateUserProfilePut
 import com.example.saturninaapp.models.User
 import com.example.saturninaapp.models.UserResponseLogin
@@ -39,7 +40,7 @@ interface ConsumeAPI {
 
     @Headers("Content-type:application/json; charset=UTF-8")
     @POST("recover-password")
-    suspend fun recoverPassword(@Body email: String): Response<JsonObject>
+    suspend fun recoverPassword(@Body email: RecoverPassword): Response<JsonObject>
 
 
     //how to add authorization: bearer

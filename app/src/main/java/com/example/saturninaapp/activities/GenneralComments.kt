@@ -8,6 +8,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
+import android.view.WindowManager
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.RatingBar
@@ -49,8 +50,6 @@ class GenneralComments : AppCompatActivity() {
     private lateinit var rbGeneralInfoRating: RatingBar
     private lateinit var btnSendGeneralComment: AppCompatButton
 
-    private lateinit var etFilterComments: EditText
-
     private var itemsGeneralCommentaries = mutableListOf<ResultComment>()
     private lateinit var rvGeneralComments: RecyclerView
     private lateinit var generalCommentsAdapter: CommentsAdapter
@@ -88,6 +87,7 @@ class GenneralComments : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_comments)
         initUI()
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
         val user_token = intent.extras?.getString("USER_TOKEN")
         val user_id = intent.extras?.getString("USER_ID")
