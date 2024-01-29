@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.EditText
+import android.widget.ImageButton
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,7 +23,7 @@ import java.lang.Exception
 
 class MySalesActivity : AppCompatActivity() {
 
-    private lateinit var btnBack: AppCompatButton
+    private lateinit var btnBack: ImageButton
 
     lateinit var bottom_nav_my_sales: BottomNavigationView
 

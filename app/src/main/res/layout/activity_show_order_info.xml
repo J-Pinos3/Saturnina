@@ -14,19 +14,15 @@
 
 
 
-        <androidx.appcompat.widget.AppCompatButton
+        <ImageButton
             android:id="@+id/btnBacktoSalesActivity"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            style="@style/btnsLoginRegister"
-            android:text="Mis Ventas"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="10dp"
-            android:textAllCaps="false"
-            android:textSize="20sp"/>
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            app:layout_constraintStart_toEndOf="@id/guidelineLeft"-->
-<!--            app:layout_constraintBottom_toTopOf="@id/guidelineTop"-->
+            android:layout_width="39dp"
+            android:layout_height="36dp"
+            android:background="@color/black"
+            android:src="@drawable/ic_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
 
 
         <ImageView
@@ -36,9 +32,7 @@
             android:layout_marginTop="10dp"
             android:background="@color/black"
             android:scaleType="centerCrop"/>
-<!--            app:layout_constraintStart_toStartOf="@id/guidelineLeft"-->
-<!--            app:layout_constraintEnd_toStartOf="@id/guidelineRight"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/guidelineTop" -->
+
 
 
         <LinearLayout
@@ -72,7 +66,7 @@
                     android:layout_height="30dp"
                     android:paddingStart="10dp"
                     android:hint="Status"
-                    android:textSize="15dp"
+                    android:textSize="19dp"
                     android:visibility="visible" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -87,6 +81,7 @@
             android:layout_marginHorizontal="10dp"
             android:inputType="textMultiLine"
             android:hint="Estado de la órden: "
+            android:textSize="20sp"
             android:visibility="visible"/>
 
         <EditText

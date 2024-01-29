@@ -24,6 +24,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.ImageButton
 import androidx.core.view.isVisible
 import com.example.saturninaapp.R
 import com.example.saturninaapp.models.OrderResult
@@ -47,7 +48,7 @@ import java.lang.Exception
 
 class ShowOrderInfoActivity : AppCompatActivity() {
 
-    private lateinit var btnBacktoSalesActivity: AppCompatButton
+    private lateinit var btnBacktoSalesActivity: ImageButton
     private lateinit var btnUpdateUserOrderData: AppCompatButton
 
     lateinit var bottom_nav_order_info: BottomNavigationView

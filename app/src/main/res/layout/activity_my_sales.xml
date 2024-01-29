@@ -6,16 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.AppCompatButton
+    <ImageButton
         android:id="@+id/btnBack"
-        android:layout_width="291dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="12dp"
-        style="@style/btnsLoginRegister"
-        android:text="Volver a Gestión"
-        android:textAllCaps="false"
-        app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-        app:layout_constraintEnd_toEndOf="@id/guidelineRight"
+        android:layout_width="39dp"
+        android:layout_height="36dp"
+        android:background="@color/black"
+        android:src="@drawable/ic_back"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
 
@@ -28,7 +25,7 @@
         app:layout_constraintEnd_toEndOf="@id/guidelineRight"
         app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
         app:layout_constraintTop_toBottomOf="@id/btnBack"
-        android:layout_marginTop="7dp"
+        android:layout_marginTop="12dp"
         android:layout_marginBottom="5dp"/>
 
 
