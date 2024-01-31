@@ -59,11 +59,13 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_car_sales)
-        val cartKey: String = "car_items"
+
         val user_token = intent.extras?.getString("USER_TOKENTO_PROFILE")
         val user_id = intent.extras?.getString("USER_ID")
         val user_rol = intent.extras?.getString("USER_ROL")
+        val cartKey: String = user_id.toString()
         val bearerToken: String = "Bearer $user_token"
+
 
         initUI()
         loadItemsFromFile(cartKey)
@@ -84,6 +86,7 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
         rvProductsCar.layoutManager = LinearLayoutManager(this)
         rvProductsCar.adapter = itemClothesAdapter
 
+        disableButtonOnNoProducts()
 
         //complete sale button
         btnMakeSale.setOnClickListener {
@@ -116,14 +119,6 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
                     startActivity(intent)
                 }
 
-                R.id.nav_item_two ->{
-                    saveItemsToFile(cartKey)
-                    val intent = Intent(this, DashboardActivity::class.java)
-                    intent.putExtra("USER_TOKEN", user_token)
-                    intent.putExtra("USER_ID", user_id)
-                    intent.putExtra("USER_ROL", user_rol)
-                    startActivity(intent)
-                }
 
                 R.id.nav_item_three ->{
                     saveItemsToFile(cartKey)
@@ -134,9 +129,6 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
                     startActivity(intent)
                 }
 
-                R.id.nav_item_four ->{
-                    //NOSOTROS
-                }
 
                 R.id.nav_item_five ->{
                     saveItemsToFile(cartKey)
@@ -226,6 +218,20 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
     }
 
 
+    private fun disableButtonOnNoProducts(){
+        val numberOfItems = tvTotalPrice.text.toString().toDouble()
+        var clickable = true
+        if(numberOfItems == 0.0){
+            clickable = false
+            btnMakeSale.isClickable = clickable
+            btnMakeSale.background = resources.getDrawable(R.drawable.disabled_buttons_style)
+        }else{
+            btnMakeSale.isClickable = clickable
+            btnMakeSale.background = resources.getDrawable(R.drawable.login_register_options_style)
+        }
+    }
+
+
     private fun loadItemsFromFile(Key: String){
         var sharedPreferences: SharedPreferences = getSharedPreferences(Key, MODE_PRIVATE)
         val gson = Gson()
@@ -302,8 +308,9 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
     }
 
     //SIZES
-    override fun onSizeSelected(spinner: AutoCompleteTextView, product: DetailProduct) {
+    override fun onSizeSelected(spinner: AutoCompleteTextView, product: DetailProduct): Boolean {
         var listofSizes = getNameofSizes(product.tallas)
+        var hasSizes = true
 
         if(listofSizes.isNotEmpty()){
             spinner.isEnabled = true
@@ -317,10 +324,12 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
                 spinner.setText( listofSizes.elementAt(0), false )
             }
         }else{
+            hasSizes = false
             spinner.setText( "N/A", false )
             spinner.isEnabled = false
         }
 
+        return hasSizes
     }
 
     private fun getNameofSizes(listSizes: List<Talla>?): ArrayList<String>{
@@ -334,8 +343,9 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
     }
 
     //COLORS
-    override fun onColorSelected(spinner: AutoCompleteTextView, product: DetailProduct) {
+    override fun onColorSelected(spinner: AutoCompleteTextView, product: DetailProduct): Boolean {
         var listofColors = getNameofColors(product.colores)
+        var hasColors = true
 
         if(listofColors.isNotEmpty()){
             if( !product.colorSeleccionado.isNullOrEmpty() ){
@@ -348,10 +358,12 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
                 spinner.setText(listofColors.elementAt(0), false)
             }
         }else{
+            hasColors = false
             spinner.setText("N/A", false)
             spinner.isEnabled = false
         }
 
+        return hasColors
     }
 
     private fun getNameofColors(listColors: List<Colore>?): ArrayList<String>{

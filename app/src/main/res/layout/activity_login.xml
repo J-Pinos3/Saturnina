@@ -18,6 +18,7 @@
         app:cardElevation="16dp"
         app:cardForegroundColor="#00FFFFFF"
         app:checkedIconTint="#FFFFFF"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -80,16 +81,14 @@
                     android:singleLine="true" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.button.MaterialButton
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnIniciarSesionLogin"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                style="@style/btnsLoginRegister"
                 android:text="Ingresa"
                 android:textAllCaps="false"
-                app:backgroundTint="@color/black"
-                android:textStyle="bold"
-                android:textColor="@color/white"
                 app:layout_constraintBottom_toTopOf="@+id/tvRegistrate"
                 app:layout_constraintEnd_toEndOf="@+id/til_emailLog"
                 app:layout_constraintHorizontal_bias="0.5"

@@ -17,8 +17,8 @@ class ItemClothesAdapter(
     val OnHideButton: (view: View, isVisible: Boolean) -> Unit,
     var isVisible: Boolean,
     val onHideItemCounter: (view: View, isVisible: Boolean) -> Unit,
-    val onChooseSize: (spinner: AutoCompleteTextView, DetailProduct) -> Unit,
-    val onChooseColor: (spinner: AutoCompleteTextView, DetailProduct) -> Unit
+    val onChooseSize: (spinner: AutoCompleteTextView, DetailProduct) -> Boolean,
+    val onChooseColor: (spinner: AutoCompleteTextView, DetailProduct) -> Boolean
 )
     :RecyclerView.Adapter<ItemClothesViewHolder>()
 {

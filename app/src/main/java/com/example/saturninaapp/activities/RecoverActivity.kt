@@ -7,6 +7,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import com.example.saturninaapp.R
@@ -22,6 +23,7 @@ class RecoverActivity : AppCompatActivity() {
 
     private lateinit var etEmailRecover: EditText
     private lateinit var btnContinueRecover: AppCompatButton
+    private lateinit var btnRegresarLOGIN: ImageView
 
 
     private var RecoverTextWatcher = object: TextWatcher{
@@ -65,12 +67,18 @@ class RecoverActivity : AppCompatActivity() {
             }
         }
 
+        btnRegresarLOGIN.setOnClickListener {
+            val intent = Intent(applicationContext, LoginActivity::class.java)
+            startActivity(intent)
+        }
 
     }//ON CREATE
 
     private fun initUI() {
         etEmailRecover = findViewById(R.id.etEmailRecover)
         btnContinueRecover = findViewById(R.id.btnContinueRecover)
+
+        btnRegresarLOGIN = findViewById(R.id.btnRegresarLOGIN)
     }
 
 

@@ -16,6 +16,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -62,11 +63,16 @@ class CompleteSaleActivity : AppCompatActivity() {
     private lateinit var etOrderDescription: EditText
     private lateinit var tvTotalSalePrice: TextView
     private var user_id = ""
+    private var userToken = ""
+    private var user_rol = ""
+
     private val MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE: Int = 123
     private var cartKey :String = ""
 
     private val MIN_LENGTH_DESCRIPTION = 10
     private val MAX_LENGTH_DESCRIPTION = 100
+
+
 
     var completSaleTextWatcher = object: TextWatcher{
         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -121,11 +127,11 @@ class CompleteSaleActivity : AppCompatActivity() {
         setContentView(R.layout.activity_complete_sale)
         initUI()
         val totalItems: String? = intent.extras?.getString("TOTAL_CART_ITEMS")
-        val userToken = intent.extras?.getString("USER_TOKENTO_PROFILE")
-        val user_rol = intent.extras?.getString("USER_ROL")
+        userToken = intent.extras?.getString("USER_TOKENTO_PROFILE").toString()
+        user_rol = intent.extras?.getString("USER_ROL").toString()
         user_id = intent.extras?.getString("USER_ID").toString()
-        cartKey = "car_items"
         bearerToken = "Bearer $userToken"
+        cartKey = user_id
         if (totalItems != null) {
             showTotalCartItems(totalItems)
         }
@@ -167,7 +173,9 @@ class CompleteSaleActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         nav_view_complete_sale.setNavigationItemSelectedListener {
             when(it.itemId){
+
                 R.id.nav_item_one ->{
+                    saveItemsToFile(cartKey)
                     val intent = Intent(this, IntroDashboardNews::class.java)
                     intent.putExtra("USER_TOKEN", userToken)
                     intent.putExtra("USER_ID", user_id)
@@ -175,15 +183,9 @@ class CompleteSaleActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
 
-                R.id.nav_item_two ->{
-                    val intent = Intent(this, DashboardActivity::class.java)
-                    intent.putExtra("USER_TOKEN", userToken)
-                    intent.putExtra("USER_ID", user_id)
-                    intent.putExtra("USER_ROL", user_rol)
-                    startActivity(intent)
-                }
 
                 R.id.nav_item_three ->{
+                    saveItemsToFile(cartKey)
                     val intent = Intent(this, ProfileActivity::class.java)
                     intent.putExtra("USER_TOKEN_PROFILE", userToken)
                     intent.putExtra("USER_ID", user_id)
@@ -191,11 +193,9 @@ class CompleteSaleActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
 
-                R.id.nav_item_four ->{
-                    //NOSOTROS
-                }
 
                 R.id.nav_item_five ->{
+                    saveItemsToFile(cartKey)
                     val intent = Intent(this, ManagementOptionsActivity::class.java)
                     intent.putExtra("USER_TOKEN", userToken)
                     intent.putExtra("USER_ID", user_id)
@@ -204,6 +204,7 @@ class CompleteSaleActivity : AppCompatActivity() {
                 }
 
                 R.id.nav_item_six ->{
+                    saveItemsToFile(cartKey)
                     val intent = Intent(applicationContext, LoginActivity::class.java)
                     startActivity(intent)
                     finish()
@@ -219,6 +220,7 @@ class CompleteSaleActivity : AppCompatActivity() {
 
             when(it.itemId){
                 R.id.bottom_nav_home->{
+                    saveItemsToFile(cartKey)
                     val intent = Intent(this, IntroDashboardNews::class.java)
                     intent.putExtra("USER_TOKEN", userToken)
                     intent.putExtra("USER_ID", user_id)
@@ -227,6 +229,7 @@ class CompleteSaleActivity : AppCompatActivity() {
                 }
 
                 R.id.bottom_nav_categories->{
+                    saveItemsToFile(cartKey)
                     val intent = Intent(this, DashboardActivity::class.java)
                     intent.putExtra("USER_TOKEN", userToken)
                     intent.putExtra("USER_ID", user_id)
@@ -235,6 +238,7 @@ class CompleteSaleActivity : AppCompatActivity() {
                 }
 
                 R.id.bottom_nav_comments->{
+                    saveItemsToFile(cartKey)
                     val intent = Intent(this, GenneralComments::class.java)
                     intent.putExtra("USER_TOKEN", userToken)
                     intent.putExtra("USER_ID", user_id)
@@ -244,6 +248,19 @@ class CompleteSaleActivity : AppCompatActivity() {
             }
 
             true
+        }
+
+        val flCarritoCompras: FrameLayout = findViewById(R.id.flCarritoCompras)
+        flCarritoCompras.setOnClickListener {
+            Toast.makeText(this, "Carrito Clicado", Toast.LENGTH_SHORT).show()
+
+            saveItemsToFile(cartKey)
+
+            val intent = Intent(applicationContext, CarSalesActivity::class.java)
+            intent.putExtra("USER_TOKENTO_PROFILE", userToken)
+            intent.putExtra("USER_ID", user_id)
+            intent.putExtra("USER_ROL", user_rol)
+            startActivity(intent)
         }
 
     }//ON CREATE
@@ -433,6 +450,9 @@ class CompleteSaleActivity : AppCompatActivity() {
                 withContext(Dispatchers.Main){
                     clearCart(key)
                     val intent = Intent(applicationContext, IntroDashboardNews::class.java)
+                    intent.putExtra("USER_TOKEN", userToken)
+                    intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
                     startActivity(intent)
                     Log.i("SEND ORDER", "ORDER SENT SUCCESSFULLY: $jsonResponse")
 
@@ -466,17 +486,6 @@ class CompleteSaleActivity : AppCompatActivity() {
     }
 
 
-    private fun createPartFromString(value: String): RequestBody {
-        return RequestBody.create(MultipartBody.FORM, value)
-    }
-
-    private fun ProductOrderInfo.toMultipart(partName: String): MultipartBody.Part{
-        val json = Gson().toJson(this)
-        val requestPart = RequestBody.create( MediaType.parse("application/json"), json )
-        return MultipartBody.Part.createFormData( partName,null,requestPart )
-    }
-
-
     private fun uriToFile(uri: Uri): File? {
         val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
         val cursor: Cursor? = contentResolver.query(uri, filePathColumn, null, null, null)
@@ -493,11 +502,11 @@ class CompleteSaleActivity : AppCompatActivity() {
 
         when(btnAcceptSale.isClickable){
             true->{
-                btnAcceptSale.setBackgroundColor( resources.getColor(R.color.blue_button) )
+                btnAcceptSale.background = resources.getDrawable(R.drawable.login_register_options_style)
             }
 
             false->{
-                btnAcceptSale.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+                btnAcceptSale.background = resources.getDrawable(R.drawable.disabled_buttons_style)
             }
         }
 
@@ -520,17 +529,25 @@ class CompleteSaleActivity : AppCompatActivity() {
         }
 
         if(clickable){
-            btnAcceptSale.setBackgroundColor( resources.getColor(R.color.blue_button) )
+            btnAcceptSale.background = resources.getDrawable(R.drawable.login_register_options_style)
         }else{
-            btnAcceptSale.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+            btnAcceptSale.background = resources.getDrawable(R.drawable.disabled_buttons_style)
         }
 
         btnAcceptSale.isClickable = clickable
     }
 
-//    private fun showToast(message: String) {
-//        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-//    }
+
+
+    private fun saveItemsToFile(Key: String){
+        var sharedPreferences: SharedPreferences = getSharedPreferences(Key, MODE_PRIVATE)
+        val gson= Gson()
+        val editor = sharedPreferences.edit()
+
+        val jsonString = gson.toJson(finalListOfProducts)
+        editor.putString(Key, jsonString)
+        editor.apply()
+    }
 
     private fun clearCart(key: String) {
         val sharedPreferences: SharedPreferences = getSharedPreferences(key, MODE_PRIVATE)

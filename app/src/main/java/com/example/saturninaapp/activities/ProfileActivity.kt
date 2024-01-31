@@ -34,7 +34,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var etNumberProfile: EditText
 
     //Buttons
-    private lateinit var btnSaveProfile: MaterialButton
+    private lateinit var btnSaveProfile: AppCompatButton
     private lateinit var btnRegresarDash: ImageButton
 
     //SYMBOLIC CONSTANTS

@@ -16,11 +16,11 @@ class RegisterProfileOrdersRepoImplTest{
     private lateinit var testApis: TestApisCreate
 
     private var user = User("Jhon","De","0","Johnfoe.com","12345678898496840FGHSFHSGTHGFH*")
-    private var userToken = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoidXNlcl9zYXR1cm5pbmE6bnh6ODloOGI0OHZrcnhuZGR5N2ciLCJyb2wiOiJyb2w6dnVxbjdrNHZ3MG0xYTN3dDdma2IiLCJleHBpcmVzIjoxNzA2NDQ2NTYwLjYwMzIzMDd9.LoxwgoUsBETGgD4CnFpLU7RqiCsgzRh6g9nFfVcS4Mk"
-    private var userId = "user_saturnina:nxz89h8b48vkrxnddy7g"
+    private var userToken = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoidXNlcl9zYXR1cm5pbmE6OWQ5ajMwNnN1MmdpMHV1YXVodW8iLCJyb2wiOiJyb2w6NzRydnE3amF0em82YWMxOW1jNzkiLCJleHBpcmVzIjoxNzA2NTMwMDkyLjEzMTg5MjJ9.XozyKOBpSj2jdTDXfSGi1duxljYdHKcbaBBpYIoKK4c"
+    private var userId = "user_saturnina:9d9j306su2gi0uuauhuo"
     private var newProfileData = UpdateUserProfilePut("JOSE","josloco665@gmail.com","PINOS","1112223336")
     private var orderStatus = OrderStatusData("Finalizado","Felicidades tu compra fue aprobada")
-    private var id_order_detail: String =""
+    private var id_order_detail: String ="order:jsbrtewpyz7xow8978mo"
 
     @Before
     fun setUp(){

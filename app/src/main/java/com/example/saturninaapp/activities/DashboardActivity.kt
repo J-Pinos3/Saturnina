@@ -25,6 +25,7 @@ import com.example.saturninaapp.models.DetailProduct
 import com.example.saturninaapp.models.Talla
 import com.example.saturninaapp.util.RetrofitHelper
 import com.example.saturninaapp.util.UtilClasses
+import com.example.saturninaapp.viewholder.ItemClothesViewHolder
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
@@ -62,7 +63,7 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
 
     private var cartItems = mutableListOf<DetailProduct>()
 
-    private var sharedKey:String = "car_items"
+    private var sharedKey:String = ""
     public var isAdapterVisible = true
 
     private lateinit var cartSalesItemsCount: TextView
@@ -70,15 +71,20 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
         initUi()
+
+        val user_token = intent.extras?.getString("USER_TOKEN")
+        val user_id = intent.extras?.getString("USER_ID")
+        val user_rol = intent.extras?.getString("USER_ROL")
+        sharedKey = user_id.toString()
+        val bearerToken: String = "Bearer $user_token"
+
+
         showCartListItems()
         loadItemsFromFile(sharedKey)
         loadInitialItemsCount()
 
 
-        val user_token = intent.extras?.getString("USER_TOKEN")
-        val user_id = intent.extras?.getString("USER_ID")
-        val user_rol = intent.extras?.getString("USER_ROL")
-        val bearerToken: String = "Bearer $user_token"
+
 
         val random_category_id = intent.extras?.getString("RANDOM_CATEGORY_ID")
 
@@ -141,12 +147,8 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
                     intent.putExtra("USER_ID", user_id)
                     intent.putExtra("USER_ROL", user_rol)
                     startActivity(intent)
-
-
                 }
-                R.id.nav_item_two ->{
-                    //THIS IS THE DASHBOARD ACTIVITY
-                }
+
                 R.id.nav_item_three ->{
                     saveItemsToFile(sharedKey)
                     val intent = Intent(this, ProfileActivity::class.java)
@@ -156,9 +158,7 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
                     startActivity(intent)
 
                 }
-                R.id.nav_item_four ->{
-                    //NOSOTROS
-                }
+
 
                 R.id.nav_item_five ->{
                     saveItemsToFile(sharedKey)
@@ -384,8 +384,9 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
     }
 
     //SIZES
-    override fun onSizeSelected(spinner: AutoCompleteTextView, product: DetailProduct) {
+    override fun onSizeSelected(spinner: AutoCompleteTextView, product: DetailProduct): Boolean{
         var listofSizes = getNameofSizes(product.tallas)
+        var hasItems = true
 
         if( listofSizes.isNotEmpty() ){
             spinner.isEnabled = true
@@ -399,10 +400,12 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
                 spinner.setText( listofSizes.elementAt(0), false )
             }
         }else{
+            hasItems = false
             spinner.setText( "N/A", false )
             spinner.isEnabled = false
         }
 
+        return hasItems
     }
 
     private fun getNameofSizes(listSizes: List<Talla>?): ArrayList<String>{
@@ -416,8 +419,9 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
     }
 
     //COLORS
-    override fun onColorSelected(spinner: AutoCompleteTextView, product: DetailProduct) {
+    override fun onColorSelected(spinner: AutoCompleteTextView, product: DetailProduct): Boolean {
         var listofColors = getNameofColors(product.colores)
+        var hasItems = true
 
         if(listofColors.isNotEmpty()){
             spinner.isEnabled = true
@@ -431,10 +435,12 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
                 spinner.setText(listofColors.elementAt(0), false)
             }
         }else{
+            hasItems = false
             spinner.setText("N/A", false)
             spinner.isEnabled = false
         }
 
+        return hasItems
     }
 
 

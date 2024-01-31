@@ -34,7 +34,7 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var etEmailLogin: TextInputEditText
     private lateinit var etPasswordLogin: TextInputEditText
-    private lateinit var btnIniciarSesionLogin: Button
+    private lateinit var btnIniciarSesionLogin: AppCompatButton
     private lateinit var tvRegistrate: Button
     private lateinit var tvRecoverPassword: Button
 
@@ -172,9 +172,9 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun disableCLicOnLogin(email: String, password: String) {
-        btnIniciarSesionLogin.isEnabled = ( !email.isNullOrEmpty() ) && ( !password.isNullOrEmpty() )
+        btnIniciarSesionLogin.isClickable = ( !email.isNullOrEmpty() ) && ( !password.isNullOrEmpty() )
 
-        when(btnIniciarSesionLogin.isEnabled){
+        when(btnIniciarSesionLogin.isClickable){
             true->{
                 //btnIniciarSesionLogin.setBackgroundColor( resources.getColor(R.color.black) )
                 btnIniciarSesionLogin.background = resources.getDrawable(R.drawable.login_register_options_style)

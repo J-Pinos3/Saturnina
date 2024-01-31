@@ -134,25 +134,19 @@ class GenneralComments : AppCompatActivity() {
         nav_view_genneral_comments.setNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.nav_item_one ->{
-                    //THIS the INTRO DASHBOARD NEWS
-                    //it.isVisible = false
-                }
-                R.id.nav_item_two ->{
-                    val intent = Intent(this, DashboardActivity::class.java)
+                    val intent = Intent(this, IntroDashboardNews::class.java)
                     intent.putExtra("USER_TOKEN", user_token)
                     intent.putExtra("USER_ID", user_id)
                     intent.putExtra("USER_ROL", user_rol)
                     startActivity(intent)
-
                 }
+
                 R.id.nav_item_three ->{
                     val intent = Intent(this, ProfileActivity::class.java)
                     intent.putExtra("USER_TOKEN_PROFILE", user_token)
                     intent.putExtra("USER_ID", user_id)
                     intent.putExtra("USER_ROL", user_rol)
                     startActivity(intent)
-                }
-                R.id.nav_item_four ->{ //NOSOTROS
                 }
 
                 R.id.nav_item_five ->{

@@ -39,7 +39,7 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var til_verify_password: TextInputLayout
 
 
-    private lateinit var btnContinuarRegister: MaterialButton
+    private lateinit var btnContinuarRegister: AppCompatButton
     private lateinit var btnRegresarRegister: ImageButton
 
     private val MIN_LENGTH_NAME = 3

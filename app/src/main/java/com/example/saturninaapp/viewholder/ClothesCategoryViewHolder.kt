@@ -16,11 +16,12 @@ class ClothesCategoryViewHolder(view: View): RecyclerView.ViewHolder(view) {
     fun render(clothCategoryData: ClothCategoryData, onCategorySelected: (Int) -> Unit) {
 
         val color = if(clothCategoryData.isSelectedCategory){
-            R.color.g_blue100
+            R.color.black
         }else{
             R.color.g_gray700
         }
         containerCategoryCard.setCardBackgroundColor(ContextCompat.getColor(containerCategoryCard.context, color))
+        tvCategoryName.setBackgroundColor(ContextCompat.getColor(containerCategoryCard.context, color))
 
         itemView.setOnClickListener { onCategorySelected(layoutPosition) }
 

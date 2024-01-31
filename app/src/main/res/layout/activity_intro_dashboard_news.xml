@@ -16,9 +16,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="?attr/actionBarSize"
-        android:fillViewport="false"
+        android:fillViewport="true"
         android:background="@color/white">
 
 
@@ -26,12 +26,11 @@
             android:id="@+id/tvBusinessInformatiom"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             app:layout_constraintStart_toStartOf="@id/guidelineLeft"
             app:layout_constraintEnd_toEndOf="@id/guidelineRight"
-            app:layout_constraintTop_toBottomOf="@id/guidelineTop"
-            app:layout_constraintBottom_toTopOf="@id/ivIntroImage"
-            android:text="Somos un negocio dedicado a la personalización de venta y prendas de ropa"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="Somos un negocio dedicado a la venta de ropa"
+            android:layout_marginTop="20dp"
             android:textSize="20sp"
             android:textStyle="bold"
             android:textAlignment="center"
@@ -40,92 +39,42 @@
 
         <ImageView
             android:id="@+id/ivIntroImage"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+            android:layout_width="0dp"
+            android:layout_height="225dp"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/metallicabgless"
             app:layout_constraintEnd_toEndOf="@id/guidelineRight"
-            app:layout_constraintTop_toBottomOf="@id/tvBusinessInformatiom"
-            android:src="@drawable/metallica_04"
-            />
+            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+            app:layout_constraintTop_toBottomOf="@id/tvBusinessInformatiom" />
 
+        <TextView
+            android:id="@+id/tvAboutProducts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nuestros Productos"
+            android:textSize="20sp"
+            android:layout_marginTop="30dp"
+            app:layout_constraintEnd_toEndOf="@id/guidelineRight"
+            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+            app:layout_constraintTop_toBottomOf="@id/ivIntroImage"
+            android:textStyle="bold"/>
+
+<!--             GUIDELINES-->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvFirstCategoryClothes"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+            app:layout_constraintTop_toBottomOf="@id/tvAboutProducts"
             app:layout_constraintEnd_toEndOf="@id/guidelineRight"
-            app:layout_constraintTop_toBottomOf="@id/ivIntroImage"
-            app:layout_constraintBottom_toTopOf="@id/guidelineMid"
-            />
+            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+            app:layout_constraintBottom_toTopOf="@id/guidelineBottom"/>
 
-        
-
-            <!--
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="5dp"
-                android:background="@color/black"
-                android:layout_marginTop="20dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:textSize="25sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:text="COMENTARIOS"/>
-
-
-
-            <EditText
-                android:id="@+id/etGeneralInfoCommentary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:inputType="textMultiLine"
-                android:textSize="20sp"
-                android:hint="Comentario"/>
-
-            <RatingBar
-                android:id="@+id/rbGeneralInfoRating"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:progressTint="@color/g_orange_yellow"
-                android:progressBackgroundTint="@color/flat_grey_light_1"
-                android:rating="2"
-                android:stepSize="1"/>
-
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnSendGeneralComment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="20dp"
-                android:paddingHorizontal="5dp"
-                style="@style/btnsLoginRegister"
-                android:text="Enviar Comentario"
-                android:textAllCaps="false"
-                android:textSize="20sp" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvGeneralComments"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"/>
-                -->
-
-<!--             GUIDELINES-->
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineTop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_end="667dp" />
+            app:layout_constraintGuide_end="830dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineBottom"
@@ -134,12 +83,6 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_end="?attr/actionBarSize" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guidelineMid"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_end="90dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineLeft"

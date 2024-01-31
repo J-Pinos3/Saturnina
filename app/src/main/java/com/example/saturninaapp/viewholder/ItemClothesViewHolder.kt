@@ -17,6 +17,7 @@ import com.example.saturninaapp.activities.ShowProductInfo
 import com.example.saturninaapp.models.Colore
 import com.example.saturninaapp.models.DetailProduct
 import com.example.saturninaapp.models.Talla
+import com.google.android.material.textfield.TextInputLayout
 import com.squareup.picasso.Picasso
 
 class ItemClothesViewHolder(view: View): RecyclerView.ViewHolder(view) {
@@ -27,6 +28,9 @@ class ItemClothesViewHolder(view: View): RecyclerView.ViewHolder(view) {
     private val ivClothItemPhoto: ImageView = view.findViewById(R.id.ivClothItemPhoto)
     val spSizesChoice: AutoCompleteTextView = view.findViewById(R.id.spSizesChoice)
     private val spColorsChoice: AutoCompleteTextView = view.findViewById(R.id.spColorsChoice)
+
+    val tilSizes: TextInputLayout = view.findViewById(R.id.tilSizes)
+    val tilColors: TextInputLayout = view.findViewById(R.id.tilColors)
 
     private val btnAddToCart: View = view.findViewById(R.id.btnAddToCart)
     private val btnDeleteFromCart: View = view.findViewById(R.id.btnDeleteFromCart)
@@ -42,8 +46,8 @@ class ItemClothesViewHolder(view: View): RecyclerView.ViewHolder(view) {
         OnHideButton: (view: View, isVisible: Boolean) -> Unit,
         isVisible: Boolean,
         onHideItemCounter: (view: View, isVisible: Boolean) -> Unit,
-        onChooseSize: (spinner: AutoCompleteTextView, DetailProduct) -> Unit,
-        onChooseColor: (spinner: AutoCompleteTextView, DetailProduct) -> Unit,
+        onChooseSize: (spinner: AutoCompleteTextView, DetailProduct) -> Boolean,
+        onChooseColor: (spinner: AutoCompleteTextView, DetailProduct) -> Boolean,
     ){
 
         itemView.setOnClickListener {
@@ -72,8 +76,22 @@ class ItemClothesViewHolder(view: View): RecyclerView.ViewHolder(view) {
             .into(ivClothItemPhoto)
 
 
-        onChooseSize(spSizesChoice, detailProduct)
-        onChooseColor(spColorsChoice, detailProduct)
+        val isEmptySize =  onChooseSize(spSizesChoice, detailProduct)
+        if(isEmptySize == false){
+            tilSizes.visibility = View.GONE
+        }else{
+            tilSizes.visibility = View.VISIBLE
+        }
+
+
+        val isEmptyColor =  onChooseColor(spColorsChoice, detailProduct)
+        if(isEmptyColor == false){
+            tilColors.visibility = View.GONE
+        }else{
+            tilColors.visibility = View.VISIBLE
+        }
+
+
 
         spSizesChoice.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, position, id ->
@@ -136,7 +154,7 @@ class ItemClothesViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
     private fun loadColorsSpinner(spinner: AutoCompleteTextView, detProd: DetailProduct){
         val colorsList = getNameofColores(detProd.colores)
-        val adapter = ArrayAdapter(itemView.context, android.R.layout.simple_spinner_item, colorsList )
+        val adapter = ArrayAdapter(itemView.context, R.layout.list_size, colorsList )
         spinner.setAdapter(adapter)
     }
 

@@ -1,5 +1,7 @@
 package com.example.saturninaapp.repositories
 
+import com.example.saturninaapp.models.CommentaryData
+import com.example.saturninaapp.models.DetailProduct
 import com.example.saturninaapp.models.LoginCredentials
 import com.example.saturninaapp.models.RecoverPassword
 import com.example.saturninaapp.util.RetrofitHelper
@@ -17,10 +19,18 @@ class ProductsRepositoryImplTest{
     private lateinit var repository: ProductsCommentsProfileRepository
     private lateinit var testApis: TestApis
 
-    private var userToken = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoidXNlcl9zYXR1cm5pbmE6bnh6ODloOGI0OHZrcnhuZGR5N2ciLCJyb2wiOiJyb2w6dnVxbjdrNHZ3MG0xYTN3dDdma2IiLCJleHBpcmVzIjoxNzA2NDQ1MzI2LjY2MDMyMzF9.aHiPR6TkJDUP0josHqHioU6b_VFBO_266Lc0iqYL9hE"
+    private var userToken = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoidXNlcl9zYXR1cm5pbmE6OWQ5ajMwNnN1MmdpMHV1YXVodW8iLCJyb2wiOiJyb2w6NzRydnE3amF0em82YWMxOW1jNzkiLCJleHBpcmVzIjoxNzA2NTMyNzQzLjg2MjI4MTh9.qjVvl6wbg4Z6ElPraqnLnKTsmdT1VTGqWeCAcdajbDg"
     private var credentials = LoginCredentials("Reverb1@outlook.es","123456789A*")
 
     private var wrongEmail = RecoverPassword("hola@gmail.com")
+
+    private var product: DetailProduct = DetailProduct("category:1w6ehoocf4ar2yfyin9h",null, "Reparación de gorra"
+    ,"product:8bym7i5dj1nili4m92pq", emptyList(), "Reparación de gorras", 30.0, null)
+
+    private var userId = "user_saturnina:9d9j306su2gi0uuauhuo"
+    private var comment: CommentaryData = CommentaryData("me gustaría que el bordado sea rojo con blanco",
+    userId, "product:hg7wo0alfquvr38ktas1", 5)
+
     @Before
     fun setUp(){
         testApis = apiHelper.testApiInstance(URL)
@@ -66,5 +76,20 @@ class ProductsRepositoryImplTest{
         val expectedResponse = repository.recoverUserPassword(wrongEmail)
         println(expectedResponse.errorMessage.toString())
         assert(expectedResponse.errorMessage.toString() == "Error al recuperar la contraseña")
+    }
+
+
+    @Test
+    fun `add product item to cart`()= runTest {
+        val expectedResponse = repository.addProductToCar(product)
+        println("Message: $expectedResponse")
+    }
+
+
+    @Test
+    fun `give error when the user wants to comment over a given product and haven't get it yet` ()= runTest {
+        val expectedResponse = repository.createCommentary(userToken, comment)
+        println(expectedResponse.errorMessage.toString())
+        assert(expectedResponse.errorMessage.toString() == "Debes realizar una compra primero")
     }
 }

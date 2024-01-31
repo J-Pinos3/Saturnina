@@ -522,7 +522,7 @@ class ShowOrderInfoActivity : AppCompatActivity() {
     private fun fillViewsWithOrderInfo (orderSelectedInfo: OrderResult){
         fillImageOrderView(ivBillOrderImage, orderSelectedInfo)
 
-        tvOrderInfoDate.text = orderSelectedInfo.fecha
+        tvOrderInfoDate.text = orderSelectedInfo.fecha.substring(0,19)
         tvOrderInfoFirstName.post {  tvOrderInfoFirstName.text = Editable.Factory.getInstance().newEditable( orderSelectedInfo.id_orden.nombre )  }
         tvOrderInfoLastName.post { tvOrderInfoLastName.text = Editable.Factory.getInstance().newEditable( orderSelectedInfo.id_orden.apellido ) }
         tvOrderInfoEmail.post { tvOrderInfoEmail.text = Editable.Factory.getInstance().newEditable( orderSelectedInfo.id_orden.email ) }

@@ -4,8 +4,14 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.Spinner
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,6 +39,8 @@ class MySalesActivity : AppCompatActivity() {
 
     private lateinit var etFilterOrders: EditText
 
+    private lateinit var spFilterOrdersByStatus: Spinner
+
     private val itemSalesOrders = mutableListOf<OrderResult>()
 
     private val ROL_USER: String = "rol:vuqn7k4vw0m1a3wt7fkb"
@@ -41,10 +49,14 @@ class MySalesActivity : AppCompatActivity() {
     private var user_id: String = ""
     private var user_rol: String = ""
 
+    private lateinit var statusList: List<String>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_sales)
         initUI()
+        statusList = arrayListOf("Pendiente","Rechazado","En entrega","Finalizado","Todos")
+        initSpinner()
 
         user_token = intent.extras?.getString("USER_TOKEN").toString()
         user_id = intent.extras?.getString("USER_ID").toString()
@@ -95,6 +107,26 @@ class MySalesActivity : AppCompatActivity() {
 
 
 
+        spFilterOrdersByStatus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                //Toast.makeText(this@MySalesActivity, statusList.elementAt(p2) + " " + p2.toString(), Toast.LENGTH_SHORT ).show()
+                if(statusList.elementAt(p2) != "Todos"){
+                    val filteredOrdersByStatus = itemSalesOrders.filter { it.status == statusList.elementAt(p2) }
+                    salesOrdersAdapter.updateOrdersWithFilter(filteredOrdersByStatus)
+                }else{
+                    salesOrdersAdapter.updateOrdersWithFilter(itemSalesOrders)
+                }
+
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+            }
+
+        }
+
+
+
         bottom_nav_my_sales.setOnNavigationItemSelectedListener{
 
             when(it.itemId){
@@ -135,6 +167,9 @@ class MySalesActivity : AppCompatActivity() {
         rvSalesManagement = findViewById(R.id.rvSalesManagement)
 
         etFilterOrders = findViewById(R.id.etFilterOrders)
+
+        spFilterOrdersByStatus = findViewById(R.id.spFilterOrdersByStatus)
+
         //back to management options
         btnBack = findViewById(R.id.btnBack)
     }
@@ -218,5 +253,13 @@ class MySalesActivity : AppCompatActivity() {
         }
     }//ORDERS OF ALL USERS
 
+
+    private fun initSpinner(){
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, statusList)
+        spFilterOrdersByStatus.adapter = adapter
+
+        spFilterOrdersByStatus.setSelection(4)
+
+    }
 
 }//FIN DE LA CLASE MY SALES ACTIVITY
