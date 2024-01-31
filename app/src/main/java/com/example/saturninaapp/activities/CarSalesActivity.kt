@@ -134,9 +134,6 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
                     startActivity(intent)
                 }
 
-                R.id.nav_item_four ->{
-                    //NOSOTROS
-                }
 
                 R.id.nav_item_five ->{
                     saveItemsToFile(cartKey)
@@ -302,8 +299,9 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
     }
 
     //SIZES
-    override fun onSizeSelected(spinner: AutoCompleteTextView, product: DetailProduct) {
+    override fun onSizeSelected(spinner: AutoCompleteTextView, product: DetailProduct): Boolean {
         var listofSizes = getNameofSizes(product.tallas)
+        var hasSizes = true
 
         if(listofSizes.isNotEmpty()){
             spinner.isEnabled = true
@@ -317,10 +315,12 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
                 spinner.setText( listofSizes.elementAt(0), false )
             }
         }else{
+            hasSizes = false
             spinner.setText( "N/A", false )
             spinner.isEnabled = false
         }
 
+        return hasSizes
     }
 
     private fun getNameofSizes(listSizes: List<Talla>?): ArrayList<String>{
@@ -334,8 +334,9 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
     }
 
     //COLORS
-    override fun onColorSelected(spinner: AutoCompleteTextView, product: DetailProduct) {
+    override fun onColorSelected(spinner: AutoCompleteTextView, product: DetailProduct): Boolean {
         var listofColors = getNameofColors(product.colores)
+        var hasColors = true
 
         if(listofColors.isNotEmpty()){
             if( !product.colorSeleccionado.isNullOrEmpty() ){
@@ -348,10 +349,12 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
                 spinner.setText(listofColors.elementAt(0), false)
             }
         }else{
+            hasColors = false
             spinner.setText("N/A", false)
             spinner.isEnabled = false
         }
 
+        return hasColors
     }
 
     private fun getNameofColors(listColors: List<Colore>?): ArrayList<String>{

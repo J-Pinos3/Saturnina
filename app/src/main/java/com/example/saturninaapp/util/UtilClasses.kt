@@ -14,7 +14,7 @@ interface UtilClasses {
     abstract fun onItemDeleteSelected(product: DetailProduct)
 
 
-    abstract fun onSizeSelected(spinner: AutoCompleteTextView, product: DetailProduct)
+    abstract fun onSizeSelected(spinner: AutoCompleteTextView, product: DetailProduct): Boolean
 
-    abstract fun onColorSelected(spinner: AutoCompleteTextView, product: DetailProduct)
+    abstract fun onColorSelected(spinner: AutoCompleteTextView, product: DetailProduct): Boolean
 }

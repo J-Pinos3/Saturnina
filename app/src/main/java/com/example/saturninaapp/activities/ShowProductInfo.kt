@@ -35,6 +35,7 @@ import com.example.saturninaapp.util.RetrofitHelper
 import com.example.saturninaapp.util.UtilClasses
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
@@ -61,6 +62,10 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
     private lateinit var tvProductInfoName: TextView
     private lateinit var tvProductInfoDescription: TextView
     private lateinit var tvProductInfoPrice: TextView
+
+    private lateinit var tilProductInfoSizes: TextInputLayout
+    private lateinit var tilProductInfoColors: TextInputLayout
+
 
     private lateinit var etProductInfoCommentary: EditText
 
@@ -123,8 +128,20 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
             bringAllComments(bearerToken, { itemsCommentaries, productData ->  filterCommentsOfProduct(itemsCommentaries, productData) }, productData )
         }
 
-        onColorSelected(spProductInfoColorsChoice, productData)
-        onSizeSelected(spProductInfoSizesChoice, productData)
+        val hasColors = onColorSelected(spProductInfoColorsChoice, productData)
+        if(hasColors == false){
+            tilProductInfoColors.visibility = View.GONE
+        }else{
+            tilProductInfoColors.visibility = View.VISIBLE
+        }
+
+        val hasSizes = onSizeSelected(spProductInfoSizesChoice, productData)
+        if(hasSizes == false){
+            tilProductInfoSizes.visibility = View.GONE
+        }else{
+            tilProductInfoSizes.visibility = View.VISIBLE
+        }
+
 
         loadScreenItemsWithProductData(productData, spProductInfoColorsChoice, spProductInfoSizesChoice)
 
@@ -238,9 +255,6 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
                     startActivity(intent)
                 }
 
-                R.id.nav_item_four ->{
-                    //NOSOTROS
-                }
 
                 R.id.nav_item_five ->{
                     saveItemsToFile(cartKey)
@@ -354,6 +368,9 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
         tvProductInfoDescription = findViewById(R.id.tvProductInfoDescription)
         tvProductInfoPrice = findViewById(R.id.tvProductInfoPrice)
 
+        tilProductInfoSizes = findViewById(R.id.tilProductInfoSizes)
+        tilProductInfoColors = findViewById(R.id.tilProductInfoColors)
+
         etProductInfoCommentary = findViewById(R.id.etProductInfoCommentary)
         rbProductInfoRating = findViewById(R.id.rbProductInfoRating)
         btnSendCommentary = findViewById(R.id.btnSendCommentary)
@@ -423,8 +440,9 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
     override fun onItemDeleteSelected(product: DetailProduct) { //NOTHING TO DELETE UNLESS ITS CART SALES ACTIVITY
     }
 
-    override fun onColorSelected(spinner: AutoCompleteTextView, product: DetailProduct) {
+    override fun onColorSelected(spinner: AutoCompleteTextView, product: DetailProduct): Boolean {
         val listofColors = getListNameOfColores(product.colores)
+        var hasItems = true
 
         if(listofColors.isNotEmpty()){
             spinner.isEnabled = true
@@ -435,13 +453,17 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
                 spinner.setText( listofColors.elementAt(0), false )
             }
         }else{
+            hasItems = false
             spinner.setText( "N/A", false )
             spinner.isEnabled = false
         }
+
+        return hasItems
     }
 
-    override fun onSizeSelected(spinner: AutoCompleteTextView, product: DetailProduct) {
+    override fun onSizeSelected(spinner: AutoCompleteTextView, product: DetailProduct): Boolean {
         val listofSizes = getListNameofSizes(product.tallas)
+        var hasItems = true
 
         if(listofSizes.isNotEmpty()){
             spinner.isEnabled = true
@@ -453,9 +475,13 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
             }
 
         }else{
+            hasItems = false
+            //tilProductInfoSizes.visibility = View.GONE
             spinner.setText( "N/A", false )
             spinner.isEnabled = false
         }
+
+        return hasItems
     }
 
 
@@ -479,7 +505,7 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
 
     private fun loadColorsToSpinner(spinner: AutoCompleteTextView, detProd: DetailProduct){
         val colorsList = getListNameOfColores(detProd.colores)
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, colorsList )
+        val adapter = ArrayAdapter(this, R.layout.list_size, colorsList )
         spinner.setAdapter(adapter)
     }
 
@@ -642,7 +668,7 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
         for(k in cartItems){
             suma += k.contador
         }
-        cartSalesItemsCount.text = (cartSalesItemsCount.text.toString().toInt() + 1).toString()
+        cartSalesItemsCount.text = suma.toString()
     }
 
 

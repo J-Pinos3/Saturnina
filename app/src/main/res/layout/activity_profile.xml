@@ -129,9 +129,10 @@
         android:id="@+id/btnSaveProfile"
         android:layout_width="216dp"
         android:layout_height="63dp"
-        android:background="#000000"
+
         android:text="Guardar"
         android:textAllCaps="false"
+        app:cornerRadius="30dp"
         app:backgroundTint="#000000"
         app:layout_constraintBottom_toTopOf="@id/bottom_nav_profile"
         app:layout_constraintEnd_toEndOf="@+id/etNumberProfile"

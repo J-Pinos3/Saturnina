@@ -54,11 +54,9 @@ class IntroDashboardNews : AppCompatActivity() {
     private val itemsCategories = mutableListOf<ClothCategoryData>()
     //products
     private lateinit var rvFirstCategoryClothes: RecyclerView
-    private lateinit var rvSecondCategoryClothes: RecyclerView
     private lateinit var firstCarouselAdapter: ClothesCarouselAdapter
-    private lateinit var secondCarouselAdapter: ClothesCarouselAdapter
     private var firstCategoryItems = mutableListOf<DetailProduct>()
-    private var secondCategoryItems = mutableListOf<DetailProduct>()
+
 
 
 //
@@ -104,13 +102,6 @@ class IntroDashboardNews : AppCompatActivity() {
         rvFirstCategoryClothes.adapter = firstCarouselAdapter
 
 
-        //secondCategoryItems = getProductsofRandomCat(firstCategoryItems)
-        //Log.i("second filter", secondCategoryItems.toString())
-        rvSecondCategoryClothes = findViewById(R.id.rvSecondCategoryClothes)//get products of a random category
-        //secondCarouselAdapter = ClothesCarouselAdapter(secondCategoryItems)
-        rvSecondCategoryClothes.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        rvSecondCategoryClothes.adapter = secondCarouselAdapter
-
 
 
 
@@ -144,8 +135,7 @@ class IntroDashboardNews : AppCompatActivity() {
                     intent.putExtra("USER_ROL", user_rol)
                     startActivity(intent)
                 }
-                R.id.nav_item_four ->{ //NOSOTROS
-                }
+
 
                 R.id.nav_item_five ->{
                     val intent = Intent(this, ManagementOptionsActivity::class.java)
@@ -215,9 +205,7 @@ class IntroDashboardNews : AppCompatActivity() {
         random1 = getRandonCategory()
         random2 = getRandonCategory()
         firstCategoryItems = getProductsofRandomCat(firstCategoryItems, random1)
-        secondCategoryItems = getProductsofRandomCat(secondCategoryItems, random2)
         Log.i("first cat", firstCategoryItems.toString() + "  categoria1 $random1")
-        Log.i("second cat", secondCategoryItems.toString()  + "  categoria2 $random2")
 
         if( firstCategoryItems.size > TOTAL_ITEMS){
             firstCarouselAdapter.productSections = firstCategoryItems.take(TOTAL_ITEMS).toMutableList()
@@ -225,16 +213,8 @@ class IntroDashboardNews : AppCompatActivity() {
             firstCarouselAdapter.productSections = firstCategoryItems
         }
 
-
-        if(secondCategoryItems.size > TOTAL_ITEMS){
-            secondCarouselAdapter.productSections = secondCategoryItems.take(TOTAL_ITEMS).toMutableList()
-        }else{
-            secondCarouselAdapter.productSections = secondCategoryItems
-        }
-
-
         firstCarouselAdapter.notifyDataSetChanged()
-        secondCarouselAdapter.notifyDataSetChanged()
+
 
     }
 
@@ -258,7 +238,6 @@ class IntroDashboardNews : AppCompatActivity() {
 
 
         firstCarouselAdapter = ClothesCarouselAdapter(mutableListOf<DetailProduct>())
-        secondCarouselAdapter = ClothesCarouselAdapter(mutableListOf<DetailProduct>())
 
     }
 
@@ -383,14 +362,13 @@ class IntroDashboardNews : AppCompatActivity() {
                             val tallas = k.tallas ?: emptyList()
 
                             firstCategoryItems.add(DetailProduct(k.category,colores, k.descripcion, k.id, k.imagen, k.name, k.precio, tallas))
-                            secondCategoryItems.add(DetailProduct(k.category,colores, k.descripcion, k.id, k.imagen, k.name, k.precio, tallas))
 
                             //k.imagen?.get(0)?.secure_url
                         }
                         onProductsFetched()
 
                         firstCarouselAdapter.notifyDataSetChanged()
-                        secondCarouselAdapter.notifyDataSetChanged()
+
                     }
                 }
 

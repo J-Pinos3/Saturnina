@@ -10,23 +10,16 @@
     android:foreground="?attr/selectableItemBackgroundBorderless"
     android:gravity="bottom"
     android:orientation="vertical"
-    android:padding="15dp">
+    android:padding="5dp">
 
 
     <ImageView
         android:id="@+id/nav_header_imageView"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/logosaturninanegro"/>
+        android:layout_width="170dp"
+        android:layout_height="158dp"
+        android:src="@drawable/logosaturninanegro"
+        android:layout_gravity="center"/>
 
-    <TextView
-        android:id="@+id/nav_header_textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="15dp"
-        android:text="Pepe"
-        android:textColor="@color/white"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
 
 
 </LinearLayout>

@@ -25,6 +25,7 @@ import com.example.saturninaapp.models.DetailProduct
 import com.example.saturninaapp.models.Talla
 import com.example.saturninaapp.util.RetrofitHelper
 import com.example.saturninaapp.util.UtilClasses
+import com.example.saturninaapp.viewholder.ItemClothesViewHolder
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
@@ -156,9 +157,7 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
                     startActivity(intent)
 
                 }
-                R.id.nav_item_four ->{
-                    //NOSOTROS
-                }
+
 
                 R.id.nav_item_five ->{
                     saveItemsToFile(sharedKey)
@@ -384,8 +383,9 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
     }
 
     //SIZES
-    override fun onSizeSelected(spinner: AutoCompleteTextView, product: DetailProduct) {
+    override fun onSizeSelected(spinner: AutoCompleteTextView, product: DetailProduct): Boolean{
         var listofSizes = getNameofSizes(product.tallas)
+        var hasItems = true
 
         if( listofSizes.isNotEmpty() ){
             spinner.isEnabled = true
@@ -399,10 +399,12 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
                 spinner.setText( listofSizes.elementAt(0), false )
             }
         }else{
+            hasItems = false
             spinner.setText( "N/A", false )
             spinner.isEnabled = false
         }
 
+        return hasItems
     }
 
     private fun getNameofSizes(listSizes: List<Talla>?): ArrayList<String>{
@@ -416,8 +418,9 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
     }
 
     //COLORS
-    override fun onColorSelected(spinner: AutoCompleteTextView, product: DetailProduct) {
+    override fun onColorSelected(spinner: AutoCompleteTextView, product: DetailProduct): Boolean {
         var listofColors = getNameofColors(product.colores)
+        var hasItems = true
 
         if(listofColors.isNotEmpty()){
             spinner.isEnabled = true
@@ -431,10 +434,12 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
                 spinner.setText(listofColors.elementAt(0), false)
             }
         }else{
+            hasItems = false
             spinner.setText("N/A", false)
             spinner.isEnabled = false
         }
 
+        return hasItems
     }
 
 

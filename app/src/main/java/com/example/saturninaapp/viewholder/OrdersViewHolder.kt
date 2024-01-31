@@ -1,9 +1,13 @@
 package com.example.saturninaapp.viewholder
 
 import android.annotation.SuppressLint
+import android.graphics.Color
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.saturninaapp.R
 import com.example.saturninaapp.models.OrderResult
@@ -17,6 +21,8 @@ class OrdersViewHolder(view: View): RecyclerView.ViewHolder(view) {
     private val tvSalesDate: TextView = view.findViewById(R.id.tvSalesDate)
     private val tvSalesStatus: TextView = view.findViewById(R.id.tvSalesStatus)
 
+    private val vColorState: View = view.findViewById(R.id.vColorState)
+    private val statusList: Array<String> = arrayOf("Pendiente","Rechazado","En entrega","Finalizado")
 
     @SuppressLint("SetTextI18n")
     fun render(orderResult: OrderResult,
@@ -31,5 +37,17 @@ class OrdersViewHolder(view: View): RecyclerView.ViewHolder(view) {
         tvSalesProductPrice.text = orderResult.id_producto.precio.toString()
         tvSalesDate.text = orderResult.fecha
         tvSalesStatus.text = orderResult.status
+
+        val color = when(orderResult.status){
+            statusList[0] ->  Color.argb(255,236,172,53)
+            statusList[1] ->  Color.RED
+            statusList[2] ->  Color.argb(255,236,172,53)
+            statusList[3] ->  Color.GREEN
+                    else  ->  Color.GRAY
+        }
+
+        //vColorState.setBackgroundColor(color)
+        vColorState.background.setTint(color)
+
     }
 }

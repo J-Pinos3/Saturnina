@@ -152,8 +152,6 @@ class GenneralComments : AppCompatActivity() {
                     intent.putExtra("USER_ROL", user_rol)
                     startActivity(intent)
                 }
-                R.id.nav_item_four ->{ //NOSOTROS
-                }
 
                 R.id.nav_item_five ->{
                     val intent = Intent(this, ManagementOptionsActivity::class.java)
