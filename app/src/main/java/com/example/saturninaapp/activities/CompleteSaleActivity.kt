@@ -68,6 +68,9 @@ class CompleteSaleActivity : AppCompatActivity() {
     private val MIN_LENGTH_DESCRIPTION = 10
     private val MAX_LENGTH_DESCRIPTION = 100
 
+    lateinit var nav_heaher_userrolCompleteSale: TextView
+    private val ROL_USER: String = "rol:vuqn7k4vw0m1a3wt7fkb"
+
     var completSaleTextWatcher = object: TextWatcher{
         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
@@ -128,6 +131,12 @@ class CompleteSaleActivity : AppCompatActivity() {
         bearerToken = "Bearer $userToken"
         if (totalItems != null) {
             showTotalCartItems(totalItems)
+        }
+
+        if(user_rol == ROL_USER){
+            nav_heaher_userrolCompleteSale.text = "Cliente"
+        }else{
+            nav_heaher_userrolCompleteSale.text = "Administrador"
         }
 
         loadItemsFromFiles(cartKey)
@@ -285,6 +294,9 @@ class CompleteSaleActivity : AppCompatActivity() {
 
         //send order button / accept sale
         btnAcceptSale = findViewById(R.id.btnAcceptSale)
+
+        //user rol label
+        nav_heaher_userrolCompleteSale = findViewById(R.id.nav_heaher_userrol)
     }
 
 

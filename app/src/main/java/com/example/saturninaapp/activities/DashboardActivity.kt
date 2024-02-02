@@ -66,6 +66,9 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
     private var sharedKey:String = ""
     public var isAdapterVisible = true
 
+    lateinit var nav_heaher_userrolDashboard: TextView
+    private val ROL_USER: String = "rol:vuqn7k4vw0m1a3wt7fkb"
+
     private lateinit var cartSalesItemsCount: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,6 +87,11 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
         loadInitialItemsCount()
 
 
+        if(user_rol == ROL_USER){
+            nav_heaher_userrolDashboard.text = "Cliente"
+        }else{
+            nav_heaher_userrolDashboard.text = "Administrador"
+        }
 
 
         val random_category_id = intent.extras?.getString("RANDOM_CATEGORY_ID")
@@ -474,6 +482,8 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
 
         //cart items count
         cartSalesItemsCount = findViewById(R.id.action_cart_count)
+
+        nav_heaher_userrolDashboard = findViewById(R.id.nav_heaher_userrol)
     }
 
 

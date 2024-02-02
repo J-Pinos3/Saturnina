@@ -81,7 +81,8 @@ class GenneralComments : AppCompatActivity() {
     private var sharedKey:String = "car_items"
     private var itemsProducts = mutableListOf<DetailProduct>()
 
-
+    lateinit var nav_heaher_userrolGenneralComents: TextView
+    private val ROL_USER: String = "rol:vuqn7k4vw0m1a3wt7fkb"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,6 +100,12 @@ class GenneralComments : AppCompatActivity() {
 
         CoroutineScope(Dispatchers.IO).launch {
             BringGeneralComments()
+        }
+
+        if(user_rol == ROL_USER){
+            nav_heaher_userrolGenneralComents.text = "Cliente"
+        }else{
+            nav_heaher_userrolGenneralComents.text = "Administrador"
         }
 
 
@@ -345,6 +352,8 @@ class GenneralComments : AppCompatActivity() {
         etGeneralInfoCommentary = findViewById(R.id.etGeneralInfoCommentary)
         rbGeneralInfoRating = findViewById(R.id.rbGeneralInfoRating)
         btnSendGeneralComment = findViewById(R.id.btnSendGeneralComment)
+
+        nav_heaher_userrolGenneralComents = findViewById(R.id.nav_heaher_userrol)
     }
 
 

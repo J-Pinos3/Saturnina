@@ -40,12 +40,16 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
     lateinit var btnMakeSale: AppCompatButton
     lateinit var tvTotalPrice: TextView
 
+    lateinit var nav_heaher_userrolCarSales: TextView
+
     //for the recycler view that'll show items in the dashboard
     private lateinit var rvProductsCar: RecyclerView
     private lateinit var itemClothesAdapter: ItemClothesAdapter
     private var itemsProducts = mutableListOf<DetailProduct>()
 
     public var isAdapterVisible = false
+
+    private val ROL_USER: String = "rol:vuqn7k4vw0m1a3wt7fkb"
 
     private lateinit var cartSalesItemsCount: TextView
 
@@ -71,6 +75,12 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
         loadItemsFromFile(cartKey)
         loadCartItemsCount()
         loadInitialPrice()
+
+        if(user_rol == ROL_USER){
+            nav_heaher_userrolCarSales.text = "Cliente"
+        }else{
+            nav_heaher_userrolCarSales.text = "Administrador"
+        }
 
         //reycler
         rvProductsCar = findViewById(R.id.rvProductsCar)
@@ -215,6 +225,9 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
 
         //cart total price
         tvTotalPrice = findViewById(R.id.tvTotalPrice)
+
+        //user rol label
+        nav_heaher_userrolCarSales = findViewById(R.id.nav_heaher_userrol)
     }
 
 

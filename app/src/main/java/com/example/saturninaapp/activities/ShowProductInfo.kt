@@ -113,6 +113,8 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
 
     }
 
+    lateinit var nav_heaher_userrolProductInfo: TextView
+    private val ROL_USER: String = "rol:vuqn7k4vw0m1a3wt7fkb"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -127,6 +129,12 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
         val productData = intent.getSerializableExtra("PRODUCT_DATA") as DetailProduct
         CoroutineScope(Dispatchers.IO).launch {
             bringAllComments(bearerToken, { itemsCommentaries, productData ->  filterCommentsOfProduct(itemsCommentaries, productData) }, productData )
+        }
+
+        if(user_rol == ROL_USER){
+            nav_heaher_userrolProductInfo.text = "Cliente"
+        }else{
+            nav_heaher_userrolProductInfo.text = "Administrador"
         }
 
         val hasColors = onColorSelected(spProductInfoColorsChoice, productData)
@@ -374,6 +382,8 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
         btnAddProductInfoToCart = findViewById(R.id.btnAddProductInfoToCart)
 
         cartSalesItemsCount = findViewById(R.id.action_cart_count)
+
+        nav_heaher_userrolProductInfo = findViewById(R.id.nav_heaher_userrol)
     }
 
 

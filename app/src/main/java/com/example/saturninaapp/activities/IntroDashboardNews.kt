@@ -71,6 +71,9 @@ class IntroDashboardNews : AppCompatActivity() {
 
     private lateinit var introDashboardItemsCount: TextView
 
+    lateinit var nav_heaher_userrolIntroNews: TextView
+    private val ROL_USER: String = "rol:vuqn7k4vw0m1a3wt7fkb"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_intro_dashboard_news)
@@ -82,6 +85,11 @@ class IntroDashboardNews : AppCompatActivity() {
         sharedKey=user_id.toString()
         val bearerToken: String = "Bearer $user_token"
 
+        if(user_rol == ROL_USER){
+            nav_heaher_userrolIntroNews.text = "Cliente"
+        }else{
+            nav_heaher_userrolIntroNews.text = "Administrador"
+        }
 
         loadItemsFromFile(sharedKey)
         loadCartItemsCount()
@@ -234,6 +242,7 @@ class IntroDashboardNews : AppCompatActivity() {
 
         firstCarouselAdapter = ClothesCarouselAdapter(mutableListOf<DetailProduct>())
 
+        nav_heaher_userrolIntroNews = findViewById(R.id.nav_heaher_userrol)
     }
 
 
