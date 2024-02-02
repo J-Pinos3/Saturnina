@@ -154,7 +154,7 @@
                         android:paddingVertical="4dp"
                         android:text="$00.00"
                         android:textAlignment="textEnd"
-                        android:textSize="20dp" />
+                        android:textSize="20sp" />
                 </LinearLayout>
 
                 <View
@@ -205,7 +205,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:menu="@menu/bottom_maenu_bar"
-            app:itemTextColor="@drawable/bottom_item_selected"
+            app:itemTextColor="@color/black"
             app:itemIconTint="@drawable/bottom_item_selected"
             android:background="@color/black" />
     </LinearLayout>
