@@ -124,7 +124,7 @@ class CompleteSaleActivity : AppCompatActivity() {
         val userToken = intent.extras?.getString("USER_TOKENTO_PROFILE")
         val user_rol = intent.extras?.getString("USER_ROL")
         user_id = intent.extras?.getString("USER_ID").toString()
-        cartKey = "car_items"
+        cartKey = user_id
         bearerToken = "Bearer $userToken"
         if (totalItems != null) {
             showTotalCartItems(totalItems)
@@ -175,13 +175,6 @@ class CompleteSaleActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
 
-                R.id.nav_item_two ->{
-                    val intent = Intent(this, DashboardActivity::class.java)
-                    intent.putExtra("USER_TOKEN", userToken)
-                    intent.putExtra("USER_ID", user_id)
-                    intent.putExtra("USER_ROL", user_rol)
-                    startActivity(intent)
-                }
 
                 R.id.nav_item_three ->{
                     val intent = Intent(this, ProfileActivity::class.java)
@@ -189,10 +182,6 @@ class CompleteSaleActivity : AppCompatActivity() {
                     intent.putExtra("USER_ID", user_id)
                     intent.putExtra("USER_ROL", user_rol)
                     startActivity(intent)
-                }
-
-                R.id.nav_item_four ->{
-                    //NOSOTROS
                 }
 
                 R.id.nav_item_five ->{
@@ -493,11 +482,11 @@ class CompleteSaleActivity : AppCompatActivity() {
 
         when(btnAcceptSale.isClickable){
             true->{
-                btnAcceptSale.setBackgroundColor( resources.getColor(R.color.blue_button) )
+                btnAcceptSale.background = resources.getDrawable(R.drawable.login_register_options_style)
             }
 
             false->{
-                btnAcceptSale.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+                btnAcceptSale.background = resources.getDrawable(R.drawable.disabled_buttons_style)
             }
         }
 
@@ -520,9 +509,9 @@ class CompleteSaleActivity : AppCompatActivity() {
         }
 
         if(clickable){
-            btnAcceptSale.setBackgroundColor( resources.getColor(R.color.blue_button) )
+            btnAcceptSale.background = resources.getDrawable(R.drawable.login_register_options_style)
         }else{
-            btnAcceptSale.setBackgroundColor( resources.getColor(R.color.g_gray500) )
+            btnAcceptSale.background = resources.getDrawable(R.drawable.disabled_buttons_style)
         }
 
         btnAcceptSale.isClickable = clickable

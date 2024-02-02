@@ -11,6 +11,7 @@ import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.widget.addTextChangedListener
@@ -41,6 +42,8 @@ class MySalesActivity : AppCompatActivity() {
 
     private lateinit var spFilterOrdersByStatus: Spinner
 
+    private lateinit var tvMySalesNoItemInFilter: TextView
+
     private val itemSalesOrders = mutableListOf<OrderResult>()
 
     private val ROL_USER: String = "rol:vuqn7k4vw0m1a3wt7fkb"
@@ -66,7 +69,14 @@ class MySalesActivity : AppCompatActivity() {
 
         etFilterOrders.addTextChangedListener {userFilter ->
             val filteredOrders = itemSalesOrders.filter { order -> order.id_orden.nombre.lowercase().contains( userFilter.toString().lowercase() )  }
-            salesOrdersAdapter.updateOrdersWithFilter(filteredOrders)
+            if(filteredOrders.isNotEmpty()){
+                tvMySalesNoItemInFilter.visibility = View.GONE
+                salesOrdersAdapter.updateOrdersWithFilter(filteredOrders)
+            }else{
+                salesOrdersAdapter.updateOrdersWithFilter(listOf<OrderResult>())
+                tvMySalesNoItemInFilter.visibility = View.VISIBLE
+            }
+
         }
 
 
@@ -106,24 +116,35 @@ class MySalesActivity : AppCompatActivity() {
         rvSalesManagement.adapter = salesOrdersAdapter
 
 
+        //SURGEN LOS ERRORES
+        spFilterOrdersByStatus.post {
+            spFilterOrdersByStatus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                    //Toast.makeText(this@MySalesActivity, spFilterOrdersByStatus.selectedItem.toString() , Toast.LENGTH_SHORT ).show()
+                    if(statusList.elementAt(p2) != "Todos"){
+                        val filteredOrdersByStatus = itemSalesOrders.filter { it.status == statusList.elementAt(p2) }
+                        if(filteredOrdersByStatus.isNotEmpty()){
+                            tvMySalesNoItemInFilter.visibility = View.GONE
+                            salesOrdersAdapter.updateOrdersWithFilter(filteredOrdersByStatus)
+                        }else{
+                            salesOrdersAdapter.updateOrdersWithFilter(listOf<OrderResult>())
+                            tvMySalesNoItemInFilter.visibility = View.VISIBLE
+                        }
 
-        spFilterOrdersByStatus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                //Toast.makeText(this@MySalesActivity, statusList.elementAt(p2) + " " + p2.toString(), Toast.LENGTH_SHORT ).show()
-                if(statusList.elementAt(p2) != "Todos"){
-                    val filteredOrdersByStatus = itemSalesOrders.filter { it.status == statusList.elementAt(p2) }
-                    salesOrdersAdapter.updateOrdersWithFilter(filteredOrdersByStatus)
-                }else{
-                    salesOrdersAdapter.updateOrdersWithFilter(itemSalesOrders)
+                    }else{
+                        salesOrdersAdapter.updateOrdersWithFilter(itemSalesOrders)
+                        tvMySalesNoItemInFilter.visibility = View.GONE
+                    }
+
+                }
+
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+
                 }
 
             }
-
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-
-            }
-
         }
+
 
 
 
@@ -169,6 +190,8 @@ class MySalesActivity : AppCompatActivity() {
         etFilterOrders = findViewById(R.id.etFilterOrders)
 
         spFilterOrdersByStatus = findViewById(R.id.spFilterOrdersByStatus)
+
+        tvMySalesNoItemInFilter = findViewById(R.id.tvMySalesNoItemInFilter)
 
         //back to management options
         btnBack = findViewById(R.id.btnBack)

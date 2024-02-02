@@ -104,7 +104,7 @@ class GenneralComments : AppCompatActivity() {
 
         rvGeneralComments = findViewById(R.id.rvGeneralComments)
         generalCommentsAdapter = CommentsAdapter(itemsGeneralCommentaries)
-        rvGeneralComments.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        rvGeneralComments.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         rvGeneralComments.adapter = generalCommentsAdapter
 
 

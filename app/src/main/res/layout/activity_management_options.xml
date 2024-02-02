@@ -9,30 +9,32 @@
 
     <!-- LOGO -->
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+
+
+    <ImageView
+        android:id="@+id/ApplicationIcon"
+        android:layout_width="190dp"
+        android:layout_height="190dp"
+        android:src="@drawable/logosaturninacolores"
+        app:layout_constraintBottom_toTopOf="@id/guidelineTop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/guidelineTop"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="110dp"
-            android:layout_height="110dp"
-            android:src="@drawable/logosaturninacolores"
-            app:layout_constraintBottom_toTopOf="@id/guidelineTop"
-            android:layout_marginRight="35dp"/>
+        />
 
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
-            android:text="Gestión"
-            android:textSize="30sp" />
+    <TextView
+        android:id="@+id/tvGestionLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|center_vertical"
+        app:layout_constraintTop_toBottomOf="@id/guidelineTop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="45dp"
+        android:text="Gestión"
+        android:textSize="30sp" />
 
-    </LinearLayout>
+
 
 
     <!-- CIRCLES -->
@@ -52,10 +54,10 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnSalesManagementOptions"
             style="@style/btnsLoginRegister"
-            android:layout_width="291dp"
+            android:layout_width="match_parent"
             android:layout_height="55dp"
             android:paddingHorizontal="20dp"
-            android:text="Mis Ventas"
+            android:text="Gestión"
             android:textAllCaps="false"
             android:textSize="30sp" />
 
@@ -65,7 +67,7 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnBackManagementOptions"
             style="@style/btnsLoginRegister"
-            android:layout_width="291dp"
+            android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_marginTop="12dp"
             android:paddingHorizontal="20dp"
@@ -104,7 +106,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.2" />
+        app:layout_constraintGuide_percent="0.23" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineBottom"

@@ -222,11 +222,13 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
         val numberOfItems = tvTotalPrice.text.toString().toDouble()
         var clickable = true
         if(numberOfItems == 0.0){
+
             clickable = false
-            btnMakeSale.isClickable = clickable
+            btnMakeSale.isEnabled = clickable
             btnMakeSale.background = resources.getDrawable(R.drawable.disabled_buttons_style)
         }else{
-            btnMakeSale.isClickable = clickable
+
+            btnMakeSale.isEnabled = clickable
             btnMakeSale.background = resources.getDrawable(R.drawable.login_register_options_style)
         }
     }

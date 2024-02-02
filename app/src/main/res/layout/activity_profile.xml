@@ -125,20 +125,19 @@
         app:layout_constraintTop_toTopOf="@+id/textView9" />
 
 
-    <com.google.android.material.button.MaterialButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnSaveProfile"
         android:layout_width="216dp"
-        android:layout_height="63dp"
-        android:background="#000000"
+        android:layout_height="wrap_content"
+        style="@style/btnsLoginRegister"
         android:text="Guardar"
         android:textAllCaps="false"
-        app:backgroundTint="#000000"
         app:layout_constraintBottom_toTopOf="@id/bottom_nav_profile"
         app:layout_constraintEnd_toEndOf="@+id/etNumberProfile"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/etNumberProfile"
         app:layout_constraintTop_toBottomOf="@+id/etNumberProfile"
-        app:layout_constraintVertical_bias="0.269" />
+        app:layout_constraintVertical_bias="0.200" />
 
     <ImageButton
         android:id="@+id/btnRegresarLogin"

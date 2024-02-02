@@ -35,7 +35,7 @@ class OrdersViewHolder(view: View): RecyclerView.ViewHolder(view) {
         tvSalesUserName.text = orderResult.id_orden.nombre + " " + orderResult.id_orden.apellido
         tvSalesProductName.text = orderResult.id_producto.name
         tvSalesProductPrice.text = orderResult.id_producto.precio.toString()
-        tvSalesDate.text = orderResult.fecha
+        tvSalesDate.text = orderResult.fecha.substring(0,19)
         tvSalesStatus.text = orderResult.status
 
         val color = when(orderResult.status){
