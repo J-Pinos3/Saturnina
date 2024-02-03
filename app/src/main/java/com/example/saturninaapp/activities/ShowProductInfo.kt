@@ -138,7 +138,7 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
         setContentView(R.layout.activity_show_product_info)
         initUI()
         //loadIdTokenRoleFromFile(fileKey)
-
+        println("USER DATA: $user_id, $user_rol, + $user_token")
         loadItemsFromFile(cartKey)
         loadItemsCount()
 

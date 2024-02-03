@@ -22,6 +22,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONArray
+import org.json.JSONObject
 import java.lang.Exception
 
 class ProfileActivity : AppCompatActivity() {
@@ -112,8 +114,27 @@ class ProfileActivity : AppCompatActivity() {
                 runOnUiThread{
                     try{
                         Log.e("Error al cargar el perfil: ","${retrofitGetProfile.code()} -- ${retrofitGetProfile.errorBody()?.string()}")
-                        val msg = retrofitGetProfile.errorBody()?.charStream()?.readText()
-                        println("MENSAJE JSON: " + msg)
+                        val error = retrofitGetProfile.errorBody()?.string()
+                        val errorBody = error?.let { JSONObject(it) }
+                        val detail = errorBody?.opt("detail")
+                        var msg = ""
+
+                        when(detail){
+                            is JSONObject->{
+                                msg = detail.getString("msg")
+                            }
+
+                            is JSONArray ->{
+                                val firstError = detail.getJSONObject(0)
+                                msg = firstError.getString("msg")
+                            }
+                        }
+
+                        if(msg == "Token inválido o expirado"){
+                            Toast.makeText(this@ProfileActivity, "Por favor vuelve a iniciar sesión", Toast.LENGTH_LONG).show()
+                        }else{
+                            Toast.makeText(this@ProfileActivity, msg, Toast.LENGTH_LONG).show()
+                        }
                     }catch (e: Exception){
                         println("no se pudo obtener el mensaje de error de la api")
                     }
@@ -167,6 +188,25 @@ class ProfileActivity : AppCompatActivity() {
                 }else{
                     runOnUiThread {
                         Log.e("Error al actualizar el perfil: ","${retrofitUpdateProfile.code()} -- ${retrofitUpdateProfile.errorBody()?.string()}")
+                        val error = retrofitUpdateProfile.errorBody()?.string()
+                        val errorBody = error?.let { JSONObject(it) }
+                        val detail = errorBody?.opt("detail")
+                        var msg = ""
+
+                        when(detail){
+                            is JSONObject->{
+                                msg = detail.getString("msg")
+                            }
+
+                            is JSONArray ->{
+                                val firstError = detail.getJSONObject(0)
+                                msg = firstError.getString("msg")
+                            }
+                        }
+
+                        if(msg == "Token inválido o expirado"){
+                            Toast.makeText(this@ProfileActivity, "Por favor vuelve a iniciar sesión", Toast.LENGTH_LONG).show()
+                        }
                     }
                 }
             }

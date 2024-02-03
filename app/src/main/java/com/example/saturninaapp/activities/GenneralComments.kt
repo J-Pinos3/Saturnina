@@ -79,7 +79,7 @@ class GenneralComments : AppCompatActivity() {
     }
 
 
-    private var sharedKey:String = "car_items"
+    private var sharedKey:String = ""
     private var itemsProducts = mutableListOf<DetailProduct>()
 
     lateinit var nav_heaher_userrolGenneralComents: TextView

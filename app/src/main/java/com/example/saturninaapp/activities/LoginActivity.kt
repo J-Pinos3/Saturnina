@@ -99,7 +99,7 @@ class LoginActivity : AppCompatActivity() {
                     runOnUiThread{
                         //Log.d("Login exitoso", retrofitPost.body() )
                         val UserResponseLogine = retrofitPost.body()
-                        Log.d("Login exitoso", "${UserResponseLogine?.detail?.token!!} ${UserResponseLogine.detail.nombre} ${UserResponseLogine.detail.id}" )
+                        Log.d("Login exitoso", "${UserResponseLogine?.detail?.token!!} ${UserResponseLogine.detail.nombre} ${UserResponseLogine.detail.rol}" )
                         val user_token = UserResponseLogine?.detail?.token!!
                         val user_id = UserResponseLogine.detail.id
                         val user_rol = UserResponseLogine.detail.rol

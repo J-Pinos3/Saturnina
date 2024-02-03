@@ -439,8 +439,32 @@ class ShowOrderInfoActivity : AppCompatActivity() {
 
             }else{
                 runOnUiThread {
-                    val error = retrofitUpdateUserStatus.errorBody()?.string()
-                    Log.e("ERROR UPDATING ORDER", "${retrofitUpdateUserStatus.code()}  -- ${error.toString()}")
+                    try{
+                        Log.e("Error al cargar el perfil: ","${retrofitUpdateUserStatus.code()} -- ${retrofitUpdateUserStatus.errorBody()?.string()}")
+                        val error = retrofitUpdateUserStatus.errorBody()?.string()
+                        val errorBody = error?.let { JSONObject(it) }
+                        val detail = errorBody?.opt("detail")
+                        var msg = ""
+
+                        when(detail){
+                            is JSONObject->{
+                                msg = detail.getString("msg")
+                            }
+
+                            is JSONArray ->{
+                                val firstError = detail.getJSONObject(0)
+                                msg = firstError.getString("msg")
+                            }
+                        }
+
+                        if(msg == "Token inválido o expirado"){
+                            Toast.makeText(this@ShowOrderInfoActivity, "Por favor vuelve a iniciar sesión", Toast.LENGTH_LONG).show()
+                        }else{
+                            Toast.makeText(this@ShowOrderInfoActivity, msg, Toast.LENGTH_LONG).show()
+                        }
+                    }catch (e: Exception){
+                        println("no se pudo obtener el mensaje de error de la api")
+                    }
                 }
             }
 
@@ -451,17 +475,6 @@ class ShowOrderInfoActivity : AppCompatActivity() {
 
     private fun getOrderStatusFromUI(): OrderStatusData{
         var status = ""
-        /*
-        spOrderStatusChoice.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
-            if(statusList.isNotEmpty()){
-
-                status = adapterView.getItemAtPosition(i).toString()
-            }else{
-                status = "N/A"
-            }
-
-        }
-        */
         if( spOrderStatusChoice.text.toString().isNotEmpty() ){
             status = spOrderStatusChoice.text.toString()
         }
@@ -520,8 +533,32 @@ class ShowOrderInfoActivity : AppCompatActivity() {
 
             }else{
                 runOnUiThread {
-                    val error = retrofitUpdateUserComment.errorBody()?.string()
-                    Log.e("ERROR UPDATING ORDER", "${retrofitUpdateUserComment.code()}  -- ${error.toString()}")
+                    try{
+                        Log.e("Error al cargar el perfil: ","${retrofitUpdateUserComment.code()} -- ${retrofitUpdateUserComment.errorBody()?.string()}")
+                        val error = retrofitUpdateUserComment.errorBody()?.string()
+                        val errorBody = error?.let { JSONObject(it) }
+                        val detail = errorBody?.opt("detail")
+                        var msg = ""
+
+                        when(detail){
+                            is JSONObject->{
+                                msg = detail.getString("msg")
+                            }
+
+                            is JSONArray ->{
+                                val firstError = detail.getJSONObject(0)
+                                msg = firstError.getString("msg")
+                            }
+                        }
+
+                        if(msg == "Token inválido o expirado"){
+                            Toast.makeText(this@ShowOrderInfoActivity, "Por favor vuelve a iniciar sesión", Toast.LENGTH_LONG).show()
+                        }else{
+                            Toast.makeText(this@ShowOrderInfoActivity, msg, Toast.LENGTH_LONG).show()
+                        }
+                    }catch (e: Exception){
+                        println("no se pudo obtener el mensaje de error de la api")
+                    }
                 }
             }
 

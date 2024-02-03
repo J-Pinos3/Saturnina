@@ -26,6 +26,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONArray
+import org.json.JSONObject
 import java.lang.Exception
 
 class MySalesActivity : AppCompatActivity() {
@@ -65,6 +67,7 @@ class MySalesActivity : AppCompatActivity() {
         user_id = intent.extras?.getString("USER_ID").toString()
         user_rol = intent.extras?.getString("USER_ROL").toString()
         val bearerToken = "Bearer $user_token"
+        println("USER DATA: $user_id, $user_rol, + $user_token")
 
 
         etFilterOrders.addTextChangedListener {userFilter ->
@@ -227,9 +230,34 @@ class MySalesActivity : AppCompatActivity() {
                 }
 
             }else{
-                val msg = retrofitGetAllOrders.errorBody()?.charStream().toString()
-                Log.e("ERROR GETTING ALL ORDERS ", "${retrofitGetAllOrders.code()} --**--  ${retrofitGetAllOrders.errorBody()?.toString()}")
-                println("MESSAGE: $msg")
+                runOnUiThread {
+                    try{
+                        Log.e("Error al obtener la órden: ","${retrofitGetAllOrders.code()} -- ${retrofitGetAllOrders.errorBody()?.string()}")
+                        val error = retrofitGetAllOrders.errorBody()?.string()
+                        val errorBody = error?.let { JSONObject(it) }
+                        val detail = errorBody?.opt("detail")
+                        var msg = ""
+
+                        when(detail){
+                            is JSONObject ->{
+                                msg = detail.getString("msg")
+                            }
+
+                            is JSONArray ->{
+                                val firstError = detail.getJSONObject(0)
+                                msg = firstError.getString("msg")
+                            }
+                        }
+
+                        if(msg == "Token inválido o expirado"){
+                            Toast.makeText(this@MySalesActivity, "Por favor vuelve a iniciar sesión", Toast.LENGTH_LONG).show()
+                        }else{
+                            Toast.makeText(this@MySalesActivity, msg, Toast.LENGTH_LONG).show()
+                        }
+                    }catch (e: Exception){
+                        println("no se pudo obtener el mensaje de error de la api")
+                    }
+                }
             }
 
         }catch (e: Exception){
@@ -268,7 +296,34 @@ class MySalesActivity : AppCompatActivity() {
                 }
 
             }else{
-                //NOT SUCCESSFUL
+                runOnUiThread {
+                    try{
+                        Log.e("Error al obtener las órdenes: ","${retrofitGetAllOrders.code()} -- ${retrofitGetAllOrders.errorBody()?.string()}")
+                        val error = retrofitGetAllOrders.errorBody()?.string()
+                        val errorBody = error?.let { JSONObject(it) }
+                        val detail = errorBody?.opt("detail")
+                        var msg = ""
+
+                        when(detail){
+                            is JSONObject ->{
+                                msg = detail.getString("msg")
+                            }
+
+                            is JSONArray ->{
+                                val firstError = detail.getJSONObject(0)
+                                msg = firstError.getString("msg")
+                            }
+                        }
+
+                        if(msg == "Token inválido o expirado"){
+                            Toast.makeText(this@MySalesActivity, "Por favor vuelve a iniciar sesión", Toast.LENGTH_LONG).show()
+                        }else{
+                            Toast.makeText(this@MySalesActivity, msg, Toast.LENGTH_LONG).show()
+                        }
+                    }catch (e: Exception){
+                        println("no se pudo obtener el mensaje de error de la api")
+                    }
+                }
             }
 
         }catch (e: Exception){

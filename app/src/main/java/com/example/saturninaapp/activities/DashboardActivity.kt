@@ -186,7 +186,7 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
 
                 R.id.nav_item_five ->{
                     //saveItemsToFile(sharedKey)
-                    val intent = Intent(applicationContext, ManagementOptionsActivity::class.java)
+                    val intent = Intent(this, ManagementOptionsActivity::class.java)
                     intent.putExtra("USER_TOKEN", user_token)
                     intent.putExtra("USER_ID", user_id)
                     intent.putExtra("USER_ROL", user_rol)
@@ -241,7 +241,7 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
             //Toast.makeText(this, "Carrito Clicado", Toast.LENGTH_SHORT).show()
             //saveItemsToFile(sharedKey)
 
-            val intent = Intent(applicationContext, CarSalesActivity::class.java)
+            val intent = Intent(this, CarSalesActivity::class.java)
             intent.putExtra("USER_TOKENTO_PROFILE", user_token)
             intent.putExtra("USER_ID", user_id)
             intent.putExtra("USER_ROL", user_rol)

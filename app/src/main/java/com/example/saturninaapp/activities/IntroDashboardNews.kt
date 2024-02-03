@@ -196,7 +196,7 @@ class IntroDashboardNews : AppCompatActivity() {
             Toast.makeText(this, "Carrito Clicado", Toast.LENGTH_SHORT).show()
 
 
-            val intent = Intent(applicationContext, CarSalesActivity::class.java)
+            val intent = Intent(this, CarSalesActivity::class.java)
             intent.putExtra("USER_TOKENTO_PROFILE", user_token)
             intent.putExtra("USER_ID", user_id)
             intent.putExtra("USER_ROL", user_rol)

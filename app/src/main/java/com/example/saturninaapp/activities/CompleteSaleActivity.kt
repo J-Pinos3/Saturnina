@@ -43,6 +43,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
 import java.lang.Exception
@@ -65,8 +66,10 @@ class CompleteSaleActivity : AppCompatActivity() {
     private lateinit var etOrderDescription: EditText
     private lateinit var tvTotalSalePrice: TextView
     private var user_id = ""
+    private var userToken = ""
     private val MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE: Int = 123
     private var cartKey :String = ""
+    private var user_rol :String = ""
 
     private val MIN_LENGTH_DESCRIPTION = 10
     private val MAX_LENGTH_DESCRIPTION = 100
@@ -127,8 +130,8 @@ class CompleteSaleActivity : AppCompatActivity() {
         setContentView(R.layout.activity_complete_sale)
         initUI()
         val totalItems: String? = intent.extras?.getString("TOTAL_CART_ITEMS")
-        val userToken = intent.extras?.getString("USER_TOKENTO_PROFILE")
-        val user_rol = intent.extras?.getString("USER_ROL")
+        userToken = intent.extras?.getString("USER_TOKENTO_PROFILE").toString()
+        user_rol = intent.extras?.getString("USER_ROL").toString()
         user_id = intent.extras?.getString("USER_ID").toString()
         cartKey = user_id
         bearerToken = "Bearer $userToken"
@@ -370,6 +373,28 @@ class CompleteSaleActivity : AppCompatActivity() {
             }else{
                 runOnUiThread {
                     Log.e("COULDN'T BRING USER DATA", "${retrofitGetProfile.code()} --- ${retrofitGetProfile.errorBody()?.toString()}")
+
+                    val error = retrofitGetProfile.errorBody()?.string()
+                    val errorBody = error?.let { JSONObject(it) }
+                    val detail = errorBody?.opt("detail")
+                    var msg = ""
+
+                    when(detail){
+                        is JSONObject->{
+                            msg = detail.getString("msg")
+                        }
+
+                        is JSONArray ->{
+                            val firstError = detail.getJSONObject(0)
+                            msg = firstError.getString("msg")
+                        }
+                    }
+
+                    if(msg == "Token inválido o expirado"){
+                        Toast.makeText(this@CompleteSaleActivity, "Por favor vuelve a iniciar sesión", Toast.LENGTH_LONG).show()
+                    }else{
+                        Toast.makeText(this@CompleteSaleActivity, msg, Toast.LENGTH_LONG).show()
+                    }
                 }
             }
         }catch (e:Exception){
@@ -442,6 +467,9 @@ class CompleteSaleActivity : AppCompatActivity() {
                     val msg = detailObject.getString("msg")
                     Toast.makeText(this@CompleteSaleActivity, msg, Toast.LENGTH_LONG).show()
                     val intent = Intent(applicationContext, IntroDashboardNews::class.java)
+                    intent.putExtra("USER_TOKEN", userToken)
+                    intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
                     startActivity(intent)
                     //Log.i("SEND ORDER", "ORDER SENT SUCCESSFULLY: $jsonResponse")
 
@@ -450,6 +478,27 @@ class CompleteSaleActivity : AppCompatActivity() {
             }else{
                 runOnUiThread {
                     Log.i("SEND ORDER ERROR", "ORDER COULDN'T BE SENT: ${retrofitSendOrder.errorBody()?.string()}")
+                    val error = retrofitSendOrder.errorBody()?.string()
+                    val errorBody = error?.let { JSONObject(it) }
+                    val detail = errorBody?.opt("detail")
+                    var msg = ""
+
+                    when(detail){
+                        is JSONObject->{
+                            msg = detail.getString("msg")
+                        }
+
+                        is JSONArray ->{
+                            val firstError = detail.getJSONObject(0)
+                            msg = firstError.getString("msg")
+                        }
+                    }
+
+                    if(msg == "Token inválido o expirado"){
+                        Toast.makeText(this@CompleteSaleActivity, "Por favor vuelve a iniciar sesión", Toast.LENGTH_LONG).show()
+                    }else{
+                        Toast.makeText(this@CompleteSaleActivity, msg, Toast.LENGTH_LONG).show()
+                    }
                 }
             }
 
