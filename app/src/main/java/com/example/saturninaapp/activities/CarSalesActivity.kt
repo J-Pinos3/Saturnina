@@ -54,12 +54,17 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
 
     private lateinit var cartSalesItemsCount: TextView
 
-//    override fun onResume() {
-//        super.onResume()
-//        val cartKey: String? = intent.extras?.getString("CARTKEY")
-//        loadItemsFromFile(cartKey!!)
-//        loadCartItemsCount()
-//    }
+    override fun onPause() {
+        super.onPause()
+
+        val user_token = intent.extras?.getString("USER_TOKENTO_PROFILE")
+        val user_id = intent.extras?.getString("USER_ID")
+        val user_rol = intent.extras?.getString("USER_ROL")
+        val cartKey: String = user_id.toString()
+
+        saveItemsToFile(cartKey)
+        //Toast.makeText(this@CarSalesActivity,"SALIENDO DEL CARRITO", Toast.LENGTH_LONG).show()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -105,7 +110,7 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
 
         //complete sale button
         btnMakeSale.setOnClickListener {
-            saveItemsToFile(cartKey)
+            //saveItemsToFile(cartKey)
             val intent = Intent(this, CompleteSaleActivity::class.java)
             intent.putExtra("TOTAL_CART_ITEMS", cartSalesItemsCount.text.toString())
             intent.putExtra("USER_TOKENTO_PROFILE", user_token)
@@ -126,7 +131,7 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
         nav_view_car.setNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.nav_item_one ->{
-                    saveItemsToFile(cartKey)
+                    //saveItemsToFile(cartKey)
                     val intent = Intent(this, IntroDashboardNews::class.java)
                     intent.putExtra("USER_TOKEN", user_token)
                     intent.putExtra("USER_ID", user_id)
@@ -136,7 +141,6 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
 
 
                 R.id.nav_item_three ->{
-                    saveItemsToFile(cartKey)
                     val intent = Intent(this, ProfileActivity::class.java)
                     intent.putExtra("USER_TOKEN_PROFILE", user_token)
                     intent.putExtra("USER_ID", user_id)
@@ -146,7 +150,6 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
 
 
                 R.id.nav_item_five ->{
-                    saveItemsToFile(cartKey)
                     val intent = Intent(this, ManagementOptionsActivity::class.java)
                     intent.putExtra("USER_TOKEN", user_token)
                     intent.putExtra("USER_ID", user_id)
@@ -155,7 +158,6 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
                 }
 
                 R.id.nav_item_six ->{
-                    saveItemsToFile(cartKey)
                     val intent = Intent(applicationContext, LoginActivity::class.java)
                     startActivity(intent)
                     finish()
@@ -169,7 +171,6 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
         bottom_nav_car_sales.setOnNavigationItemSelectedListener{
             when(it.itemId){
                 R.id.bottom_nav_home->{
-                    saveItemsToFile(cartKey)
                     val intent = Intent(this, IntroDashboardNews::class.java)
                     intent.putExtra("USER_TOKEN", user_token)
                     intent.putExtra("USER_ID", user_id)
@@ -178,7 +179,6 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
                 }
 
                 R.id.bottom_nav_categories->{
-                    saveItemsToFile(cartKey)
                     val intent = Intent(this, DashboardActivity::class.java)
                     intent.putExtra("USER_TOKEN", user_token)
                     intent.putExtra("USER_ID", user_id)
@@ -187,7 +187,6 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
                 }
 
                 R.id.bottom_nav_comments->{
-                    saveItemsToFile(cartKey)
                     val intent = Intent(this, GenneralComments::class.java)
                     intent.putExtra("USER_TOKEN", user_token)
                     intent.putExtra("USER_ID", user_id)

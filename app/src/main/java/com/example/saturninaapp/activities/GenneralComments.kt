@@ -95,6 +95,7 @@ class GenneralComments : AppCompatActivity() {
         val user_id = intent.extras?.getString("USER_ID")
         val user_rol = intent.extras?.getString("USER_ROL")
         val bearerToken: String = "Bearer $user_token"
+        sharedKey = user_id.toString()
 
         loadItemsFromFile(sharedKey)
         loadCartItemsCount()
@@ -377,7 +378,7 @@ class GenneralComments : AppCompatActivity() {
         val type = object : TypeToken<MutableList<DetailProduct>>() {}.type
         itemsProducts = (gson.fromJson(jsonString, type) ?: mutableListOf<DetailProduct>() )
 
-        println("carrito de productos: $itemsProducts")
+        println("CARRASO de productos: $itemsProducts")
     }
 
 

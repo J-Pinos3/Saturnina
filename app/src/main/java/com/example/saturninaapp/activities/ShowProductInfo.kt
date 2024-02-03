@@ -116,11 +116,28 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
     lateinit var nav_heaher_userrolProductInfo: TextView
     private val ROL_USER: String = "rol:vuqn7k4vw0m1a3wt7fkb"
 
+    override fun onPause() {
+        super.onPause()
+
+        saveItemsToFile(cartKey)
+        //Toast.makeText(this@ShowProductInfo,"SALIENDO DEL PRODUCT INFO", Toast.LENGTH_LONG).show()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        loadIdTokenRoleFromFile(fileKey)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadIdTokenRoleFromFile(fileKey)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_product_info)
         initUI()
-        loadIdTokenRoleFromFile(fileKey)
+        //loadIdTokenRoleFromFile(fileKey)
 
         loadItemsFromFile(cartKey)
         loadItemsCount()
@@ -242,7 +259,7 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
         nav_view_produt_info.setNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.nav_item_one->{
-                    saveItemsToFile(cartKey)
+                    //saveItemsToFile(cartKey)
                     val intent = Intent(this, IntroDashboardNews::class.java)
                     intent.putExtra("USER_TOKEN", user_token)
                     intent.putExtra("USER_ID", user_id)
@@ -252,7 +269,7 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
 
 
                 R.id.nav_item_three->{
-                    saveItemsToFile(cartKey)
+                    //saveItemsToFile(cartKey)
                     val intent = Intent(this, ProfileActivity::class.java)
                     intent.putExtra("USER_TOKEN_PROFILE", user_token)
                     intent.putExtra("USER_ID", user_id)
@@ -262,7 +279,7 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
 
 
                 R.id.nav_item_five ->{
-                    saveItemsToFile(cartKey)
+                    //saveItemsToFile(cartKey)
                     val intent = Intent(this, ManagementOptionsActivity::class.java)
                     intent.putExtra("USER_TOKEN", user_token)
                     intent.putExtra("USER_ID", user_id)
@@ -271,7 +288,7 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
                 }
 
                 R.id.nav_item_six ->{
-                    saveItemsToFile(cartKey)
+                    //saveItemsToFile(cartKey)
                     val intent = Intent(applicationContext, LoginActivity::class.java)
                     startActivity(intent)
                     finish()
@@ -284,7 +301,7 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
 
             when(it.itemId){
                 R.id.bottom_nav_home->{
-                    saveItemsToFile(cartKey)
+                    //saveItemsToFile(cartKey)
                     val intent = Intent(this, IntroDashboardNews::class.java)
                     intent.putExtra("USER_TOKEN", user_token)
                     intent.putExtra("USER_ID", user_id)
@@ -293,7 +310,7 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
                 }
 
                 R.id.bottom_nav_categories->{
-                    saveItemsToFile(cartKey)
+                    //saveItemsToFile(cartKey)
                     val intent = Intent(this, DashboardActivity::class.java)
                     intent.putExtra("USER_TOKEN", user_token)
                     intent.putExtra("USER_ID", user_id)
@@ -302,7 +319,7 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
                 }
 
                 R.id.bottom_nav_comments->{
-                    saveItemsToFile(cartKey)
+                    //saveItemsToFile(cartKey)
                     val intent = Intent(this, GenneralComments::class.java)
                     intent.putExtra("USER_TOKEN", user_token)
                     intent.putExtra("USER_ID", user_id)
@@ -316,7 +333,7 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
 
         val flCarritoCOmpras: FrameLayout = findViewById(R.id.flCarritoCompras)
         flCarritoCOmpras.setOnClickListener {
-            saveItemsToFile(cartKey)
+            //saveItemsToFile(cartKey)
 
             val intent = Intent(applicationContext, CarSalesActivity::class.java)
             intent.putExtra("USER_TOKENTO_PROFILE", user_token)

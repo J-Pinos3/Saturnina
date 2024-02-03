@@ -70,6 +70,18 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
     private val ROL_USER: String = "rol:vuqn7k4vw0m1a3wt7fkb"
 
     private lateinit var cartSalesItemsCount: TextView
+
+    override fun onPause() {
+        super.onPause()
+        val user_token = intent.extras?.getString("USER_TOKEN")
+        val user_id = intent.extras?.getString("USER_ID")
+        val user_rol = intent.extras?.getString("USER_ROL")
+        sharedKey = user_id.toString()
+        saveItemsToFile(sharedKey)
+        //Toast.makeText(this@DashboardActivity,"SALIENDO DEL DASHBOARD", Toast.LENGTH_LONG).show()
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
@@ -153,7 +165,7 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
         nav_view.setNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.nav_item_one ->{
-                    saveItemsToFile(sharedKey)
+
                     val intent = Intent(this, IntroDashboardNews::class.java)
                     intent.putExtra("USER_TOKEN", user_token)
                     intent.putExtra("USER_ID", user_id)
@@ -162,7 +174,7 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
                 }
 
                 R.id.nav_item_three ->{
-                    saveItemsToFile(sharedKey)
+
                     val intent = Intent(this, ProfileActivity::class.java)
                     intent.putExtra("USER_TOKEN_PROFILE", user_token)
                     intent.putExtra("USER_ID", user_id)
@@ -173,7 +185,7 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
 
 
                 R.id.nav_item_five ->{
-                    saveItemsToFile(sharedKey)
+                    //saveItemsToFile(sharedKey)
                     val intent = Intent(applicationContext, ManagementOptionsActivity::class.java)
                     intent.putExtra("USER_TOKEN", user_token)
                     intent.putExtra("USER_ID", user_id)
@@ -182,7 +194,7 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
                 }
 
                 R.id.nav_item_six ->{
-                    saveItemsToFile(sharedKey)
+
                     val intent = Intent(applicationContext, LoginActivity::class.java)
                     startActivity(intent)
                     finish()
@@ -199,7 +211,7 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
 
             when(it.itemId){
                 R.id.bottom_nav_home->{
-                    saveItemsToFile(sharedKey)
+                    //saveItemsToFile(sharedKey)
                     val intent = Intent(this, IntroDashboardNews::class.java)
                     intent.putExtra("USER_TOKEN", user_token)
                     intent.putExtra("USER_ID", user_id)
@@ -210,7 +222,7 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
                 R.id.bottom_nav_categories->{ }
 
                 R.id.bottom_nav_comments->{
-                    saveItemsToFile(sharedKey)
+
                     val intent = Intent(this, GenneralComments::class.java)
                     intent.putExtra("USER_TOKEN", user_token)
                     intent.putExtra("USER_ID", user_id)
@@ -226,9 +238,8 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
 
         val flCarritoCompras: FrameLayout = findViewById(R.id.flCarritoCompras)
         flCarritoCompras.setOnClickListener {
-            Toast.makeText(this, "Carrito Clicado", Toast.LENGTH_SHORT).show()
-
-            saveItemsToFile(sharedKey)
+            //Toast.makeText(this, "Carrito Clicado", Toast.LENGTH_SHORT).show()
+            //saveItemsToFile(sharedKey)
 
             val intent = Intent(applicationContext, CarSalesActivity::class.java)
             intent.putExtra("USER_TOKENTO_PROFILE", user_token)
@@ -293,7 +304,7 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
 
     //this function will handle add item to cart
     override fun onItemClothSelected(product: DetailProduct){
-        Toast.makeText(this, product.id + " " + product.name + " " + product.precio, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, product.name + " Agregado al carrito" , Toast.LENGTH_SHORT).show()
         //if the element is not in the list, add it
         val existingProduct = cartItems.find { it.id == product.id }
 
@@ -346,7 +357,7 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
         editor.putString(key, jsonString)
         editor.apply()
 
-        Toast.makeText(this, "Saved cartItems to sharedPreferences", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this, "Saved cartItems to sharedPreferences", Toast.LENGTH_SHORT).show()
     }
 
 

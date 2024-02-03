@@ -115,6 +115,7 @@ class ShowOrderInfoActivity : AppCompatActivity() {
     private var bearerToken: String = ""
     private var user_id: String = ""
     private var user_rol: String = ""
+    private var user_token: String = ""
     private lateinit var orderSelectedInfo: OrderResult
 
     private val pickImage = registerForActivityResult( ActivityResultContracts.StartActivityForResult() ){
@@ -147,7 +148,7 @@ class ShowOrderInfoActivity : AppCompatActivity() {
         initUI()
 
 
-        val user_token = intent.extras?.getString("USER_TOKEN")
+        user_token = intent.extras?.getString("USER_TOKEN").toString()
         user_id = intent.extras?.getString("USER_ID").toString()
         user_rol = intent.extras?.getString("USER_ROL").toString()
         bearerToken = "Bearer $user_token"
@@ -423,8 +424,16 @@ class ShowOrderInfoActivity : AppCompatActivity() {
                 val jsonObject = jsonResponse?.let { JSONObject(it) }
                 val detailObject = jsonObject?.getJSONObject("detail")
                 val msg = detailObject?.getString("msg")
-                Toast.makeText(this@ShowOrderInfoActivity, msg, Toast.LENGTH_LONG).show()
+
                 withContext(Dispatchers.IO){
+                    Toast.makeText(this@ShowOrderInfoActivity, msg, Toast.LENGTH_LONG).show()
+
+                    val intent = Intent(this@ShowOrderInfoActivity, MySalesActivity::class.java)
+                    intent.putExtra("USER_TOKEN", user_token)
+                    intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
+                    startActivity(intent)
+
                     Log.i("UPDATE ORDER", "ORDER STATUS UPDATED SUCCESSFULLY $msg")
                 }
 
@@ -498,9 +507,15 @@ class ShowOrderInfoActivity : AppCompatActivity() {
                 val detailObject = jsonObject?.getJSONObject("detail")
                 val msg = detailObject?.getString("msg")
 
-                Toast.makeText(this@ShowOrderInfoActivity, msg, Toast.LENGTH_LONG).show()
+
                 withContext(Dispatchers.Main){
-                    Log.i("UPDATE ORDER", "ORDER UPDATED SUCCESSFULLY $msg")
+
+                    Toast.makeText(this@ShowOrderInfoActivity, msg, Toast.LENGTH_LONG).show()
+                    val intent = Intent(this@ShowOrderInfoActivity, MySalesActivity::class.java)
+                    intent.putExtra("USER_TOKEN", user_token)
+                    intent.putExtra("USER_ID", user_id)
+                    intent.putExtra("USER_ROL", user_rol)
+                    startActivity(intent)
                 }
 
             }else{

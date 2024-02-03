@@ -249,6 +249,18 @@ class CompleteSaleActivity : AppCompatActivity() {
             true
         }
 
+
+        val flCarritoCompras: FrameLayout = findViewById(R.id.flCarritoCompras)
+        flCarritoCompras.setOnClickListener {
+            Toast.makeText(this, "Carrito Clicado", Toast.LENGTH_SHORT).show()
+
+            val intent = Intent(applicationContext, CarSalesActivity::class.java)
+            intent.putExtra("USER_TOKENTO_PROFILE", userToken)
+            intent.putExtra("USER_ID", user_id)
+            intent.putExtra("USER_ROL", user_rol)
+            startActivity(intent)
+        }
+
     }//ON CREATE
 
 

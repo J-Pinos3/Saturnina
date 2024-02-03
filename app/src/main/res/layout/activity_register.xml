@@ -6,28 +6,37 @@
     android:layout_height="match_parent"
     tools:context=".activities.RegisterActivity">
 
+    <ImageButton
+        android:id="@+id/btnRegresarRegister"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_back" />
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/materialCardView"
         android:layout_width="340dp"
         android:layout_height="677dp"
         android:layout_marginStart="48dp"
-        android:layout_marginTop="2dp"
         android:layout_marginEnd="48dp"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="12dp"
         app:cardElevation="16dp"
+        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnRegresarRegister"
+        app:layout_constraintTop_toTopOf="parent"
         app:strokeColor="@color/g_black"
         app:strokeWidth="3dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="677dp"
+            android:layout_height="match_parent"
             android:paddingHorizontal="32dp"
-            android:paddingTop="50dp"
+            android:paddingTop="40dp"
             android:paddingBottom="20dp"
             tools:layout_editor_absoluteY="1dp">
 
@@ -181,11 +190,11 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnContinuarRegister"
+                style="@style/btnsLoginRegister"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Registrate"
                 android:textAllCaps="false"
-                style="@style/btnsLoginRegister"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/til_email"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -209,16 +218,7 @@
         app:layout_constraintStart_toStartOf="@+id/materialCardView"
         app:layout_constraintTop_toTopOf="@+id/materialCardView" />
 
-    <ImageButton
-        android:id="@+id/btnRegresarRegister"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="2dp"
-        android:backgroundTint="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/materialCardView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_back" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
