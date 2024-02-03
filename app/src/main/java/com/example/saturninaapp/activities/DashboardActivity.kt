@@ -91,6 +91,9 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
             nav_heaher_userrolDashboard.text = "Cliente"
         }else{
             nav_heaher_userrolDashboard.text = "Administrador"
+            val flCarritoCompras: FrameLayout = findViewById(R.id.flCarritoCompras)
+            flCarritoCompras.visibility = View.GONE
+
         }
 
 
@@ -123,7 +126,8 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
             isVisible = isAdapterVisible,
             onHideItemCounter = {v, isVisible -> hideItemCartCounter(v, isVisible)},
             onChooseSize = {item, product -> onSizeSelected(item, product)},
-            onChooseColor = {item, product -> onColorSelected(item, product)}
+            onChooseColor = {item, product -> onColorSelected(item, product)},
+            user_rol.toString()
         )
         rvProductsDash.layoutManager = LinearLayoutManager(this)
         rvProductsDash.adapter = itemClothesAdapter
@@ -483,7 +487,7 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
         //cart items count
         cartSalesItemsCount = findViewById(R.id.action_cart_count)
 
-        nav_heaher_userrolDashboard = findViewById(R.id.nav_heaher_userrol)
+        nav_heaher_userrolDashboard = nav_view.getHeaderView(0).findViewById(R.id.nav_heaher_userrol)
     }
 
 

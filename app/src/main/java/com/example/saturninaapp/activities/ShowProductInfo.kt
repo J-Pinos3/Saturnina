@@ -135,6 +135,10 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
             nav_heaher_userrolProductInfo.text = "Cliente"
         }else{
             nav_heaher_userrolProductInfo.text = "Administrador"
+            val flCarritoCompras: FrameLayout = findViewById(R.id.flCarritoCompras)
+            flCarritoCompras.visibility = View.GONE
+
+            btnAddProductInfoToCart.visibility = View.GONE
         }
 
         val hasColors = onColorSelected(spProductInfoColorsChoice, productData)
@@ -383,7 +387,7 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
 
         cartSalesItemsCount = findViewById(R.id.action_cart_count)
 
-        nav_heaher_userrolProductInfo = findViewById(R.id.nav_heaher_userrol)
+        nav_heaher_userrolProductInfo = nav_view_produt_info.getHeaderView(0).findViewById(R.id.nav_heaher_userrol)
     }
 
 

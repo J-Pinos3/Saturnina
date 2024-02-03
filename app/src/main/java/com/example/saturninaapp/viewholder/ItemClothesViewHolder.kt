@@ -38,6 +38,10 @@ class ItemClothesViewHolder(view: View): RecyclerView.ViewHolder(view) {
     private val tvItemCounter: TextView = view.findViewById(R.id.tvItemCounter)
     private lateinit var sizesList: List<String>
 
+    private val ROL_ADMIN: String = "rol:74rvq7jatzo6ac19mc79"
+
+
+
     //where itemClothes is a data class
     fun render(
         detailProduct: DetailProduct,
@@ -48,7 +52,14 @@ class ItemClothesViewHolder(view: View): RecyclerView.ViewHolder(view) {
         onHideItemCounter: (view: View, isVisible: Boolean) -> Unit,
         onChooseSize: (spinner: AutoCompleteTextView, DetailProduct) -> Boolean,
         onChooseColor: (spinner: AutoCompleteTextView, DetailProduct) -> Boolean,
+        UserROL: String
     ){
+
+        if(UserROL == ROL_ADMIN){
+            btnAddToCart.visibility = View.GONE
+            btnDeleteFromCart.visibility = View.GONE
+        }
+
 
         itemView.setOnClickListener {
             //Toast.makeText(itemView.context, "WHAT WOULD YOU LIKE TO DO ?", Toast.LENGTH_SHORT).show()
@@ -122,6 +133,8 @@ class ItemClothesViewHolder(view: View): RecyclerView.ViewHolder(view) {
         }
 
     }
+
+
     private fun loadSizesSpinner(spinner: AutoCompleteTextView, detProd: DetailProduct){
         sizesList = getNameofSizes(detProd.tallas)
         val adapter = ArrayAdapter(itemView.context, R.layout.list_size, sizesList )

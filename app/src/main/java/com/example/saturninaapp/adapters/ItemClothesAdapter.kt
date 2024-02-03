@@ -18,7 +18,8 @@ class ItemClothesAdapter(
     var isVisible: Boolean,
     val onHideItemCounter: (view: View, isVisible: Boolean) -> Unit,
     val onChooseSize: (spinner: AutoCompleteTextView, DetailProduct) -> Boolean,
-    val onChooseColor: (spinner: AutoCompleteTextView, DetailProduct) -> Boolean
+    val onChooseColor: (spinner: AutoCompleteTextView, DetailProduct) -> Boolean,
+    val UserROL: String
 )
     :RecyclerView.Adapter<ItemClothesViewHolder>()
 {
@@ -31,7 +32,7 @@ class ItemClothesAdapter(
 
 
     override fun onBindViewHolder(holder: ItemClothesViewHolder, position: Int) {
-        holder.render(sellingItems[position], OnCLickListener, OnItemDeleteListener, OnHideButton, isVisible, onHideItemCounter, onChooseSize, onChooseColor)
+        holder.render(sellingItems[position], OnCLickListener, OnItemDeleteListener, OnHideButton, isVisible, onHideItemCounter, onChooseSize, onChooseColor,UserROL)
     }
 
     override fun getItemCount(): Int = sellingItems.size

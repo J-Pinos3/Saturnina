@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.AutoCompleteTextView
+import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -80,6 +81,9 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
             nav_heaher_userrolCarSales.text = "Cliente"
         }else{
             nav_heaher_userrolCarSales.text = "Administrador"
+
+            val flCarritoCompras: FrameLayout = findViewById(R.id.flCarritoCompras)
+            flCarritoCompras.visibility = View.GONE
         }
 
         //reycler
@@ -91,7 +95,8 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
             isVisible = isAdapterVisible,
             onHideItemCounter = {v, isVisible -> hideItemCartCounter(v,isVisible) },
             onChooseSize = {item, product -> onSizeSelected(item, product)},
-            onChooseColor = {item, product -> onColorSelected(item, product)}
+            onChooseColor = {item, product -> onColorSelected(item, product)},
+            user_rol.toString()
         )
         rvProductsCar.layoutManager = LinearLayoutManager(this)
         rvProductsCar.adapter = itemClothesAdapter
@@ -227,7 +232,7 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
         tvTotalPrice = findViewById(R.id.tvTotalPrice)
 
         //user rol label
-        nav_heaher_userrolCarSales = findViewById(R.id.nav_heaher_userrol)
+        nav_heaher_userrolCarSales =  nav_view_car.getHeaderView(0).findViewById(R.id.nav_heaher_userrol)
     }
 
 

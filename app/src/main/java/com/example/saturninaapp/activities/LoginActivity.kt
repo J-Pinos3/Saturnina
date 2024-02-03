@@ -104,6 +104,7 @@ class LoginActivity : AppCompatActivity() {
                         val user_id = UserResponseLogine.detail.id
                         val user_rol = UserResponseLogine.detail.rol
 
+                        print("Dentro del login")
                         saveIdTokenRoleToFile(fileKey, user_token, user_id, user_rol)
                         val intent = Intent(applicationContext, IntroDashboardNews::class.java)
                         intent.putExtra("USER_TOKEN", user_token)

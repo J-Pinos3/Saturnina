@@ -8,6 +8,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.view.WindowManager
 import android.widget.EditText
 import android.widget.FrameLayout
@@ -106,6 +107,8 @@ class GenneralComments : AppCompatActivity() {
             nav_heaher_userrolGenneralComents.text = "Cliente"
         }else{
             nav_heaher_userrolGenneralComents.text = "Administrador"
+            val flCarritoCompras: FrameLayout = findViewById(R.id.flCarritoCompras)
+            flCarritoCompras.visibility = View.GONE
         }
 
 
@@ -353,7 +356,7 @@ class GenneralComments : AppCompatActivity() {
         rbGeneralInfoRating = findViewById(R.id.rbGeneralInfoRating)
         btnSendGeneralComment = findViewById(R.id.btnSendGeneralComment)
 
-        nav_heaher_userrolGenneralComents = findViewById(R.id.nav_heaher_userrol)
+        nav_heaher_userrolGenneralComents =  nav_view_genneral_comments.getHeaderView(0).findViewById(R.id.nav_heaher_userrol)
     }
 
 

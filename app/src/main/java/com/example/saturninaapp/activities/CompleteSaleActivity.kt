@@ -15,7 +15,9 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -41,6 +43,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.json.JSONObject
 import java.io.File
 import java.lang.Exception
 
@@ -137,6 +140,8 @@ class CompleteSaleActivity : AppCompatActivity() {
             nav_heaher_userrolCompleteSale.text = "Cliente"
         }else{
             nav_heaher_userrolCompleteSale.text = "Administrador"
+            val flCarritoCompras: FrameLayout = findViewById(R.id.flCarritoCompras)
+            flCarritoCompras.visibility = View.GONE
         }
 
         loadItemsFromFiles(cartKey)
@@ -296,7 +301,7 @@ class CompleteSaleActivity : AppCompatActivity() {
         btnAcceptSale = findViewById(R.id.btnAcceptSale)
 
         //user rol label
-        nav_heaher_userrolCompleteSale = findViewById(R.id.nav_heaher_userrol)
+        nav_heaher_userrolCompleteSale = nav_view_complete_sale.getHeaderView(0).findViewById(R.id.nav_heaher_userrol)
     }
 
 
@@ -412,20 +417,6 @@ class CompleteSaleActivity : AppCompatActivity() {
             val retrofitSendOrder = RetrofitHelper.consumeAPI.createOrder(
                 bearerToken, dataBody, filepart )
 
-//            val userIdRequestBody = createPartFromString(userId)
-//            val priceOrderRequestBody = createPartFromString(priceOrder.toString())
-//            val nombreRequestBody = createPartFromString(nombre)
-//            val apellidoRequestBody = createPartFromString(apellido)
-//            val direccionRequestBody = createPartFromString(direccion)
-//            val telefonoRequestBody = createPartFromString(telefono)
-//            val emailRequestBody = createPartFromString(email)
-//            val descripcionRequestBody = createPartFromString(descripcion)
-//
-//            val retrofitSendOrder = RetrofitHelper.consumeAPI.createOrder(
-//                bearerToken, userIdRequestBody,
-//                priceOrderRequestBody, listPart, nombreRequestBody, apellidoRequestBody,
-//                direccionRequestBody, emailRequestBody,telefonoRequestBody,
-//                descripcionRequestBody, filepart  )
 
 
             if(retrofitSendOrder.isSuccessful){
@@ -433,9 +424,14 @@ class CompleteSaleActivity : AppCompatActivity() {
                 val jsonResponse = retrofitSendOrder.body()
                 withContext(Dispatchers.Main){
                     clearCart(key)
+                    val jsonResponse = retrofitSendOrder.body().toString()
+                    val jsonObject = JSONObject(jsonResponse)
+                    val detailObject = jsonObject.getJSONObject("detail")
+                    val msg = detailObject.getString("msg")
+                    Toast.makeText(this@CompleteSaleActivity, msg, Toast.LENGTH_LONG).show()
                     val intent = Intent(applicationContext, IntroDashboardNews::class.java)
                     startActivity(intent)
-                    Log.i("SEND ORDER", "ORDER SENT SUCCESSFULLY: $jsonResponse")
+                    //Log.i("SEND ORDER", "ORDER SENT SUCCESSFULLY: $jsonResponse")
 
                 }
 

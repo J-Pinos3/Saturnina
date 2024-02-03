@@ -8,6 +8,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.RatingBar
@@ -89,6 +90,8 @@ class IntroDashboardNews : AppCompatActivity() {
             nav_heaher_userrolIntroNews.text = "Cliente"
         }else{
             nav_heaher_userrolIntroNews.text = "Administrador"
+            val flCarritoCompras: FrameLayout = findViewById(R.id.flCarritoCompras)
+            flCarritoCompras.visibility = View.GONE
         }
 
         loadItemsFromFile(sharedKey)
@@ -242,7 +245,8 @@ class IntroDashboardNews : AppCompatActivity() {
 
         firstCarouselAdapter = ClothesCarouselAdapter(mutableListOf<DetailProduct>())
 
-        nav_heaher_userrolIntroNews = findViewById(R.id.nav_heaher_userrol)
+        //nav_heaher_userrolIntroNews = findViewById(R.id.nav_heaher_userrol)
+        nav_heaher_userrolIntroNews = nav_view_main_news.getHeaderView(0).findViewById(R.id.nav_heaher_userrol)
     }
 
 

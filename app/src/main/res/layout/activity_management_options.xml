@@ -92,7 +92,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:menu="@menu/bottom_maenu_bar"
-        app:itemTextColor="@drawable/bottom_item_selected"
+        app:itemTextColor="@color/black"
         app:itemIconTint="@drawable/bottom_item_selected"
         android:background="@color/black"
         app:layout_constraintStart_toStartOf="parent"
