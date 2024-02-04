@@ -425,7 +425,7 @@ class ShowOrderInfoActivity : AppCompatActivity() {
                 val detailObject = jsonObject?.getJSONObject("detail")
                 val msg = detailObject?.getString("msg")
 
-                withContext(Dispatchers.IO){
+                runOnUiThread{
                     Toast.makeText(this@ShowOrderInfoActivity, msg, Toast.LENGTH_LONG).show()
 
                     val intent = Intent(this@ShowOrderInfoActivity, MySalesActivity::class.java)

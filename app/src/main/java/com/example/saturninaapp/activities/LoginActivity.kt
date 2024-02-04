@@ -38,6 +38,10 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var tvRegistrate: Button
     private lateinit var tvRecoverPassword: Button
 
+    private lateinit var tvTestResponse: TextView
+
+
+
 
     private var fileKey: String = "user_data"
 
@@ -105,6 +109,7 @@ class LoginActivity : AppCompatActivity() {
                         val user_rol = UserResponseLogine.detail.rol
 
                         print("Dentro del login")
+                        tvTestResponse.text = "Bienvenido querido usuario"
                         saveIdTokenRoleToFile(fileKey, user_token, user_id, user_rol)
                         val intent = Intent(applicationContext, IntroDashboardNews::class.java)
                         intent.putExtra("USER_TOKEN", user_token)
@@ -118,7 +123,7 @@ class LoginActivity : AppCompatActivity() {
                         val errorBody = error?.let { JSONObject(it) }
                         val detail = errorBody?.opt("detail")
                         var msg = ""
-
+                        tvTestResponse.text = "No puede ingresar"
                         when(detail){
                             is JSONObject->{
                                 msg = detail.getString("msg")
@@ -154,6 +159,7 @@ class LoginActivity : AppCompatActivity() {
         tvRegistrate = findViewById(R.id.tvRegistrate)
 
         tvRecoverPassword = findViewById(R.id.tvRecoverPassword)
+        tvTestResponse = findViewById(R.id.tvTestResponse)
     }
 
     private fun getUsersCredentials(): LoginCredentials{

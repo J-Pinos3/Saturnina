@@ -478,21 +478,26 @@ class CompleteSaleActivity : AppCompatActivity() {
             }else{
                 runOnUiThread {
                     Log.i("SEND ORDER ERROR", "ORDER COULDN'T BE SENT: ${retrofitSendOrder.errorBody()?.string()}")
-                    val error = retrofitSendOrder.errorBody()?.string()
-                    val errorBody = error?.let { JSONObject(it) }
-                    val detail = errorBody?.opt("detail")
-                    var msg = ""
-
-                    when(detail){
-                        is JSONObject->{
-                            msg = detail.getString("msg")
-                        }
-
-                        is JSONArray ->{
-                            val firstError = detail.getJSONObject(0)
-                            msg = firstError.getString("msg")
-                        }
-                    }
+                    val jsonResponse = retrofitSendOrder.body().toString()
+                    val jsonObject = JSONObject(jsonResponse)
+                    val detailObject = jsonObject.getJSONObject("detail")
+                    val msg = detailObject.getString("msg")
+                    Toast.makeText(this@CompleteSaleActivity, msg, Toast.LENGTH_LONG).show()
+//                    val error = retrofitSendOrder.errorBody()?.string()
+//                    val errorBody = error?.let { JSONObject(it) }
+//                    val detail = errorBody?.opt("detail")
+//                    var msg = ""
+//
+//                    when(detail){
+//                        is JSONObject->{
+//                            msg = detail.getString("msg")
+//                        }
+//
+//                        is JSONArray ->{
+//                            val firstError = detail.getJSONObject(0)
+//                            msg = firstError.getString("msg")
+//                        }
+//                    }
 
                     if(msg == "Token inválido o expirado"){
                         Toast.makeText(this@CompleteSaleActivity, "Por favor vuelve a iniciar sesión", Toast.LENGTH_LONG).show()

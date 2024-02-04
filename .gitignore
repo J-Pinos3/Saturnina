@@ -23,3 +23,5 @@ local.properties
 /app/src/main/java/com/example/saturninaapp/repositories/RegisterUpdateProfileOrdersRepository.kt
 /app/src/main/java/com/example/saturninaapp/repositories/TestApis.kt
 /app/src/main/java/com/example/saturninaapp/repositories/TestApisCreate.kt
+/.idea/androidTestResultsUserPreferences.xml
+/app/src/androidTest/java/com/example/saturninaapp/LoginActivityTest.kt

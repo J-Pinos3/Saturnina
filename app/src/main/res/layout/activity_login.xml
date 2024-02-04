@@ -95,6 +95,19 @@
                 app:layout_constraintStart_toStartOf="@+id/til_emailLog"
                 app:layout_constraintTop_toBottomOf="@+id/til_passwordLog" />
 
+            <TextView
+                android:id="@+id/tvTestResponse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnIniciarSesionLogin"
+                app:layout_constraintBottom_toTopOf="@id/tvRegistrate"
+                android:text="Prueba"
+                android:visibility="invisible"
+                android:textSize="15sp"
+                android:textColor="@color/g_red"/>
+
             <Button
                 android:id="@+id/tvRegistrate"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"

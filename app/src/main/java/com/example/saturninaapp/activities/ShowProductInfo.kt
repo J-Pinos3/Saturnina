@@ -125,19 +125,19 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
 
     override fun onStart() {
         super.onStart()
-        loadIdTokenRoleFromFile(fileKey)
+        //loadIdTokenRoleFromFile(fileKey)
     }
 
     override fun onResume() {
         super.onResume()
-        loadIdTokenRoleFromFile(fileKey)
+        //loadIdTokenRoleFromFile(fileKey)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_product_info)
         initUI()
-        //loadIdTokenRoleFromFile(fileKey)
+        loadIdTokenRoleFromFile(fileKey)
         println("USER DATA: $user_id, $user_rol, + $user_token")
         loadItemsFromFile(cartKey)
         loadItemsCount()
@@ -561,17 +561,17 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
                 val detailObject = jsonObject?.getJSONObject("detail")
                 val msg = detailObject?.getString("msg")
 
-                print("awuuii verga1")
+
                 withContext(Dispatchers.Main){
 
                     insertNewCommentIntoList(resultComment)
-                    Toast.makeText (this@ShowProductInfo, msg, Toast.LENGTH_LONG).show()
+                    Toast.makeText (this@ShowProductInfo, "exito: "+msg, Toast.LENGTH_LONG).show()
                     Log.i("CREATE COMMENT: ", "COMMENT CREATED SUCCESSFULLY: $msg")
                 }
             }else{
-                print("awuuii verga3")
+
                 runOnUiThread {
-                    print("awuuii verga2")
+
                     val error = retrofitCreateNewComment.errorBody()?.string()
                     val errorBody = error?.let { JSONObject(it) }
                     val detail = errorBody?.opt("detail")
@@ -586,7 +586,7 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
                             msg = firstError.getString("msg")
                         }
                     }
-                    Toast.makeText (this@ShowProductInfo, msg, Toast.LENGTH_LONG).show()
+                    Toast.makeText (this@ShowProductInfo, "error: " + msg, Toast.LENGTH_LONG).show()
                     //Log.e("ERROR CREATING COMMENT: ", "COULDN'T CREATE NEW COMMENT: ${retrofitCreateNewComment.code()} --**-- $msg  --**-- $error -*-*-*- ${retrofitCreateNewComment.errorBody().toString()}")
                 }
             }

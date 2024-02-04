@@ -101,7 +101,7 @@ interface ConsumeAPI {
 
 
     @Multipart
-    @PUT("order/{id_user}")
+    @PUT("order/{id_order}")
     suspend fun updateUserOrder(
         @Header("Authorization") authorization: String,
         @Part("data") data: RequestBody,
