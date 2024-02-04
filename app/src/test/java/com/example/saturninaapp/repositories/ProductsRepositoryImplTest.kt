@@ -39,7 +39,7 @@ class ProductsRepositoryImplTest{
 
 
     @Test
-    fun `bring all products from API`() = runTest {
+    fun `bring all products to UI`() = runTest {
         val expectedResponse = repository.getItemsProducts()
         println("Message: ")
         println("P1: ${expectedResponse.body?.detail?.get(0)?.name} ${expectedResponse.body?.detail?.get(0)?.precio}")
@@ -49,7 +49,7 @@ class ProductsRepositoryImplTest{
 
 
     @Test
-    fun `bring all categories from API`()= runTest {
+    fun `bring all categories to UI`()= runTest {
         val expectedResponse = repository.getClothesCategories(userToken)
         println("Message: category " + expectedResponse.body?.detail?.get(0)?.name)
         assert(expectedResponse.body?.detail?.size!! >= 1)
@@ -65,7 +65,7 @@ class ProductsRepositoryImplTest{
 
 
     @Test
-    fun `get general comments from all users`() = runTest {
+    fun `get general comments from all users, draw to UI`() = runTest {
         val expectedResponse = repository.getAllComments()
         print("Message: " + expectedResponse.body?.detail)
         assert(expectedResponse.body != null)

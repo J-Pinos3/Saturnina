@@ -47,6 +47,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
 import java.lang.Exception
+import java.text.DecimalFormat
 
 
 class CompleteSaleActivity : AppCompatActivity() {
@@ -342,10 +343,11 @@ class CompleteSaleActivity : AppCompatActivity() {
     //final price of purchase
     private fun getTotalValueOfCart(): Double{
         var suma: Double = 0.0
+        val df = DecimalFormat("####.##")
         for(k in finalListOfProducts){
             suma += k.precio * k.contador
         }
-        return suma
+        return df.format(suma).toDouble()
     }
 
     suspend fun bringUserData(bearerToken: String, user_id: String){

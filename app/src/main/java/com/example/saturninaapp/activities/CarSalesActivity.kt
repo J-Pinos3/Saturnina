@@ -28,6 +28,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.text.DecimalFormat
 
 
 class CarSalesActivity : AppCompatActivity(), UtilClasses  {
@@ -400,21 +401,24 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
 
     private fun increaseTotalPricebyProduct(currentProduct: DetailProduct){
         var currentPrice = (currentProduct.precio )
-        tvTotalPrice.text = ( tvTotalPrice.text.toString().toDouble() +  currentPrice).toString()
+        val df = DecimalFormat("####.##")
+        tvTotalPrice.text = df.format( tvTotalPrice.text.toString().toDouble() +  currentPrice).toString()
     }
 
 
     private fun decreaseTotalPricebyProduct(currentProduct: DetailProduct){
         var currentPrice = (currentProduct.precio)
-        tvTotalPrice.text = ( tvTotalPrice.text.toString().toDouble() -  currentPrice).toString()
+        val df = DecimalFormat("####.##")
+        tvTotalPrice.text = df.format( tvTotalPrice.text.toString().toDouble() -  currentPrice).toString()
     }
 
     private fun loadInitialPrice(): Unit{
         var suma: Double = 0.0
+        val df = DecimalFormat("####.##")
         for(k in itemsProducts){
             suma += k.precio * k.contador
         }
-        tvTotalPrice.text = suma.toString()
+        tvTotalPrice.text = df.format(suma).toString()
     }
 
 
