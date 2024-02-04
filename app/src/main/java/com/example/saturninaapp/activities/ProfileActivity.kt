@@ -132,6 +132,9 @@ class ProfileActivity : AppCompatActivity() {
 
                         if(msg == "Token inválido o expirado"){
                             Toast.makeText(this@ProfileActivity, "Por favor vuelve a iniciar sesión", Toast.LENGTH_LONG).show()
+                            val intent = Intent(applicationContext, LoginActivity::class.java)
+                            startActivity(intent)
+                            finish()
                         }else{
                             Toast.makeText(this@ProfileActivity, msg, Toast.LENGTH_LONG).show()
                         }
@@ -181,6 +184,7 @@ class ProfileActivity : AppCompatActivity() {
                         val userResponseUpdateProfile = retrofitUpdateProfile.body()
                         val msg = userResponseUpdateProfile?.getAsJsonObject("detail")?.get("msg")?.asString
                         println("userr message $msg")
+                        Toast.makeText(this@ProfileActivity, "Usuario Actualizado", Toast.LENGTH_LONG).show()
                         Log.d("Usuario Actualizado", "Se actualizó el usuario ${userProfile.nombre} con id ${user_id}\n ${retrofitUpdateProfile.body().toString()}")
                         paintUserNewData(userProfile)
                     }
@@ -206,6 +210,11 @@ class ProfileActivity : AppCompatActivity() {
 
                         if(msg == "Token inválido o expirado"){
                             Toast.makeText(this@ProfileActivity, "Por favor vuelve a iniciar sesión", Toast.LENGTH_LONG).show()
+                            val intent = Intent(applicationContext, LoginActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }else{
+                            Toast.makeText(this@ProfileActivity, msg, Toast.LENGTH_LONG).show()
                         }
                     }
                 }

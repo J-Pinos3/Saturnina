@@ -287,9 +287,15 @@ class GenneralComments : AppCompatActivity() {
                             msg = firstError.getString("msg")
                         }
                     }
-                    Toast.makeText (this@GenneralComments, msg, Toast.LENGTH_LONG).show()
-                    Log.e("ERROR CREATING GEN COMMENT: ", "COULDN'T CREATE NEW COMMENT: ${retrofitCreateGComment.code()} \n\t--**-- $msg  --**--\n" +
-                            "\t $error -*-*-*- ${retrofitCreateGComment.errorBody().toString()}")
+
+                    if(msg == "Token inválido o expirado"){
+                        Toast.makeText(this@GenneralComments, "Por favor vuelve a iniciar sesión", Toast.LENGTH_LONG).show()
+                        val intent = Intent(applicationContext, LoginActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }else{
+                        Toast.makeText (this@GenneralComments, msg, Toast.LENGTH_LONG).show()
+                    }
                 }
             }
 

@@ -40,7 +40,7 @@
         <ImageView
             android:id="@+id/ivIntroImage"
             android:layout_width="0dp"
-            android:layout_height="225dp"
+            android:layout_height="200dp"
             android:layout_marginTop="15dp"
             android:src="@drawable/metallicabgless"
             app:layout_constraintEnd_toEndOf="@id/guidelineRight"
@@ -63,7 +63,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvFirstCategoryClothes"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/tvAboutProducts"
             app:layout_constraintEnd_toEndOf="@id/guidelineRight"
             app:layout_constraintStart_toStartOf="@id/guidelineLeft"

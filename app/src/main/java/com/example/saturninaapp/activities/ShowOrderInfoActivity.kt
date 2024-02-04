@@ -459,6 +459,9 @@ class ShowOrderInfoActivity : AppCompatActivity() {
 
                         if(msg == "Token inválido o expirado"){
                             Toast.makeText(this@ShowOrderInfoActivity, "Por favor vuelve a iniciar sesión", Toast.LENGTH_LONG).show()
+                            val intent = Intent(applicationContext, LoginActivity::class.java)
+                            startActivity(intent)
+                            finish()
                         }else{
                             Toast.makeText(this@ShowOrderInfoActivity, msg, Toast.LENGTH_LONG).show()
                         }
@@ -553,6 +556,9 @@ class ShowOrderInfoActivity : AppCompatActivity() {
 
                         if(msg == "Token inválido o expirado"){
                             Toast.makeText(this@ShowOrderInfoActivity, "Por favor vuelve a iniciar sesión", Toast.LENGTH_LONG).show()
+                            val intent = Intent(applicationContext, LoginActivity::class.java)
+                            startActivity(intent)
+                            finish()
                         }else{
                             Toast.makeText(this@ShowOrderInfoActivity, msg, Toast.LENGTH_LONG).show()
                         }

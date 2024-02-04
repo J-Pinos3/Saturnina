@@ -41,7 +41,7 @@
                     android:layout_column="0"
                     android:paddingVertical="4dp"
                     android:text="Total:"
-                    android:textSize="20dp" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/tvTotalPrice"
@@ -51,7 +51,7 @@
                     android:paddingVertical="4dp"
                     android:text="$00.00"
                     android:textAlignment="textEnd"
-                    android:textSize="20dp" />
+                    android:textSize="20sp" />
             </TableRow>
 
 
@@ -98,7 +98,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_end="667dp" />
+            app:layout_constraintGuide_percent="0.05" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineBottom"
