@@ -548,7 +548,7 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
 
     suspend fun createUserCommentary(bearerToken: String, descripcion: String, user_id: String, id_producto:String, calificacion: Int){
         try{
-            Log.i("DATA TO CREATE COMMENT ", " desc $descripcion  user $user_id  idprod $id_producto  calif $calificacion")
+            //Log.i("DATA TO CREATE COMMENT ", " desc $descripcion  user $user_id  idprod $id_producto  calif $calificacion")
             val commentaryData = CommentaryData(descripcion, user_id, id_producto, calificacion)
 
             val resultComment = ResultComment(calificacion, descripcion,"",id_producto, UserId())
@@ -567,7 +567,7 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
 
                     insertNewCommentIntoList(resultComment)
                     Toast.makeText (this@ShowProductInfo, "exito: "+msg, Toast.LENGTH_LONG).show()
-                    Log.i("CREATE COMMENT: ", "COMMENT CREATED SUCCESSFULLY: $msg")
+                    //Log.i("CREATE COMMENT: ", "COMMENT CREATED SUCCESSFULLY: $msg")
                 }
             }else{
 
@@ -608,7 +608,7 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
                     if(listResponse != null){
                         for(k in listResponse){
                             for(comment in k.result){
-                                println(comment.calificacion.toString() + " " + comment.user_id + " " + comment.descripcion +  " " + comment.id_producto + "-*-*-*-*-")
+                                //println(comment.calificacion.toString() + " " + comment.user_id + " " + comment.descripcion +  " " + comment.id_producto + "-*-*-*-*-")
                                 itemsCommentaries.add(ResultComment(comment.calificacion, comment.descripcion,
                                     comment.id, comment.id_producto, comment.user_id))
                             }
@@ -644,9 +644,9 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
 
 
     private fun filterCommentsOfProduct(commentariesList: MutableList<ResultComment>, product: DetailProduct) {
-        println("PRODUCT ID FOR FILTERING: ${product.id}")
+        //println("PRODUCT ID FOR FILTERING: ${product.id}")
         filteredCommentaries = commentariesList.filter { it.id_producto == product.id }.toMutableList()
-        Log.i("FILTERED COMMENTS BY PRODUCT: ", filteredCommentaries.toString())
+        //Log.i("FILTERED COMMENTS BY PRODUCT: ", filteredCommentaries.toString())
 
         commentsAdapter.commentsList = filteredCommentaries
         commentsAdapter.notifyDataSetChanged()
@@ -666,7 +666,7 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
         user_id =  sharedPreferences.getString("USER-ID","").toString()
         user_rol =  sharedPreferences.getString("USER-ROL","").toString()
         cartKey = user_id
-        println(user_token + " -- " + user_id + " -- " + user_rol + "III")
+        //println(user_token + " -- " + user_id + " -- " + user_rol + "III")
     }
 
 

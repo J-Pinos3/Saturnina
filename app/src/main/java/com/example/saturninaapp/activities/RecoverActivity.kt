@@ -141,7 +141,7 @@ class RecoverActivity : AppCompatActivity() {
                    val errorBody = error?.let { JSONObject(it) }
                    val detail = errorBody?.opt("detail")
                    var msg = ""
-                   Log.e("ERROR RECOVER PASS", error.toString() +"  "+ retrofitNewPassword.code())
+                   //Log.e("ERROR RECOVER PASS", error.toString() +"  "+ retrofitNewPassword.code())
                    when(detail){
                         is JSONObject->{  msg = detail.getString("msg")  }
 

@@ -99,10 +99,10 @@ class IntroDashboardNews : AppCompatActivity() {
 
         CoroutineScope(Dispatchers.Main).launch {
             fetchIntroClothCategories(bearerToken)
-            Log.d("DEBUG", "Categories fetched: $itemsCategories")
+            //Log.d("DEBUG", "Categories fetched: $itemsCategories")
 
             fecthIntroItemProducts(bearerToken) { ShuffleLists() }
-            Log.d("DEBUG", "Products fetched: $firstCategoryItems")
+          //  Log.d("DEBUG", "Products fetched: $firstCategoryItems")
         }
 
 
@@ -193,7 +193,7 @@ class IntroDashboardNews : AppCompatActivity() {
         //navigate
         val flCarritoComprasIcon: FrameLayout = findViewById(R.id.flCarritoCompras)
         flCarritoComprasIcon.setOnClickListener {
-            Toast.makeText(this, "Carrito Clicado", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this, "Carrito Clicado", Toast.LENGTH_SHORT).show()
 
 
             val intent = Intent(this, CarSalesActivity::class.java)
@@ -211,7 +211,7 @@ class IntroDashboardNews : AppCompatActivity() {
         random1 = getRandonCategory()
         random2 = getRandonCategory()
         firstCategoryItems = getProductsofRandomCat(firstCategoryItems, random1)
-        Log.i("first cat", firstCategoryItems.toString() + "  categoria1 $random1")
+        //Log.i("first cat", firstCategoryItems.toString() + "  categoria1 $random1")
 
         if( firstCategoryItems.size > TOTAL_ITEMS){
             firstCarouselAdapter.productSections = firstCategoryItems.take(TOTAL_ITEMS).toMutableList()
@@ -273,7 +273,7 @@ class IntroDashboardNews : AppCompatActivity() {
 
     private fun getRandonCategory(): String{
 
-        Log.i("CATEGORIES SIZE", itemsCategories.size.toString())
+        //Log.i("CATEGORIES SIZE", itemsCategories.size.toString())
         return if(itemsCategories.size != 0 ){
             val randomcar = itemsCategories.random()
             randomcar.id
@@ -298,7 +298,7 @@ class IntroDashboardNews : AppCompatActivity() {
             categoryRandom = itemsCategories.random().id
             filteredList = listaProductos.filter { it.category == categoryRandom}
         }
-        Log.i("FILTERED LIST-RANDOM CAT", "HERE $categoryRandom and $filteredList ")
+        //Log.i("FILTERED LIST-RANDOM CAT", "HERE $categoryRandom and $filteredList ")
 
 
         return filteredList.toMutableList()
@@ -317,7 +317,7 @@ class IntroDashboardNews : AppCompatActivity() {
                 withContext(Dispatchers.Main){
                     if (listResponse != null) {
                         for(k in listResponse){
-                            println("ID: " + k.id + " CATE: " + k.name)
+                            //println("ID: " + k.id + " CATE: " + k.name)
                             itemsCategories.add(ClothCategoryData(k.id, k.name))
                         }
 
@@ -364,7 +364,7 @@ class IntroDashboardNews : AppCompatActivity() {
                 withContext(Dispatchers.Main){
                     if(listResponse != null){
                         for(k in listResponse){
-                            println("Cate: ${k.category}  Name: ${k.name}  Desc: ${k.descripcion}  Price: ${k.precio}")
+                            //println("Cate: ${k.category}  Name: ${k.name}  Desc: ${k.descripcion}  Price: ${k.precio}")
 
                             val colores = k.colores ?: emptyList()
                             val tallas = k.tallas ?: emptyList()
@@ -419,7 +419,7 @@ class IntroDashboardNews : AppCompatActivity() {
         val type = object : TypeToken<MutableList<DetailProduct>>() {}.type
         itemsProducts = (gson.fromJson(jsonString, type) ?: mutableListOf<DetailProduct>() )
 
-        println("carrito de productos: $itemsProducts")
+        //println("carrito de productos: $itemsProducts")
     }
 
 }

@@ -260,7 +260,7 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
         val type = object : TypeToken< MutableList<DetailProduct> >() {}.type
         itemsProducts = (gson.fromJson(jsonString, type) ?: mutableListOf<DetailProduct>() )
 
-        println("carrito de productos: $itemsProducts")
+        //println("carrito de productos: $itemsProducts")
     }
 
 
@@ -289,19 +289,19 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
             product.contador++
             itemsProducts.add(product)
             increaseCarItemsCount()
-            Log.d("CarSales: Product Added To Cart","${product} ")
+            //Log.d("CarSales: Product Added To Cart","${product} ")
 
         }else {
             //else just increase its counter
             var productIndex: Int = itemsProducts.indexOf(product)
             itemsProducts[productIndex].contador ++
             increaseCarItemsCount()
-            Log.d("CarSales: Product counter increased"," ${product} ${product.contador}")
+            //Log.d("CarSales: Product counter increased"," ${product} ${product.contador}")
         }
 
         increaseTotalPricebyProduct(product)
         NotifyListItemChanged()
-        showCartListItems()
+        //showCartListItems()
     }
 
     override fun onItemDeleteSelected(product: DetailProduct){
@@ -324,7 +324,7 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
         }
 
         NotifyListItemChanged()
-        showCartListItems()
+        //showCartListItems()
     }
 
     //SIZES

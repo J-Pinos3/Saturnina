@@ -208,7 +208,7 @@ class GenneralComments : AppCompatActivity() {
         //cart items navigate
         val flCarritoComprasIcon: FrameLayout = findViewById(R.id.flCarritoCompras)
         flCarritoComprasIcon.setOnClickListener {
-            Toast.makeText(this, "Carrito Clicado", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this, "Carrito Clicado", Toast.LENGTH_SHORT).show()
             val intent = Intent(applicationContext, CarSalesActivity::class.java)
             intent.putExtra("USER_TOKENTO_PROFILE", user_token)
             intent.putExtra("USER_ID", user_id)
@@ -240,7 +240,7 @@ class GenneralComments : AppCompatActivity() {
                                         comment.id,"", comment.user_id))
                             }
                         }
-                        Log.d("ALL COMMENTS", itemsGeneralCommentaries.toString())
+                        //Log.d("ALL COMMENTS", itemsGeneralCommentaries.toString())
                         generalCommentsAdapter.notifyDataSetChanged()
                     }
 
@@ -384,7 +384,7 @@ class GenneralComments : AppCompatActivity() {
         val type = object : TypeToken<MutableList<DetailProduct>>() {}.type
         itemsProducts = (gson.fromJson(jsonString, type) ?: mutableListOf<DetailProduct>() )
 
-        println("CARRASO de productos: $itemsProducts")
+        //println("CARRASO de productos: $itemsProducts")
     }
 
 

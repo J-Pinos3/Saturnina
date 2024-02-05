@@ -112,7 +112,7 @@ class CompleteSaleActivity : AppCompatActivity() {
                     if(file != null && file.exists()){
                         val totalValue = getTotalValueOfCart()
                         val idcounterList = getListWithIdCounterSizeColor(finalListOfProducts)
-                        Log.i("FINAL LIST", "$idcounterList")
+                        //Log.i("FINAL LIST", "$idcounterList")
                         addDataToOrder(bearerToken, user_id, totalValue, idcounterList, userOwner.nombre, userOwner.apellido, etOrderAddress.text.toString(),
                             userOwner.email, userOwner.telefono, etOrderDescription.text.toString(), file, cartKey)
 
@@ -256,7 +256,7 @@ class CompleteSaleActivity : AppCompatActivity() {
 
         val flCarritoCompras: FrameLayout = findViewById(R.id.flCarritoCompras)
         flCarritoCompras.setOnClickListener {
-            Toast.makeText(this, "Carrito Clicado", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this, "Carrito Clicado", Toast.LENGTH_SHORT).show()
 
             val intent = Intent(applicationContext, CarSalesActivity::class.java)
             intent.putExtra("USER_TOKENTO_PROFILE", userToken)
@@ -278,9 +278,9 @@ class CompleteSaleActivity : AppCompatActivity() {
             if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 val selectBillImage = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
                 pickImage.launch(selectBillImage)
-                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
             }else{
-                Toast.makeText(this, "NO Permission Granted", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this, "NO Permission Granted", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -368,13 +368,13 @@ class CompleteSaleActivity : AppCompatActivity() {
                         userResponseProfile?.detail?.telefono.toString(),
                         userResponseProfile?.detail?.token.toString()
                     )
-                    Log.i("USER DATA FOR ORDER", "${userOwner.nombre} + ${userOwner.telefono}")
+                    //Log.i("USER DATA FOR ORDER", "${userOwner.nombre} + ${userOwner.telefono}")
                 }
 
 
             }else{
                 runOnUiThread {
-                    Log.e("COULDN'T BRING USER DATA", "${retrofitGetProfile.code()} --- ${retrofitGetProfile.errorBody()?.toString()}")
+                    //Log.e("COULDN'T BRING USER DATA", "${retrofitGetProfile.code()} --- ${retrofitGetProfile.errorBody()?.toString()}")
 
                     val error = retrofitGetProfile.errorBody()?.string()
                     val errorBody = error?.let { JSONObject(it) }
@@ -417,7 +417,7 @@ class CompleteSaleActivity : AppCompatActivity() {
                 image.name,
                 requestFile
             )
-            Log.i("iimage loaded:","${image.absoluteFile}")
+            //Log.i("iimage loaded:","${image.absoluteFile}")
 
 //            val listPart = mutableListOf<MultipartBody.Part>()
 //            for(product in productsData){
@@ -459,7 +459,7 @@ class CompleteSaleActivity : AppCompatActivity() {
 
 
             if(retrofitSendOrder.isSuccessful){
-                Log.i("SEND ORDER", "AQUIII")
+                //Log.i("SEND ORDER", "AQUIII")
                 val jsonResponse = retrofitSendOrder.body()
                 withContext(Dispatchers.Main){
                     clearCart(key)
@@ -479,7 +479,7 @@ class CompleteSaleActivity : AppCompatActivity() {
 
             }else{
                 runOnUiThread {
-                    Log.i("SEND ORDER ERROR", "ORDER COULDN'T BE SENT: ${retrofitSendOrder.errorBody()?.string()}")
+                    //Log.i("SEND ORDER ERROR", "ORDER COULDN'T BE SENT: ${retrofitSendOrder.errorBody()?.string()}")
                     val jsonResponse = retrofitSendOrder.body().toString()
                     val jsonObject = JSONObject(jsonResponse)
                     val detailObject = jsonObject.getJSONObject("detail")

@@ -110,7 +110,7 @@ class ItemClothesViewHolder(view: View): RecyclerView.ViewHolder(view) {
                 spSizesChoice.post{
                     spSizesChoice.text = Editable.Factory.getInstance().newEditable(detailProduct.tallaSeleccionada)
                 }
-                Log.i("SELECTED SIZE", "you choose ${detailProduct}")
+                //Log.i("SELECTED SIZE", "you choose ${detailProduct}")
             }
 
 
@@ -120,7 +120,7 @@ class ItemClothesViewHolder(view: View): RecyclerView.ViewHolder(view) {
                 spColorsChoice.post{
                     spColorsChoice.text = Editable.Factory.getInstance().newEditable(detailProduct.colorSeleccionado)
                 }
-                Log.i("SELECTED COLOR", "you choose ${detailProduct}")
+                //Log.i("SELECTED COLOR", "you choose ${detailProduct}")
         }
 
 

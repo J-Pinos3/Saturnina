@@ -128,7 +128,7 @@ class ShowOrderInfoActivity : AppCompatActivity() {
                 if(imgUri != null){
                     val file = uriToFile(imgUri)
                     if( file != null && file.exists() ){
-                        println("TOKEN IS LIKE? $bearerToken")
+                        //println("TOKEN IS LIKE? $bearerToken")
                         updateUserOrder(bearerToken, tvOrderInfoFirstName.text.toString(), tvOrderInfoLastName.text.toString(),
                             tvOrderInfoAddress.text.toString(), tvOrderInfoEmail.text.toString(), tvOrderInfoCellPhone.text.toString(),
                             orderSelectedInfo.id_orden.id, file)
@@ -152,7 +152,7 @@ class ShowOrderInfoActivity : AppCompatActivity() {
         user_id = intent.extras?.getString("USER_ID").toString()
         user_rol = intent.extras?.getString("USER_ROL").toString()
         bearerToken = "Bearer $user_token"
-        println("token del usuario: ${bearerToken}")
+        //println("token del usuario: ${bearerToken}")
         orderSelectedInfo = intent.getSerializableExtra("ORDER_SELECTED") as OrderResult
         fillViewsWithOrderInfo(orderSelectedInfo)
         when(user_rol){
@@ -321,9 +321,9 @@ class ShowOrderInfoActivity : AppCompatActivity() {
                     pickImage.launch(selectBillImage)
                 }
 
-                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "NO Permission Granted", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this, "NO Permission Granted", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -414,9 +414,9 @@ class ShowOrderInfoActivity : AppCompatActivity() {
 
     suspend fun updateOrderStatus( bearerToken: String, orderStatusData: OrderStatusData, order_id: String ){
 
-        println("ORDER ID: $order_id")
+        //println("ORDER ID: $order_id")
         try {
-            println("ORDER ID: $order_id")
+            //println("ORDER ID: $order_id")
             val retrofitUpdateUserStatus = RetrofitHelper.consumeAPI.uptdateOrderStatus(bearerToken, orderStatusData, order_id)
             if(retrofitUpdateUserStatus.isSuccessful){
 
@@ -434,13 +434,13 @@ class ShowOrderInfoActivity : AppCompatActivity() {
                     intent.putExtra("USER_ROL", user_rol)
                     startActivity(intent)
 
-                    Log.i("UPDATE ORDER", "ORDER STATUS UPDATED SUCCESSFULLY $msg")
+                    //Log.i("UPDATE ORDER", "ORDER STATUS UPDATED SUCCESSFULLY $msg")
                 }
 
             }else{
                 runOnUiThread {
                     try{
-                        Log.e("Error al cargar el perfil: ","${retrofitUpdateUserStatus.code()} -- ${retrofitUpdateUserStatus.errorBody()?.string()}")
+                        //Log.e("Error al cargar el perfil: ","${retrofitUpdateUserStatus.code()} -- ${retrofitUpdateUserStatus.errorBody()?.string()}")
                         val error = retrofitUpdateUserStatus.errorBody()?.string()
                         val errorBody = error?.let { JSONObject(it) }
                         val detail = errorBody?.opt("detail")
@@ -483,7 +483,7 @@ class ShowOrderInfoActivity : AppCompatActivity() {
         }
 
 
-        Log.i("DATA FOR STATUS"," data -- $status --  ${etStatusDescription.text}")
+        //Log.i("DATA FOR STATUS"," data -- $status --  ${etStatusDescription.text}")
         return OrderStatusData( status, etStatusDescription.text.toString() )
     }
 
@@ -499,7 +499,7 @@ class ShowOrderInfoActivity : AppCompatActivity() {
                 image.name,
                 requestFile
             )
-            Log.i("iimage loaded:","${image.absoluteFile}")
+            //Log.i("iimage loaded:","${image.absoluteFile}")
 
             val dataJson = JsonObject()
 
@@ -537,7 +537,7 @@ class ShowOrderInfoActivity : AppCompatActivity() {
             }else{
                 runOnUiThread {
                     try{
-                        Log.e("Error al cargar el perfil: ","${retrofitUpdateUserComment.code()} -- ${retrofitUpdateUserComment.errorBody()?.string()}")
+                       // Log.e("Error al cargar el perfil: ","${retrofitUpdateUserComment.code()} -- ${retrofitUpdateUserComment.errorBody()?.string()}")
                         val error = retrofitUpdateUserComment.errorBody()?.string()
                         val errorBody = error?.let { JSONObject(it) }
                         val detail = errorBody?.opt("detail")

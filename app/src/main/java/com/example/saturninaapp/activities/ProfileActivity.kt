@@ -91,8 +91,8 @@ class ProfileActivity : AppCompatActivity() {
             if(retrofitGetProfile.isSuccessful){
                 val userResponseProfile = retrofitGetProfile.body()
                 withContext(Dispatchers.Main) {
-                    Log.d("Perfil Obtenido exitosamente", "${userResponseProfile?.detail?.token} ${userResponseProfile?.detail?.nombre} ${userResponseProfile?.detail?.apellido}")
-                    println("user_id = ${user_id}")
+                    //Log.d("Perfil Obtenido exitosamente", "${userResponseProfile?.detail?.token} ${userResponseProfile?.detail?.nombre} ${userResponseProfile?.detail?.apellido}")
+                    //println("user_id = ${user_id}")
 
                     etNameProfile.post {
                         etNameProfile.text = Editable.Factory.getInstance().newEditable(userResponseProfile?.detail?.nombre?.trim())
@@ -113,7 +113,7 @@ class ProfileActivity : AppCompatActivity() {
             }else{
                 runOnUiThread{
                     try{
-                        Log.e("Error al cargar el perfil: ","${retrofitGetProfile.code()} -- ${retrofitGetProfile.errorBody()?.string()}")
+                        //Log.e("Error al cargar el perfil: ","${retrofitGetProfile.code()} -- ${retrofitGetProfile.errorBody()?.string()}")
                         val error = retrofitGetProfile.errorBody()?.string()
                         val errorBody = error?.let { JSONObject(it) }
                         val detail = errorBody?.opt("detail")
@@ -177,21 +177,21 @@ class ProfileActivity : AppCompatActivity() {
             CoroutineScope(Dispatchers.IO).launch {
 
                 val retrofitUpdateProfile = RetrofitHelper.consumeAPI.updateUserProfile(bearer_token, user_id!!, userProfile)
-                println("AQUIIIIIIII")
+                //println("AQUIIIIIIII")
 
                 if( retrofitUpdateProfile.isSuccessful ){
                     runOnUiThread {
                         val userResponseUpdateProfile = retrofitUpdateProfile.body()
                         val msg = userResponseUpdateProfile?.getAsJsonObject("detail")?.get("msg")?.asString
-                        println("userr message $msg")
+                        //println("userr message $msg")
                         Toast.makeText(this@ProfileActivity, "Usuario Actualizado", Toast.LENGTH_LONG).show()
-                        Log.d("Usuario Actualizado", "Se actualizó el usuario ${userProfile.nombre} con id ${user_id}\n ${retrofitUpdateProfile.body().toString()}")
+                        //Log.d("Usuario Actualizado", "Se actualizó el usuario ${userProfile.nombre} con id ${user_id}\n ${retrofitUpdateProfile.body().toString()}")
                         paintUserNewData(userProfile)
                     }
 
                 }else{
                     runOnUiThread {
-                        Log.e("Error al actualizar el perfil: ","${retrofitUpdateProfile.code()} -- ${retrofitUpdateProfile.errorBody()?.string()}")
+                        //Log.e("Error al actualizar el perfil: ","${retrofitUpdateProfile.code()} -- ${retrofitUpdateProfile.errorBody()?.string()}")
                         val error = retrofitUpdateProfile.errorBody()?.string()
                         val errorBody = error?.let { JSONObject(it) }
                         val detail = errorBody?.opt("detail")
@@ -302,14 +302,14 @@ class ProfileActivity : AppCompatActivity() {
 
 
         if(name.length  !in MIN_LENGTH_PROFILENAME .. MAX_LENGTH_PROFILENAME ){
-            Log.e("NAME LENGTH", " --**-- ${name}, ${name.length}")
+            //Log.e("NAME LENGTH", " --**-- ${name}, ${name.length}")
             etNameProfile.error = "El nombre debe tener una longitud entre $MIN_LENGTH_PROFILENAME y $MAX_LENGTH_PROFILENAME caracteres"
             clickable = false
         }
 
 
         if( lastName.length !in MIN_LENGTH_PROFILENAME ..  MAX_LENGTH_PROFILENAME){
-            Log.e("LAST LENGTH", " --**-- ${lastName}, ${lastName.length}")
+            //Log.e("LAST LENGTH", " --**-- ${lastName}, ${lastName.length}")
             etLastProfile.error = "El apellido debe tener una longitud entre $MIN_LENGTH_PROFILENAME y $MAX_LENGTH_PROFILENAME caracteres"
             clickable = false
         }
@@ -320,7 +320,7 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         if( number.length != MIN_LENGTH_PROFILECELLPHONE){
-            Log.e("NUMBER LENGTH", " --**-- ${number}, ${number.length}")
+           // Log.e("NUMBER LENGTH", " --**-- ${number}, ${number.length}")
             etNumberProfile.error = "El teléfono debe tener una longitud de $MIN_LENGTH_PROFILECELLPHONE  caracteres"
             clickable = false
         }

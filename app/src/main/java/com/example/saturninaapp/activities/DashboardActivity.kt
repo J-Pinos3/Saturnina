@@ -94,7 +94,7 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
         val bearerToken: String = "Bearer $user_token"
 
 
-        showCartListItems()
+        //showCartListItems()
         loadItemsFromFile(sharedKey)
         loadInitialItemsCount()
 
@@ -148,9 +148,9 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
         if( intent.hasExtra("codIntro") ){
             if( !random_category_id.isNullOrEmpty() ){
                 updateRandomItems(random_category_id)
-                Log.i("RANDOM PRODUCT", "PRODUCTO RANDOM DE CATEGORÍA $random_category_id")
+                //Log.i("RANDOM PRODUCT", "PRODUCTO RANDOM DE CATEGORÍA $random_category_id")
             }
-            Log.i("RANDOM PRODUC1T", "PRODUCTO RANDOM1 DE CATEGORÍA $random_category_id")
+            //Log.i("RANDOM PRODUC1T", "PRODUCTO RANDOM1 DE CATEGORÍA $random_category_id")
         }
 
         //navigation
@@ -266,7 +266,7 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
 
     private fun updateRandomItems(idcategoria: String){
         val randomProducts: MutableList<DetailProduct> = itemsProducts.filter { it.category == idcategoria }.toMutableList()
-        Log.i("RANDOM LIST OF PRODUCTS?", "$randomProducts")
+        //Log.i("RANDOM LIST OF PRODUCTS?", "$randomProducts")
         val randomCategoryChosen = itemsCategories.find { it.id == idcategoria }
         randomCategoryChosen?.isSelectedCategory = false
 
@@ -282,7 +282,7 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
         //obtengo las categorías seleccionadas y según eso muestro la ropa
         val selectedCategories: List<ClothCategoryData> = itemsCategories.filter { it.isSelectedCategory == false }
         var newClothes =  mutableListOf<DetailProduct>()
-        println("categorías seleccionadas ${selectedCategories}")
+        //println("categorías seleccionadas ${selectedCategories}")
         for(k in itemsProducts){
             if( selectedCategories.any {  it.id == k.category } )
             {
@@ -328,15 +328,15 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
             product.contador++
             cartItems.add(product)
             increaseCartItemsCount()
-            Log.d("Dash: Product Added To Cart","${product} ")
+            //Log.d("Dash: Product Added To Cart","${product} ")
 
         }else {
             //else just increase its counter
             existingProduct.contador++
             increaseCartItemsCount()
-            Log.d("Dash: Product counter increased"," ${existingProduct} ${existingProduct.contador}")
+            //Log.d("Dash: Product counter increased"," ${existingProduct} ${existingProduct.contador}")
         }
-        showCartListItems()
+        //showCartListItems()
     }
 
     private fun showCartListItems(){
@@ -514,7 +514,7 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
                 withContext(Dispatchers.Main){
                     if (listResponse != null) {
                         for(k in listResponse){
-                            println("ID: " + k.id + " CATE: " + k.name)
+                            //println("ID: " + k.id + " CATE: " + k.name)
                             itemsCategories.add(ClothCategoryData(k.id, k.name))
                         }
 
@@ -561,7 +561,7 @@ class DashboardActivity : AppCompatActivity(), UtilClasses {
                 withContext(Dispatchers.Main){
                     if(listResponse != null){
                         for(k in listResponse){
-                            println("Cate: ${k.category}  Name: ${k.name}  Desc: ${k.descripcion}  Price: ${k.precio}")
+                            //println("Cate: ${k.category}  Name: ${k.name}  Desc: ${k.descripcion}  Price: ${k.precio}")
 
                             val colores = k.colores ?: emptyList()
                             val tallas = k.tallas ?: emptyList()

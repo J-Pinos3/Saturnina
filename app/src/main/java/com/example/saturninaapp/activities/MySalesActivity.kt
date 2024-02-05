@@ -86,21 +86,21 @@ class MySalesActivity : AppCompatActivity() {
         println("USER ROL: ${user_rol}")
         when(user_rol){
             ROL_USER -> {
-                Log.i("INSIDE ROL USER ", "HERE")
+                //Log.i("INSIDE ROL USER ", "HERE")
                 CoroutineScope(Dispatchers.IO).launch {
                     bringOrdersFromSpecificUser(bearerToken, user_id)
                 }
             }
 
             ROL_ADMIN -> {
-                Log.i("INSIDE ROL ADMIN ", "HERE")
+                //Log.i("INSIDE ROL ADMIN ", "HERE")
                 CoroutineScope(Dispatchers.IO).launch(){
                     getOrdersFromAllUsers(bearerToken)
                 }
             }
 
             else -> {
-                Log.i("SOMEWHERE ", " BUT NOT HERE")
+                //Log.i("SOMEWHERE ", " BUT NOT HERE")
             }
         }
 
@@ -232,7 +232,7 @@ class MySalesActivity : AppCompatActivity() {
             }else{
                 runOnUiThread {
                     try{
-                        Log.e("Error al obtener la órden: ","${retrofitGetAllOrders.code()} -- ${retrofitGetAllOrders.errorBody()?.string()}")
+                        //Log.e("Error al obtener la órden: ","${retrofitGetAllOrders.code()} -- ${retrofitGetAllOrders.errorBody()?.string()}")
                         val error = retrofitGetAllOrders.errorBody()?.string()
                         val errorBody = error?.let { JSONObject(it) }
                         val detail = errorBody?.opt("detail")
@@ -301,7 +301,7 @@ class MySalesActivity : AppCompatActivity() {
             }else{
                 runOnUiThread {
                     try{
-                        Log.e("Error al obtener las órdenes: ","${retrofitGetAllOrders.code()} -- ${retrofitGetAllOrders.errorBody()?.string()}")
+                        //Log.e("Error al obtener las órdenes: ","${retrofitGetAllOrders.code()} -- ${retrofitGetAllOrders.errorBody()?.string()}")
                         val error = retrofitGetAllOrders.errorBody()?.string()
                         val errorBody = error?.let { JSONObject(it) }
                         val detail = errorBody?.opt("detail")

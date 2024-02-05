@@ -23,7 +23,7 @@ class ManagementOptionsActivity : AppCompatActivity() {
         val user_id = intent.extras?.getString("USER_ID")
         val user_rol = intent.extras?.getString("USER_ROL")
 
-        println("USER DATA: $user_id, $user_rol, + $user_token")
+        //println("USER DATA: $user_id, $user_rol, + $user_token")
 
         btnSalesManagementOptions.setOnClickListener {
             val intent = Intent(applicationContext, MySalesActivity::class.java)
