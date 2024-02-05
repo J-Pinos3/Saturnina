@@ -443,6 +443,7 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
 
 
     override fun onItemClothSelected(product: DetailProduct) {
+        Toast.makeText(this, product.name + " Agregado al carrito" , Toast.LENGTH_SHORT).show()
         val existingProduct = cartItems.find { it.id == product.id }
 
         if(existingProduct == null){

@@ -172,7 +172,7 @@ class ShowOrderInfoActivity : AppCompatActivity() {
             }
         }
         disableClicOnUpdateOrder()
-
+        disableEditingData()
         tvOrderInfoFirstName.addTextChangedListener(OrderTextWatcher)
         tvOrderInfoLastName.addTextChangedListener(OrderTextWatcher)
         tvOrderInfoEmail.addTextChangedListener(OrderTextWatcher)
@@ -575,6 +575,20 @@ class ShowOrderInfoActivity : AppCompatActivity() {
 
     }
 
+
+    private fun disableEditingData(){
+        when(spOrderStatusChoice.text.toString()){
+            "Rechazado","En entrega","Finalizado"->{
+                tvOrderInfoFirstName.isEnabled = false
+                tvOrderInfoLastName.isEnabled = false
+                tvOrderInfoEmail.isEnabled = false
+                tvOrderInfoAddress.isEnabled = false
+                tvOrderInfoCellPhone.isEnabled = false
+                tvOrderInfoDescription.isEnabled = false
+            }
+        }
+
+    }
 
 
     private fun fillViewsWithOrderInfo (orderSelectedInfo: OrderResult){

@@ -283,7 +283,7 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
 
 
     override fun onItemClothSelected(product: DetailProduct){
-        Toast.makeText(this, product.id + " " + product.name + " " + product.precio, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, product.name + " Agregado al carrito" , Toast.LENGTH_SHORT).show()
         //if the element is not in the list, add it
         if( !itemsProducts.contains(product) ){
             product.contador++
@@ -305,7 +305,7 @@ class CarSalesActivity : AppCompatActivity(), UtilClasses  {
     }
 
     override fun onItemDeleteSelected(product: DetailProduct){
-        Toast.makeText(this, "DELETE " + product.id + " " + product.name + " " + product.precio, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this,  product.name + " Eliminado del carrito" , Toast.LENGTH_SHORT).show()
         //if the element is still in the list, just reduce its counter
         //if there's no product, do nothing
         if( itemsProducts.contains(product) ){
