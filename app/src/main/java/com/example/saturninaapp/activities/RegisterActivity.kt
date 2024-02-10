@@ -175,49 +175,49 @@ class RegisterActivity : AppCompatActivity() {
         var clickable = true
 
         if( name.length !in MIN_LENGTH_NAME .. MAX_LENGTH_NAME ){
-            til_nickname.helperText = "El nombre debe tener una longitud entre $MAX_LENGTH_NAME y $MAX_LENGTH_NAME caracteres"
+            etNameRegister.error = "El nombre debe tener una longitud entre $MIN_LENGTH_NAME y $MAX_LENGTH_NAME caracteres"
             clickable = false
         }
 
 
         if( lastName.length !in MIN_LENGTH_NAME .. MAX_LENGTH_NAME ){
-            last_name.helperText = "El apellido debe tener una longitud entre $MAX_LENGTH_NAME y $MAX_LENGTH_NAME caracteres"
+            etLastNameRegister.error = "El apellido debe tener una longitud entre $MIN_LENGTH_NAME y $MAX_LENGTH_NAME caracteres"
             clickable = false
         }
 
 
         if( number.length != MIN_LENGTH_CELLPHONE ){
-            til_phone_number.helperText = "El teléfono debe tener $MIN_LENGTH_CELLPHONE dígitos"
+            etNumberRegister.error = "El teléfono debe tener $MIN_LENGTH_CELLPHONE dígitos"
             clickable = false
         }
 
         if(pass1.length !in MIN_LENGTH_PASSWORD .. MAX_LENGTH_PASSWORD){
-            til_password.helperText = "La contraseña debe tener una longitud de $MIN_LENGTH_PASSWORD a $MAX_LENGTH_PASSWORD caracteres "
+            etPasswordPass.error = "La contraseña debe tener una longitud de $MIN_LENGTH_PASSWORD a $MAX_LENGTH_PASSWORD caracteres "
             clickable = false
         }
 
         if(pass2.length !in MIN_LENGTH_PASSWORD .. MAX_LENGTH_PASSWORD){
-            til_verify_password.helperText = "La contraseña debe tener una longitud de $MIN_LENGTH_PASSWORD a $MAX_LENGTH_PASSWORD caracteres "
+            etConfirmPasswordPass.error = "La contraseña debe tener una longitud de $MIN_LENGTH_PASSWORD a $MAX_LENGTH_PASSWORD caracteres "
             clickable = false
         }
 
         if( !email.contains("@") || !email.contains(".") ){
-            til_email.helperText = "El correo debe contener almenos un (.) y debe contener (@)"
+            etEmailPass.error = "El correo debe contener almenos un (.) y debe contener (@)"
             clickable = false
         }
 
         if( pass1 != pass2 ){
-            til_verify_password.helperText = "Las contraseñas no coinciden"
+            etConfirmPasswordPass.error = "Las contraseñas no coinciden"
             clickable = false
         }
 
         if( !pass1.matches(".*[A-Z].*".toRegex()) ){
-            til_password.helperText = "La contraseña debe contener almenos una letra mayúscula"
+            etPasswordPass.error = "La contraseña debe contener almenos una letra mayúscula"
             clickable = false
         }
 
         if( !pass1.matches(".*[+/x*-@()_!].*".toRegex()) ){
-            til_password.helperText = "La contraseña debe contener almenos un caracter especial"
+            etPasswordPass.error = "La contraseña debe contener almenos un caracter especial"
             clickable = false
         }
 
