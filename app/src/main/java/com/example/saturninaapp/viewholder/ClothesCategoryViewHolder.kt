@@ -5,7 +5,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.example.saturninaapp.R
+import com.saturnina.saturninaapp.R
 import com.example.saturninaapp.models.ClothCategoryData
 
 class ClothesCategoryViewHolder(view: View): RecyclerView.ViewHolder(view) {

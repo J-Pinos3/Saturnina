@@ -10,11 +10,9 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
-import androidx.core.widget.addTextChangedListener
-import com.example.saturninaapp.R
+import com.saturnina.saturninaapp.R
 import com.example.saturninaapp.models.User
 import com.example.saturninaapp.util.RetrofitHelper
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.CoroutineScope

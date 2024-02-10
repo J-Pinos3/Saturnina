@@ -4,7 +4,7 @@ import android.view.View
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.saturninaapp.R
+import com.saturnina.saturninaapp.R
 import com.example.saturninaapp.models.ResultComment
 
 class CommentsViewHolder(view: View): RecyclerView.ViewHolder(view) {

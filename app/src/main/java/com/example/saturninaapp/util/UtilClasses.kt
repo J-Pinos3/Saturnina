@@ -1,10 +1,7 @@
 package com.example.saturninaapp.util
 
-import android.view.MenuItem
-import android.view.View
 import android.widget.AutoCompleteTextView
 import com.example.saturninaapp.models.DetailProduct
-import com.google.android.material.bottomnavigation.BottomNavigationItemView
 
 interface UtilClasses {
 

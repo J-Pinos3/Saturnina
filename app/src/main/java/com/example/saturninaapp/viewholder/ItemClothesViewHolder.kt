@@ -2,17 +2,14 @@ package com.example.saturninaapp.viewholder
 
 import android.content.Intent
 import android.text.Editable
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.example.saturninaapp.R
+import com.saturnina.saturninaapp.R
 import com.example.saturninaapp.activities.ShowProductInfo
 import com.example.saturninaapp.models.Colore
 import com.example.saturninaapp.models.DetailProduct

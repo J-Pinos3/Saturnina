@@ -3,7 +3,7 @@ package com.example.saturninaapp.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.saturninaapp.R
+import com.saturnina.saturninaapp.R
 import com.example.saturninaapp.models.ClothCategoryData
 import com.example.saturninaapp.viewholder.ClothesCategoryViewHolder
 

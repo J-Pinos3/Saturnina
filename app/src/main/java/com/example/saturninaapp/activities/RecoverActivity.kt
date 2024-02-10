@@ -10,7 +10,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
-import com.example.saturninaapp.R
+import com.saturnina.saturninaapp.R
 import com.example.saturninaapp.models.RecoverPassword
 import com.example.saturninaapp.util.RetrofitHelper
 import kotlinx.coroutines.CoroutineScope

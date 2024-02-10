@@ -4,12 +4,9 @@ import com.example.saturninaapp.models.CommentaryData
 import com.example.saturninaapp.models.DetailProduct
 import com.example.saturninaapp.models.LoginCredentials
 import com.example.saturninaapp.models.RecoverPassword
-import com.example.saturninaapp.util.RetrofitHelper
-import io.mockk.coVerify
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
-import kotlin.math.exp
 
 
 class ProductsRepositoryImplTest{

@@ -1,16 +1,12 @@
 package com.example.saturninaapp.viewholder
 
-import android.annotation.SuppressLint
-import android.media.Image
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.saturninaapp.R
+import com.saturnina.saturninaapp.R
 import com.example.saturninaapp.models.DetailProduct
-import com.example.saturninaapp.models.Imagen
 import com.squareup.picasso.Picasso
-import org.w3c.dom.Text
 
 class ClothesCarouselViewHolder(view: View): RecyclerView.ViewHolder(view) {
 

@@ -26,46 +26,46 @@
         android:theme="@style/Theme.SaturninaApp"
         tools:targetApi="tiramisu">
         <activity
-            android:name=".activities.GenneralComments"
+            android:name="com.example.saturninaapp.activities.GenneralComments"
             android:exported="false" />
         <activity
-            android:name=".activities.RecoverActivity"
+            android:name="com.example.saturninaapp.activities.RecoverActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.ShowOrderInfoActivity"
+            android:name="com.example.saturninaapp.activities.ShowOrderInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.ShowProductInfo"
+            android:name="com.example.saturninaapp.activities.ShowProductInfo"
             android:exported="false" />
         <activity
-            android:name=".activities.IntroDashboardNews"
+            android:name="com.example.saturninaapp.activities.IntroDashboardNews"
             android:exported="false" />
         <activity
-            android:name=".activities.CompleteSaleActivity"
+            android:name="com.example.saturninaapp.activities.CompleteSaleActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.MySalesActivity"
+            android:name="com.example.saturninaapp.activities.MySalesActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.ProfileActivity"
+            android:name="com.example.saturninaapp.activities.ProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.CarSalesActivity"
+            android:name="com.example.saturninaapp.activities.CarSalesActivity"
             android:exported="true" />
         <activity
-            android:name=".activities.ManagementOptionsActivity"
+            android:name="com.example.saturninaapp.activities.ManagementOptionsActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.DashboardActivity"
+            android:name="com.example.saturninaapp.activities.DashboardActivity"
             android:exported="true" />
         <activity
-            android:name=".activities.RegisterActivity"
+            android:name="com.example.saturninaapp.activities.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.LoginActivity"
+            android:name="com.example.saturninaapp.activities.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.MainActivity"
+            android:name="com.example.saturninaapp.activities.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
