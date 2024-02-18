@@ -1,6 +1,9 @@
 package com.example.saturninaapp.activities
 
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -8,6 +11,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import com.saturnina.saturninaapp.R
@@ -87,11 +91,27 @@ class RegisterActivity : AppCompatActivity() {
         etPasswordPass.addTextChangedListener ( RegisterTextWatcher )
         etConfirmPasswordPass.addTextChangedListener ( RegisterTextWatcher )
 
+        //NEW
+        val dialogBinding = layoutInflater.inflate(R.layout.custom_dialog, null)
+        val myDialog = Dialog(this@RegisterActivity)
+        myDialog.setContentView(dialogBinding)
+        myDialog.setCancelable(true)
+        myDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+
+        val tvAlertMessage = dialogBinding.findViewById<TextView>(R.id.tvAlertMessage)
+        val continueButton = dialogBinding.findViewById<AppCompatButton>(R.id.alertContinue)
+        continueButton.setOnClickListener {
+            myDialog.dismiss()
+            val intent = Intent(applicationContext, LoginActivity::class.java)
+            startActivity(intent)
+        }
+        //END NEW
 
         btnContinuarRegister.setOnClickListener {
 
             val user = getUsersData()
-            println("REGISTERACTIVITY: ${user.nombre} ${user.apellido} ${user.telefono}")
+            //println("REGISTERACTIVITY: ${user.nombre} ${user.apellido} ${user.telefono}")
 
             CoroutineScope(Dispatchers.IO).launch {
                 val retrofitPost = RetrofitHelper.consumeAPI.createUser(user)
@@ -101,13 +121,13 @@ class RegisterActivity : AppCompatActivity() {
                         val jsonObject = JSONObject(jsonResponse)
                         val detailObject = jsonObject.getJSONObject("detail")
                         val msg = detailObject.getString("msg")
-                        Toast.makeText(this@RegisterActivity, msg, Toast.LENGTH_LONG).show()
+                        //Toast.makeText(this@RegisterActivity, msg, Toast.LENGTH_LONG).show()
+                        myDialog.show()
+                        tvAlertMessage.text = msg
 
-                        val intent = Intent(applicationContext, LoginActivity::class.java)
-                        startActivity(intent)
                     }
                 }else{
-                    Log.e("Error: ","${retrofitPost.code()} -- ${retrofitPost.errorBody()?.string()}")
+                    //Log.e("Error: ","${retrofitPost.code()} -- ${retrofitPost.errorBody()?.string()}")
                 }
 
             }

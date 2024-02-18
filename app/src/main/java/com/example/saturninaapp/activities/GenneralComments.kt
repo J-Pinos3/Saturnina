@@ -1,7 +1,10 @@
 package com.example.saturninaapp.activities
 
+import android.app.Dialog
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -268,10 +271,24 @@ class GenneralComments : AppCompatActivity() {
                 val jsonObject = jsonResponse?.let { JSONObject(it) }
                 val detailObject = jsonObject?.getJSONObject("detail")
                 val msg = detailObject?.getString("msg")
-
                 withContext(Dispatchers.Main){
                     insertCommentIntoList(resultComment)
-                    Toast.makeText (this@GenneralComments, msg, Toast.LENGTH_LONG).show()
+                    //NEW
+                    val dialogBinding = layoutInflater.inflate(R.layout.custom_dialog, null)
+                    val myDialog = Dialog(this@GenneralComments)
+                    myDialog.setContentView(dialogBinding)
+                    myDialog.setCancelable(true)
+                    myDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                    myDialog.show()
+
+                    val tvAlertMessage = dialogBinding.findViewById<TextView>(R.id.tvAlertMessage)
+                    tvAlertMessage.text = msg
+                    val continueButton = dialogBinding.findViewById<AppCompatButton>(R.id.alertContinue)
+                    continueButton.setOnClickListener {
+                        myDialog.dismiss()
+                    }
+                    //END NEW
+                    //Toast.makeText (this@GenneralComments, msg, Toast.LENGTH_LONG).show()
                 }
             }else{
                 runOnUiThread {
@@ -289,10 +306,26 @@ class GenneralComments : AppCompatActivity() {
                     }
 
                     if(msg == "Token inválido o expirado"){
-                        Toast.makeText(this@GenneralComments, "Por favor vuelve a iniciar sesión", Toast.LENGTH_LONG).show()
-                        val intent = Intent(applicationContext, LoginActivity::class.java)
-                        startActivity(intent)
-                        finish()
+                        //Toast.makeText(this@GenneralComments, "Por favor vuelve a iniciar sesión", Toast.LENGTH_LONG).show()
+                        //NEW
+                        val dialogBinding = layoutInflater.inflate(R.layout.custom_dialog, null)
+                        val myDialog = Dialog(this@GenneralComments)
+                        myDialog.setContentView(dialogBinding)
+                        myDialog.setCancelable(true)
+                        myDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        myDialog.show()
+
+                        val tvAlertMessage = dialogBinding.findViewById<TextView>(R.id.tvAlertMessage)
+                        tvAlertMessage.text = "Por favor vuelve a iniciar sesión"
+                        val continueButton = dialogBinding.findViewById<AppCompatButton>(R.id.alertContinue)
+                        continueButton.setOnClickListener {
+                            myDialog.dismiss()
+                            val intent = Intent(applicationContext, LoginActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
+                        //END NEW
+
                     }else{
                         Toast.makeText (this@GenneralComments, msg, Toast.LENGTH_LONG).show()
                     }

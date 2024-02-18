@@ -1,12 +1,16 @@
 package com.example.saturninaapp.activities
 
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import com.saturnina.saturninaapp.R
@@ -126,10 +130,26 @@ class ProfileActivity : AppCompatActivity() {
                         }
 
                         if(msg == "Token inválido o expirado"){
-                            Toast.makeText(this@ProfileActivity, "Por favor vuelve a iniciar sesión", Toast.LENGTH_LONG).show()
-                            val intent = Intent(applicationContext, LoginActivity::class.java)
-                            startActivity(intent)
-                            finish()
+                            //Toast.makeText(this@ProfileActivity, "Por favor vuelve a iniciar sesión", Toast.LENGTH_LONG).show()
+                            //NEW
+                            val dialogBinding = layoutInflater.inflate(R.layout.custom_dialog, null)
+                            val myDialog = Dialog(this@ProfileActivity)
+                            myDialog.setContentView(dialogBinding)
+                            myDialog.setCancelable(true)
+                            myDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                            myDialog.show()
+
+                            val tvAlertMessage = dialogBinding.findViewById<TextView>(R.id.tvAlertMessage)
+                            tvAlertMessage.text = "Por favor vuelve a iniciar sesión"
+                            val continueButton = dialogBinding.findViewById<AppCompatButton>(R.id.alertContinue)
+                            continueButton.setOnClickListener {
+                                myDialog.dismiss()
+                                val intent = Intent(applicationContext, LoginActivity::class.java)
+                                startActivity(intent)
+                                finish()
+                            }
+                            //END NEW
+
                         }else{
                             Toast.makeText(this@ProfileActivity, msg, Toast.LENGTH_LONG).show()
                         }
@@ -179,7 +199,22 @@ class ProfileActivity : AppCompatActivity() {
                         val userResponseUpdateProfile = retrofitUpdateProfile.body()
                         val msg = userResponseUpdateProfile?.getAsJsonObject("detail")?.get("msg")?.asString
                         //println("userr message $msg")
-                        Toast.makeText(this@ProfileActivity, "Usuario Actualizado", Toast.LENGTH_LONG).show()
+                        //Toast.makeText(this@ProfileActivity, "Usuario Actualizado", Toast.LENGTH_LONG).show()
+                        //NEW
+                        val dialogBinding = layoutInflater.inflate(R.layout.custom_dialog, null)
+                        val myDialog = Dialog(this@ProfileActivity)
+                        myDialog.setContentView(dialogBinding)
+                        myDialog.setCancelable(true)
+                        myDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        myDialog.show()
+
+                        val tvAlertMessage = dialogBinding.findViewById<TextView>(R.id.tvAlertMessage)
+                        tvAlertMessage.text = "Usuario Actualizado Exitosamente"
+                        val continueButton = dialogBinding.findViewById<AppCompatButton>(R.id.alertContinue)
+                        continueButton.setOnClickListener {
+                            myDialog.dismiss()
+                        }
+                        //END NEW
                         //Log.d("Usuario Actualizado", "Se actualizó el usuario ${userProfile.nombre} con id ${user_id}\n ${retrofitUpdateProfile.body().toString()}")
                         paintUserNewData(userProfile)
                     }
@@ -204,10 +239,26 @@ class ProfileActivity : AppCompatActivity() {
                         }
 
                         if(msg == "Token inválido o expirado"){
-                            Toast.makeText(this@ProfileActivity, "Por favor vuelve a iniciar sesión", Toast.LENGTH_LONG).show()
-                            val intent = Intent(applicationContext, LoginActivity::class.java)
-                            startActivity(intent)
-                            finish()
+                            //Toast.makeText(this@ProfileActivity, "Por favor vuelve a iniciar sesión", Toast.LENGTH_LONG).show()
+                            //NEW
+                            val dialogBinding = layoutInflater.inflate(R.layout.custom_dialog, null)
+                            val myDialog = Dialog(this@ProfileActivity)
+                            myDialog.setContentView(dialogBinding)
+                            myDialog.setCancelable(true)
+                            myDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                            myDialog.show()
+
+                            val tvAlertMessage = dialogBinding.findViewById<TextView>(R.id.tvAlertMessage)
+                            tvAlertMessage.text = "Por favor vuelve a iniciar sesión"
+                            val continueButton = dialogBinding.findViewById<AppCompatButton>(R.id.alertContinue)
+                            continueButton.setOnClickListener {
+                                myDialog.dismiss()
+                                val intent = Intent(applicationContext, LoginActivity::class.java)
+                                startActivity(intent)
+                                finish()
+                            }
+                            //END NEW
+
                         }else{
                             Toast.makeText(this@ProfileActivity, msg, Toast.LENGTH_LONG).show()
                         }

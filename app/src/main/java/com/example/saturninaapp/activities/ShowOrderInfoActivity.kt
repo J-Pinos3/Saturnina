@@ -18,6 +18,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.app.ActivityCompat
 import android.Manifest
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -410,6 +413,8 @@ class ShowOrderInfoActivity : AppCompatActivity() {
 
     suspend fun updateOrderStatus( bearerToken: String, orderStatusData: OrderStatusData, order_id: String ){
 
+
+
         //println("ORDER ID: $order_id")
         try {
             //println("ORDER ID: $order_id")
@@ -422,13 +427,29 @@ class ShowOrderInfoActivity : AppCompatActivity() {
                 val msg = detailObject?.getString("msg")
 
                 runOnUiThread{
-                    Toast.makeText(this@ShowOrderInfoActivity, msg, Toast.LENGTH_LONG).show()
+                    //Toast.makeText(this@ShowOrderInfoActivity, msg, Toast.LENGTH_LONG).show()
+                    //NEW
+                    val dialogBinding = layoutInflater.inflate(R.layout.custom_dialog, null)
+                    val myDialog = Dialog(this@ShowOrderInfoActivity)
+                    myDialog.setContentView(dialogBinding)
+                    myDialog.setCancelable(true)
+                    myDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-                    val intent = Intent(this@ShowOrderInfoActivity, MySalesActivity::class.java)
-                    intent.putExtra("USER_TOKEN", user_token)
-                    intent.putExtra("USER_ID", user_id)
-                    intent.putExtra("USER_ROL", user_rol)
-                    startActivity(intent)
+
+                    val tvAlertMessage = dialogBinding.findViewById<TextView>(R.id.tvAlertMessage)
+                    val continueButton = dialogBinding.findViewById<AppCompatButton>(R.id.alertContinue)
+                    continueButton.setOnClickListener {
+                        myDialog.dismiss()
+                        val intent = Intent(this@ShowOrderInfoActivity, MySalesActivity::class.java)
+                        intent.putExtra("USER_TOKEN", user_token)
+                        intent.putExtra("USER_ID", user_id)
+                        intent.putExtra("USER_ROL", user_rol)
+                        startActivity(intent)
+                    }
+                    //END NEW
+                    myDialog.show()
+                    tvAlertMessage.text = msg
+
 
                     //Log.i("UPDATE ORDER", "ORDER STATUS UPDATED SUCCESSFULLY $msg")
                 }
@@ -454,10 +475,27 @@ class ShowOrderInfoActivity : AppCompatActivity() {
                         }
 
                         if(msg == "Token inválido o expirado"){
-                            Toast.makeText(this@ShowOrderInfoActivity, "Por favor vuelve a iniciar sesión", Toast.LENGTH_LONG).show()
-                            val intent = Intent(applicationContext, LoginActivity::class.java)
-                            startActivity(intent)
-                            finish()
+                            //Toast.makeText(this@ShowOrderInfoActivity, "Por favor vuelve a iniciar sesión", Toast.LENGTH_LONG).show()
+                            //NEW
+                            val dialogBinding = layoutInflater.inflate(R.layout.custom_dialog, null)
+                            val myDialog = Dialog(this@ShowOrderInfoActivity)
+                            myDialog.setContentView(dialogBinding)
+                            myDialog.setCancelable(true)
+                            myDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+
+                            val tvAlertMessage = dialogBinding.findViewById<TextView>(R.id.tvAlertMessage)
+                            val continueButton = dialogBinding.findViewById<AppCompatButton>(R.id.alertContinue)
+                            continueButton.setOnClickListener {
+                                myDialog.dismiss()
+                                val intent = Intent(applicationContext, LoginActivity::class.java)
+                                startActivity(intent)
+                                finish()
+                            }
+                            //END NEW
+                            myDialog.show()
+                            tvAlertMessage.text = "Por favor vuelve a iniciar sesión"
+
                         }else{
                             Toast.makeText(this@ShowOrderInfoActivity, msg, Toast.LENGTH_LONG).show()
                         }
@@ -522,12 +560,29 @@ class ShowOrderInfoActivity : AppCompatActivity() {
 
                 withContext(Dispatchers.Main){
 
-                    Toast.makeText(this@ShowOrderInfoActivity, msg, Toast.LENGTH_LONG).show()
-                    val intent = Intent(this@ShowOrderInfoActivity, MySalesActivity::class.java)
-                    intent.putExtra("USER_TOKEN", user_token)
-                    intent.putExtra("USER_ID", user_id)
-                    intent.putExtra("USER_ROL", user_rol)
-                    startActivity(intent)
+                    //Toast.makeText(this@ShowOrderInfoActivity, msg, Toast.LENGTH_LONG).show()
+                    //NEW
+                    val dialogBinding = layoutInflater.inflate(R.layout.custom_dialog, null)
+                    val myDialog = Dialog(this@ShowOrderInfoActivity)
+                    myDialog.setContentView(dialogBinding)
+                    myDialog.setCancelable(true)
+                    myDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+
+                    val tvAlertMessage = dialogBinding.findViewById<TextView>(R.id.tvAlertMessage)
+                    val continueButton = dialogBinding.findViewById<AppCompatButton>(R.id.alertContinue)
+                    continueButton.setOnClickListener {
+                        myDialog.dismiss()
+                        val intent = Intent(this@ShowOrderInfoActivity, MySalesActivity::class.java)
+                        intent.putExtra("USER_TOKEN", user_token)
+                        intent.putExtra("USER_ID", user_id)
+                        intent.putExtra("USER_ROL", user_rol)
+                        startActivity(intent)
+                    }
+                    //END NEW
+                    myDialog.show()
+                    tvAlertMessage.text = msg
+
                 }
 
             }else{
@@ -551,10 +606,27 @@ class ShowOrderInfoActivity : AppCompatActivity() {
                         }
 
                         if(msg == "Token inválido o expirado"){
-                            Toast.makeText(this@ShowOrderInfoActivity, "Por favor vuelve a iniciar sesión", Toast.LENGTH_LONG).show()
-                            val intent = Intent(applicationContext, LoginActivity::class.java)
-                            startActivity(intent)
-                            finish()
+                            //Toast.makeText(this@ShowOrderInfoActivity, "Por favor vuelve a iniciar sesión", Toast.LENGTH_LONG).show()
+                            //NEW
+                            val dialogBinding = layoutInflater.inflate(R.layout.custom_dialog, null)
+                            val myDialog = Dialog(this@ShowOrderInfoActivity)
+                            myDialog.setContentView(dialogBinding)
+                            myDialog.setCancelable(true)
+                            myDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+
+                            val tvAlertMessage = dialogBinding.findViewById<TextView>(R.id.tvAlertMessage)
+                            val continueButton = dialogBinding.findViewById<AppCompatButton>(R.id.alertContinue)
+                            continueButton.setOnClickListener {
+                                myDialog.dismiss()
+                                val intent = Intent(applicationContext, LoginActivity::class.java)
+                                startActivity(intent)
+                                finish()
+                            }
+                            //END NEW
+                            myDialog.show()
+                            tvAlertMessage.text = "Por favor vuelve a iniciar sesión"
+
                         }else{
                             Toast.makeText(this@ShowOrderInfoActivity, msg, Toast.LENGTH_LONG).show()
                         }

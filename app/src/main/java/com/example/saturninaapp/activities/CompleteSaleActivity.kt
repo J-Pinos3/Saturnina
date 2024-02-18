@@ -2,10 +2,13 @@ package com.example.saturninaapp.activities
 
 import android.Manifest
 import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.database.Cursor
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -394,7 +397,26 @@ class CompleteSaleActivity : AppCompatActivity() {
                     }
 
                     if(msg == "Token inválido o expirado"){
-                        Toast.makeText(this@CompleteSaleActivity, "Por favor vuelve a iniciar sesión", Toast.LENGTH_LONG).show()
+                        //Toast.makeText(this@CompleteSaleActivity, "Por favor vuelve a iniciar sesión", Toast.LENGTH_LONG).show()
+                        //NEW
+                        val dialogBinding = layoutInflater.inflate(R.layout.custom_dialog, null)
+                        val myDialog = Dialog(this@CompleteSaleActivity)
+                        myDialog.setContentView(dialogBinding)
+                        myDialog.setCancelable(true)
+                        myDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        myDialog.show()
+
+                        val tvAlertMessage = dialogBinding.findViewById<TextView>(R.id.tvAlertMessage)
+                        tvAlertMessage.text = "Por favor vuelve a iniciar sesión"
+                        val continueButton = dialogBinding.findViewById<AppCompatButton>(R.id.alertContinue)
+                        continueButton.setOnClickListener {
+                            myDialog.dismiss()
+                            val intent = Intent(applicationContext, LoginActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
+                        //END NEW
+
                     }else{
                         Toast.makeText(this@CompleteSaleActivity, msg, Toast.LENGTH_LONG).show()
                     }
@@ -468,12 +490,29 @@ class CompleteSaleActivity : AppCompatActivity() {
                     val jsonObject = JSONObject(jsonResponse)
                     val detailObject = jsonObject.getJSONObject("detail")
                     val msg = detailObject.getString("msg")
-                    Toast.makeText(this@CompleteSaleActivity, msg, Toast.LENGTH_LONG).show()
-                    val intent = Intent(applicationContext, IntroDashboardNews::class.java)
-                    intent.putExtra("USER_TOKEN", userToken)
-                    intent.putExtra("USER_ID", user_id)
-                    intent.putExtra("USER_ROL", user_rol)
-                    startActivity(intent)
+                    //Toast.makeText(this@CompleteSaleActivity, msg, Toast.LENGTH_LONG).show()
+                    //NEW
+                    val dialogBinding = layoutInflater.inflate(R.layout.custom_dialog, null)
+                    val myDialog = Dialog(this@CompleteSaleActivity)
+                    myDialog.setContentView(dialogBinding)
+                    myDialog.setCancelable(true)
+                    myDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                    myDialog.show()
+
+
+                    val tvAlertMessage = dialogBinding.findViewById<TextView>(R.id.tvAlertMessage)
+                    tvAlertMessage.text = msg
+                    val continueButton = dialogBinding.findViewById<AppCompatButton>(R.id.alertContinue)
+                    continueButton.setOnClickListener {
+                        myDialog.dismiss()
+                        val intent = Intent(applicationContext, IntroDashboardNews::class.java)
+                        intent.putExtra("USER_TOKEN", userToken)
+                        intent.putExtra("USER_ID", user_id)
+                        intent.putExtra("USER_ROL", user_rol)
+                        startActivity(intent)
+                    }
+                    //END NEW
+
                     //Log.i("SEND ORDER", "ORDER SENT SUCCESSFULLY: $jsonResponse")
 
                 }
@@ -485,7 +524,7 @@ class CompleteSaleActivity : AppCompatActivity() {
                     val jsonObject = JSONObject(jsonResponse)
                     val detailObject = jsonObject.getJSONObject("detail")
                     val msg = detailObject.getString("msg")
-                    Toast.makeText(this@CompleteSaleActivity, msg, Toast.LENGTH_LONG).show()
+                    //Toast.makeText(this@CompleteSaleActivity, msg, Toast.LENGTH_LONG).show()
 //                    val error = retrofitSendOrder.errorBody()?.string()
 //                    val errorBody = error?.let { JSONObject(it) }
 //                    val detail = errorBody?.opt("detail")
@@ -503,10 +542,26 @@ class CompleteSaleActivity : AppCompatActivity() {
 //                    }
 
                     if(msg == "Token inválido o expirado"){
-                        Toast.makeText(this@CompleteSaleActivity, "Por favor vuelve a iniciar sesión", Toast.LENGTH_LONG).show()
-                        val intent = Intent(applicationContext, LoginActivity::class.java)
-                        startActivity(intent)
-                        finish()
+                        //Toast.makeText(this@CompleteSaleActivity, "Por favor vuelve a iniciar sesión", Toast.LENGTH_LONG).show()
+                        //NEW
+                        val dialogBinding = layoutInflater.inflate(R.layout.custom_dialog, null)
+                        val myDialog = Dialog(this@CompleteSaleActivity)
+                        myDialog.setContentView(dialogBinding)
+                        myDialog.setCancelable(true)
+                        myDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        myDialog.show()
+
+                        val tvAlertMessage = dialogBinding.findViewById<TextView>(R.id.tvAlertMessage)
+                        tvAlertMessage.text = "Por favor vuelve a iniciar sesión"
+                        val continueButton = dialogBinding.findViewById<AppCompatButton>(R.id.alertContinue)
+                        continueButton.setOnClickListener {
+                            myDialog.dismiss()
+                            val intent = Intent(applicationContext, LoginActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
+                        //END NEW
+
                     }else{
                         Toast.makeText(this@CompleteSaleActivity, msg, Toast.LENGTH_LONG).show()
                     }

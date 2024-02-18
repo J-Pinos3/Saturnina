@@ -1,7 +1,10 @@
 package com.example.saturninaapp.activities
 
+import android.app.Dialog
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -545,6 +548,9 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
 
 
     suspend fun createUserCommentary(bearerToken: String, descripcion: String, user_id: String, id_producto:String, calificacion: Int){
+
+
+
         try{
             //Log.i("DATA TO CREATE COMMENT ", " desc $descripcion  user $user_id  idprod $id_producto  calif $calificacion")
             val commentaryData = CommentaryData(descripcion, user_id, id_producto, calificacion)
@@ -564,7 +570,24 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
                 withContext(Dispatchers.Main){
 
                     insertNewCommentIntoList(resultComment)
-                    Toast.makeText (this@ShowProductInfo, "exito: "+msg, Toast.LENGTH_LONG).show()
+                    //Toast.makeText (this@ShowProductInfo, "exito: "+msg, Toast.LENGTH_LONG).show()
+                    //NEW
+                    val dialogBinding = layoutInflater.inflate(R.layout.custom_dialog, null)
+                    val myDialog = Dialog(this@ShowProductInfo)
+                    myDialog.setContentView(dialogBinding)
+                    myDialog.setCancelable(true)
+                    myDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+
+                    val tvAlertMessage = dialogBinding.findViewById<TextView>(R.id.tvAlertMessage)
+
+                    val continueButton = dialogBinding.findViewById<AppCompatButton>(R.id.alertContinue)
+                    continueButton.setOnClickListener {
+                        myDialog.dismiss()
+                    }
+                    //END NEW
+                    tvAlertMessage.text= msg
+                    myDialog.show()
                     //Log.i("CREATE COMMENT: ", "COMMENT CREATED SUCCESSFULLY: $msg")
                 }
             }else{
@@ -585,7 +608,24 @@ class ShowProductInfo : AppCompatActivity(), UtilClasses {
                             msg = firstError.getString("msg")
                         }
                     }
-                    Toast.makeText (this@ShowProductInfo, "error: " + msg, Toast.LENGTH_LONG).show()
+                    //Toast.makeText (this@ShowProductInfo, "error: " + msg, Toast.LENGTH_LONG).show()
+                    //NEW
+                    val dialogBinding = layoutInflater.inflate(R.layout.custom_dialog, null)
+                    val myDialog = Dialog(this@ShowProductInfo)
+                    myDialog.setContentView(dialogBinding)
+                    myDialog.setCancelable(true)
+                    myDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+
+                    val tvAlertMessage = dialogBinding.findViewById<TextView>(R.id.tvAlertMessage)
+
+                    val continueButton = dialogBinding.findViewById<AppCompatButton>(R.id.alertContinue)
+                    continueButton.setOnClickListener {
+                        myDialog.dismiss()
+                    }
+                    //END NEW
+                    tvAlertMessage.text= msg
+                    myDialog.show()
                     //Log.e("ERROR CREATING COMMENT: ", "COULDN'T CREATE NEW COMMENT: ${retrofitCreateNewComment.code()} --**-- $msg  --**-- $error -*-*-*- ${retrofitCreateNewComment.errorBody().toString()}")
                 }
             }

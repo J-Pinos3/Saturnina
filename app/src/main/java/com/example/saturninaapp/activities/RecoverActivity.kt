@@ -1,6 +1,9 @@
 package com.example.saturninaapp.activities
 
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -8,6 +11,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import com.saturnina.saturninaapp.R
@@ -121,7 +125,7 @@ class RecoverActivity : AppCompatActivity() {
 
         val objectEmailRecover = RecoverPassword(email)
        try {
-            print("Email to recover: -$email-")
+            //print("Email to recover: -$email-")
            val retrofitNewPassword = RetrofitHelper.consumeAPI.recoverPassword(objectEmailRecover)
            if(retrofitNewPassword.isSuccessful){
                 runOnUiThread {
@@ -130,9 +134,28 @@ class RecoverActivity : AppCompatActivity() {
                     val detailObject = jsonObject.getJSONObject("detail")
                     val msg = detailObject.getString("msg")
 
-                    Toast.makeText(this@RecoverActivity, msg, Toast.LENGTH_LONG).show()
-                    val intent = Intent(applicationContext, LoginActivity::class.java)
-                    startActivity(intent)
+                    //NEW
+                    val dialogBinding = layoutInflater.inflate(R.layout.custom_dialog, null)
+                    val myDialog = Dialog(this@RecoverActivity)
+                    myDialog.setContentView(dialogBinding)
+                    myDialog.setCancelable(true)
+                    myDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+
+                    val tvAlertMessage = dialogBinding.findViewById<TextView>(R.id.tvAlertMessage)
+                    val continueButton = dialogBinding.findViewById<AppCompatButton>(R.id.alertContinue)
+                    myDialog.show()
+                    tvAlertMessage.text = msg
+                    continueButton.setOnClickListener {
+                        myDialog.dismiss()
+                        val intent = Intent(applicationContext, LoginActivity::class.java)
+                        startActivity(intent)
+                    }
+
+                    //END NEW
+
+                    //Toast.makeText(this@RecoverActivity, msg, Toast.LENGTH_LONG).show()
+
                 }
 
            }else{
@@ -150,7 +173,24 @@ class RecoverActivity : AppCompatActivity() {
                            msg = firstError.getString("msg")
                        }
                    }
-                   Toast.makeText(this@RecoverActivity, msg, Toast.LENGTH_LONG).show()
+                   //NEW
+                   val dialogBinding = layoutInflater.inflate(R.layout.custom_dialog, null)
+                   val myDialog = Dialog(this@RecoverActivity)
+                   myDialog.setContentView(dialogBinding)
+                   myDialog.setCancelable(true)
+                   myDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+
+                   val tvAlertMessage = dialogBinding.findViewById<TextView>(R.id.tvAlertMessage)
+                   tvAlertMessage.text = msg
+                   myDialog.show()
+                   val continueButton = dialogBinding.findViewById<AppCompatButton>(R.id.alertContinue)
+                   continueButton.setOnClickListener {
+                       myDialog.dismiss()
+                   }
+
+                   //END NEW
+                   //Toast.makeText(this@RecoverActivity, msg, Toast.LENGTH_LONG).show()
                }
            }
 
