@@ -1,5 +1,8 @@
 # Saturnina Clothing Store
 
+## Get the app by following this link
+https://play.google.com/store/apps/details?id=com.saturnina.saturninaapp
+
 ## Features
 
 This mobile app in android was made for the Ecuadorial cloth selling store "Saturnina".
