@@ -19,6 +19,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.TextView
@@ -178,6 +179,16 @@ class CompleteSaleActivity : AppCompatActivity() {
         etOrderDescription.addTextChangedListener(completSaleTextWatcher)
 
 
+        drawer.setOnClickListener {
+            val view: View? = this.currentFocus
+
+            if(view != null){
+                val inputMethodManager =
+                    getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+
+                inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+            }
+        }
 
         //navigation
         val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_main)

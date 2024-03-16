@@ -4,16 +4,21 @@ import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.inputmethodservice.InputMethodService
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View
+import android.view.inputmethod.InputMethod
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.saturnina.saturninaapp.R
 import com.example.saturninaapp.models.User
 import com.example.saturninaapp.util.RetrofitHelper
@@ -39,6 +44,8 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var til_phone_number: TextInputLayout
     private lateinit var til_password: TextInputLayout
     private lateinit var til_verify_password: TextInputLayout
+
+    private lateinit var constraintRegister: ConstraintLayout
 
 
     private lateinit var btnContinuarRegister: AppCompatButton
@@ -140,6 +147,17 @@ class RegisterActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        constraintRegister.setOnClickListener {
+            val view: View? = this.currentFocus
+
+            if(view != null){
+                val inputMethodManager =
+                    getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+
+                inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+            }
+        }
+
 
     }//ON CREATE
 
@@ -161,6 +179,8 @@ class RegisterActivity : AppCompatActivity() {
         til_phone_number = findViewById(R.id.til_phone_number)
         til_password = findViewById(R.id.til_password)
         til_verify_password = findViewById(R.id.til_verify_password)
+
+        constraintRegister = findViewById(R.id.constraintRegister)
     }
 
     private fun getUsersData(): User{
@@ -234,8 +254,8 @@ class RegisterActivity : AppCompatActivity() {
             clickable = false
         }
 
-        if( !pass1.matches(".*[+/x*-@()_!].*".toRegex()) ){
-            etPasswordPass.error = "La contraseña debe contener almenos un caracter especial"
+        if( !pass1.matches(".*[+/*\\\\\\-@()_!].*".toRegex()) ){
+            etPasswordPass.error = "La contraseña debe contener almenos un caractér especial"
             clickable = false
         }
 
